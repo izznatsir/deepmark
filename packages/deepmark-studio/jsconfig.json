@@ -1,13 +1,10 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
+	"extends": "../../jsconfig.base.json",
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true
-	}
+		"baseUrl": ".",
+		"rootDirs": [".", "./.svelte-kit/types"],
+		"composite": true,
+		"lib": ["ESNext", "DOM"]
+	},
+	"include": ["../src/**/*.js", "../src/**/*.ts", "../src/**/*.svelte"]
 }

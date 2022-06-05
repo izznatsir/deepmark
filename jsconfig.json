@@ -1,0 +1,3 @@
+{
+	"references": [{ "deepmark-studio": "./packages/deepmark-studio" }]
+}
