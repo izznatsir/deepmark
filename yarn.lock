@@ -19,6 +19,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@izznatsir/deepl-js@workspace:packages/deepl-js":
+  version: 0.0.0-use.local
+  resolution: "@izznatsir/deepl-js@workspace:packages/deepl-js"
+  languageName: unknown
+  linkType: soft
+
 "@jridgewell/resolve-uri@npm:^3.0.3":
   version: 3.0.7
   resolution: "@jridgewell/resolve-uri@npm:3.0.7"
@@ -581,6 +587,14 @@ __metadata:
     "@sveltejs/kit": next
     svelte: ^3.44.0
     svelte-check: ^2.2.6
+  languageName: unknown
+  linkType: soft
+
+"deepmark@workspace:packages/deepmark":
+  version: 0.0.0-use.local
+  resolution: "deepmark@workspace:packages/deepmark"
+  bin:
+    deepmark: ./dist/cli.mjs
   languageName: unknown
   linkType: soft
 
