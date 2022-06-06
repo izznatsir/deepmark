@@ -3,7 +3,10 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"composite": true,
-		"lib": ["ESNext"]
+		"lib": ["ESNext"],
+		"paths": {
+			"@types": ["./src/types"]
+		}
 	},
 	"include": ["./src/**/*.js", "./src/**/*.ts"]
 }

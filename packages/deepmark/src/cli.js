@@ -12,7 +12,7 @@ async function main() {
 	if (!is_file_readable(config_file_path))
 		throw new Error(`No configuration file found at the expected path: \n${config_file_path}`);
 
-	/** @type { import("./types.js").Config } */
+	/** @type { import('@types').Config } */
 	const config = await import(config_file_path);
 
 	if (!config.deeplAuthKey) {

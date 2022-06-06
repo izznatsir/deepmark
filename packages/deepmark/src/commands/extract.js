@@ -4,13 +4,13 @@ import np from 'path';
 import { get_path_tail, get_string_array, is_directory_exist, resolve_path } from '../utils.js';
 
 /**
- * @param { import("../types.js").Config } config
- * @returns { import("../types.js").CommandHandler }
+ * @param { import('@types').Config } config
+ * @returns { import('@types').CommandHandler }
  */
 export function extract({ sourceLanguage, directories: { extraction }, frontmatter, components }) {
 	return async () => {
-		const source_dirs = get_string_array(extraction.source)
-		const output_dirs = get_string_array(extraction.output)
+		const source_dirs = get_string_array(extraction.source);
+		const output_dirs = get_string_array(extraction.output);
 
 		for (let i = 0; i < source_dirs.length; i++) {
 			const source_dir = source_dirs[i].replace('%language%', sourceLanguage);
