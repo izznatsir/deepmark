@@ -1,3 +1,5 @@
+export * from './eswalk';
+
 export interface Config {
 	/**
 	 * Auth key for Deepl developer API. By default
@@ -48,14 +50,19 @@ export interface Config {
 		};
 	};
 	/**
+	 * MDAST nodes to not translate, defaults to:
+	 * ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm']
+	 */
+	ignoredNodes?: string[];
+	/**
 	 * Frontmatter fields to be translated, default to not include any field.
 	 */
-	frontmatter: string[];
+	frontmatter?: string[];
 	/**
 	 * JSX Components and optionally their props that should be translated.
 	 * Pass an empty array if you do not want to translate any props.
 	 */
-	components: {
+	components?: {
 		[Name: string]: string[];
 	};
 }

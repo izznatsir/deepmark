@@ -1,5 +1,5 @@
 import { program } from 'commander';
-import { extract } from './commands/extract.js';
+import { create_extract_handler } from './commands/extract.js';
 import { generate } from './commands/generate.js';
 import { translate } from './commands/translate.js';
 import { is_file_readable, resolve_path } from './utils.js';
@@ -37,7 +37,7 @@ async function main() {
 		.description(
 			'Extract strings from markdown files that are intended to be translated.\nIt skip some markdown segments such as code block.'
 		)
-		.action(extract(config));
+		.action(create_extract_handler(config));
 
 	program
 		.command('generate')
