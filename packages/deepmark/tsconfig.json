@@ -1,9 +1,12 @@
 {
-	"extends": "../../jsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"composite": true,
-		"lib": ["ESNext"]
+		"lib": ["ESNext"],
+		"paths": {
+			"@types": ["./src/types/index.js"]
+		}
 	},
 	"include": ["./src/**/*.js", "./src/**/*.ts"]
 }

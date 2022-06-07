@@ -1,104 +1,237 @@
-import type * as Estree from 'estree';
+import type {
+	Identifier,
+	Program,
+	Function,
+	SwitchCase,
+	CatchClause,
+	VariableDeclarator,
+	ExpressionStatement,
+	BlockStatement,
+	EmptyStatement,
+	DebuggerStatement,
+	WithStatement,
+	ReturnStatement,
+	LabeledStatement,
+	BreakStatement,
+	ContinueStatement,
+	IfStatement,
+	SwitchStatement,
+	ThrowStatement,
+	TryStatement,
+	WhileStatement,
+	DoWhileStatement,
+	ForStatement,
+	ForInStatement,
+	ForOfStatement,
+	ClassDeclaration,
+	FunctionDeclaration,
+	VariableDeclaration,
+	ModuleDeclaration,
+	ImportDeclaration,
+	ExportDefaultDeclaration,
+	ExportNamedDeclaration,
+	ExportAllDeclaration,
+	ThisExpression,
+	ArrayExpression,
+	ObjectExpression,
+	FunctionExpression,
+	ArrowFunctionExpression,
+	YieldExpression,
+	UnaryExpression,
+	UpdateExpression,
+	BinaryExpression,
+	AssignmentExpression,
+	LogicalExpression,
+	MemberExpression,
+	ConditionalExpression,
+	CallExpression,
+	NewExpression,
+	SequenceExpression,
+	TaggedTemplateExpression,
+	ClassExpression,
+	AwaitExpression,
+	ImportExpression,
+	ChainExpression,
+	SimpleLiteral,
+	RegExpLiteral,
+	BigIntLiteral,
+	TemplateLiteral,
+	PrivateIdentifier,
+	Property,
+	MetaProperty,
+	PropertyDefinition,
+	AssignmentProperty,
+	Super,
+	TemplateElement,
+	SpreadElement,
+	ObjectPattern,
+	ArrayPattern,
+	RestElement,
+	AssignmentPattern,
+	Class,
+	ClassBody,
+	StaticBlock,
+	MethodDefinition,
+	ModuleSpecifier,
+	ImportSpecifier,
+	ImportNamespaceSpecifier,
+	ImportDefaultSpecifier,
+	ExportSpecifier,
+	Node
+} from 'estree';
+
+import type {
+	JSXAttribute,
+	JSXClosingElement,
+	JSXClosingFragment,
+	JSXElement,
+	JSXEmptyExpression,
+	JSXExpressionContainer,
+	JSXFragment,
+	JSXIdentifier,
+	JSXMemberExpression,
+	JSXNamespacedName,
+	JSXOpeningElement,
+	JSXOpeningFragment,
+	JSXSpreadAttribute,
+	JSXSpreadChild,
+	JSXText,
+	Node as JSXNode
+} from 'estree-jsx';
 
 export interface EstreeNodes {
-	Identifier: Estree.Identifier;
-	Program: Estree.Program;
-	Function: Estree.Function;
-	SwitchCase: Estree.SwitchCase;
-	CatchClause: Estree.CatchClause;
-	VariableDeclarator: Estree.VariableDeclarator;
-	Statement: Estree.Statement;
-	ExpressionStatement: Estree.ExpressionStatement;
-	BlockStatement: Estree.BlockStatement;
-	EmptyStatement: Estree.EmptyStatement;
-	DebuggerStatement: Estree.DebuggerStatement;
-	WithStatement: Estree.WithStatement;
-	ReturnStatement: Estree.ReturnStatement;
-	LabeledStatement: Estree.LabeledStatement;
-	BreakStatement: Estree.BreakStatement;
-	ContinueStatement: Estree.ContinueStatement;
-	IfStatement: Estree.IfStatement;
-	SwitchStatement: Estree.SwitchStatement;
-	ThrowStatement: Estree.ThrowStatement;
-	TryStatement: Estree.TryStatement;
-	WhileStatement: Estree.WhileStatement;
-	DoWhileStatement: Estree.DoWhileStatement;
-	ForStatement: Estree.ForStatement;
-	ForInStatement: Estree.ForInStatement;
-	ForOfStatement: Estree.ForOfStatement;
-	ClassDeclaration: Estree.ClassDeclaration;
-	FunctionDeclaration: Estree.FunctionDeclaration;
-	VariableDeclaration: Estree.VariableDeclaration;
-	Declaration: Estree.Declaration;
-	ModuleDeclaration: Estree.ModuleDeclaration;
-	ImportDeclaration: Estree.ImportDeclaration;
-	ExportDefaultDeclaration: Estree.ExportDefaultDeclaration;
-	ExportNamedDeclaration: Estree.ExportNamedDeclaration;
-	ExportAllDeclaration: Estree.ExportAllDeclaration;
-	Expression: Estree.Expression;
-	ThisExpression: Estree.ThisExpression;
-	ArrayExpression: Estree.ArrayExpression;
-	ObjectExpression: Estree.ObjectExpression;
-	FunctionExpression: Estree.FunctionExpression;
-	ArrowFunctionExpression: Estree.ArrowFunctionExpression;
-	YieldExpression: Estree.YieldExpression;
-	UnaryExpression: Estree.UnaryExpression;
-	UpdateExpression: Estree.UpdateExpression;
-	BinaryExpression: Estree.BinaryExpression;
-	AssignmentExpression: Estree.AssignmentExpression;
-	LogicalExpression: Estree.LogicalExpression;
-	MemberExpression: Estree.MemberExpression;
-	ConditionalExpression: Estree.ConditionalExpression;
-	CallExpression: Estree.CallExpression;
-	NewExpression: Estree.NewExpression;
-	SequenceExpression: Estree.SequenceExpression;
-	TaggedTemplateExpression: Estree.TaggedTemplateExpression;
-	ClassExpression: Estree.ClassExpression;
-	AwaitExpression: Estree.AwaitExpression;
-	ImportExpression: Estree.ImportExpression;
-	ChainExpression: Estree.ChainExpression;
-	Literal: Estree.Literal;
-	TemplateLiteral: Estree.TemplateLiteral;
-	PrivateIdentifier: Estree.PrivateIdentifier;
-	Property: Estree.Property;
-	MetaProperty: Estree.MetaProperty;
-	PropertyDefinition: Estree.PropertyDefinition;
-	AssignmentProperty: Estree.AssignmentProperty;
-	Super: Estree.Super;
-	TemplateElement: Estree.TemplateElement;
-	SpreadElement: Estree.SpreadElement;
-	Pattern: Estree.Pattern;
-	ObjectPattern: Estree.ObjectPattern;
-	ArrayPattern: Estree.ArrayPattern;
-	RestElement: Estree.RestElement;
-	AssignmentPattern: Estree.AssignmentPattern;
-	Class: Estree.Class;
-	ClassBody: Estree.ClassBody;
-	StaticBlock: Estree.StaticBlock;
-	MethodDefinition: Estree.MethodDefinition;
-	ModuleSpecifier: Estree.ModuleSpecifier;
-	ImportSpecifier: Estree.ImportSpecifier;
-	ImportNamespaceSpecifier: Estree.ImportNamespaceSpecifier;
-	ImportDefaultSpecifier: Estree.ImportDefaultSpecifier;
-	ExportSpecifier: Estree.ExportSpecifier;
+	Identifier: Identifier;
+	Program: Program;
+	Function: Function;
+	SwitchCase: SwitchCase;
+	CatchClause: CatchClause;
+	VariableDeclarator: VariableDeclarator;
+	ExpressionStatement: ExpressionStatement;
+	BlockStatement: BlockStatement;
+	EmptyStatement: EmptyStatement;
+	DebuggerStatement: DebuggerStatement;
+	WithStatement: WithStatement;
+	ReturnStatement: ReturnStatement;
+	LabeledStatement: LabeledStatement;
+	BreakStatement: BreakStatement;
+	ContinueStatement: ContinueStatement;
+	IfStatement: IfStatement;
+	SwitchStatement: SwitchStatement;
+	ThrowStatement: ThrowStatement;
+	TryStatement: TryStatement;
+	WhileStatement: WhileStatement;
+	DoWhileStatement: DoWhileStatement;
+	ForStatement: ForStatement;
+	ForInStatement: ForInStatement;
+	ForOfStatement: ForOfStatement;
+	ClassDeclaration: ClassDeclaration;
+	FunctionDeclaration: FunctionDeclaration;
+	VariableDeclaration: VariableDeclaration;
+	ModuleDeclaration: ModuleDeclaration;
+	ImportDeclaration: ImportDeclaration;
+	ExportDefaultDeclaration: ExportDefaultDeclaration;
+	ExportNamedDeclaration: ExportNamedDeclaration;
+	ExportAllDeclaration: ExportAllDeclaration;
+	ThisExpression: ThisExpression;
+	ArrayExpression: ArrayExpression;
+	ObjectExpression: ObjectExpression;
+	FunctionExpression: FunctionExpression;
+	ArrowFunctionExpression: ArrowFunctionExpression;
+	YieldExpression: YieldExpression;
+	UnaryExpression: UnaryExpression;
+	UpdateExpression: UpdateExpression;
+	BinaryExpression: BinaryExpression;
+	AssignmentExpression: AssignmentExpression;
+	LogicalExpression: LogicalExpression;
+	MemberExpression: MemberExpression;
+	ConditionalExpression: ConditionalExpression;
+	CallExpression: CallExpression;
+	NewExpression: NewExpression;
+	SequenceExpression: SequenceExpression;
+	TaggedTemplateExpression: TaggedTemplateExpression;
+	ClassExpression: ClassExpression;
+	AwaitExpression: AwaitExpression;
+	ImportExpression: ImportExpression;
+	ChainExpression: ChainExpression;
+	Literal: SimpleLiteral;
+	RegExpLiteral: RegExpLiteral;
+	BigIntLiteral: BigIntLiteral;
+	TemplateLiteral: TemplateLiteral;
+	PrivateIdentifier: PrivateIdentifier;
+	Property: Property;
+	MetaProperty: MetaProperty;
+	PropertyDefinition: PropertyDefinition;
+	AssignmentProperty: AssignmentProperty;
+	Super: Super;
+	TemplateElement: TemplateElement;
+	SpreadElement: SpreadElement;
+	ObjectPattern: ObjectPattern;
+	ArrayPattern: ArrayPattern;
+	RestElement: RestElement;
+	AssignmentPattern: AssignmentPattern;
+	Class: Class;
+	ClassBody: ClassBody;
+	StaticBlock: StaticBlock;
+	MethodDefinition: MethodDefinition;
+	ModuleSpecifier: ModuleSpecifier;
+	ImportSpecifier: ImportSpecifier;
+	ImportNamespaceSpecifier: ImportNamespaceSpecifier;
+	ImportDefaultSpecifier: ImportDefaultSpecifier;
+	ExportSpecifier: ExportSpecifier;
 }
 
+export interface EsxtreeNodes extends EstreeNodes {
+	JSXAttribute: JSXAttribute;
+	JSXClosingElement: JSXClosingElement;
+	JSXClosingFragment: JSXClosingFragment;
+	JSXElement: JSXElement;
+	JSXEmptyExpression: JSXEmptyExpression;
+	JSXExpressionContainer: JSXExpressionContainer;
+	JSXFragment: JSXFragment;
+	JSXIdentifier: JSXIdentifier;
+	JSXMemberExpression: JSXMemberExpression;
+	JSXNamespacedName: JSXNamespacedName;
+	JSXOpeningElement: JSXOpeningElement;
+	JSXOpeningFragment: JSXOpeningFragment;
+	JSXSpreadAttribute: JSXSpreadAttribute;
+	JSXSpreadChild: JSXSpreadChild;
+	JSXText: JSXText;
+}
+
+export type EstreeNodeTypes = keyof EstreeNodes;
+export type EsxtreeNodeTypes = keyof EsxtreeNodes;
+
 export interface EstreeProcessor {
-	(node: Estree.Node | null): void;
+	(node: Node | null): void;
+}
+export interface EsxtreeProcessor {
+	(node: JSXNode | null): void;
 }
 
 export interface EstreeVisitor<NodeType extends keyof EstreeNodes> {
 	(node: EstreeNodes[NodeType]): boolean | void;
 }
+export interface EsxtreeVisitor<NodeType extends keyof EsxtreeNodes> {
+	(node: EsxtreeNodes[NodeType]): boolean | void;
+}
 
 export type EstreeVisitors = {
-	[NodeType in keyof Partial<EstreeNodes>]: EstreeVisitor<NodeType>;
+	[NodeType in keyof EstreeNodes]?: EstreeVisitor<NodeType>;
+};
+export type EsxtreeVisitors = {
+	[NodeType in keyof EsxtreeNodes]?: EsxtreeVisitor<NodeType>;
 };
 
 export interface EstreeWalker<NodeType extends keyof EstreeNodes> {
 	(node: EstreeNodes[NodeType], process: EstreeProcessor): void;
 }
+export interface EsxtreeWalker<NodeType extends keyof EsxtreeNodes> {
+	(node: EsxtreeNodes[NodeType], process: EsxtreeProcessor): void;
+}
 
 export type EstreeWalkers = {
 	[NodeType in keyof Partial<EstreeNodes>]: EstreeWalker<NodeType>;
+};
+export type EsxtreeWalkers = {
+	[NodeType in keyof Partial<EsxtreeNodes>]: EsxtreeWalker<NodeType>;
 };

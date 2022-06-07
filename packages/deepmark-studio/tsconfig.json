@@ -1,5 +1,5 @@
 {
-	"extends": "../../jsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"rootDirs": [".", "./.svelte-kit/types"],

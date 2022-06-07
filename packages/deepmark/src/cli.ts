@@ -1,3 +1,5 @@
+import type { Config } from '@types';
+
 import { program } from 'commander';
 import { create_extract_handler } from './commands/extract.js';
 import { generate } from './commands/generate.js';
@@ -12,8 +14,7 @@ async function main() {
 	if (!is_file_readable(config_file_path))
 		throw new Error(`No configuration file found at the expected path: \n${config_file_path}`);
 
-	/** @type { import('@types').Config } */
-	const config = await import(config_file_path);
+	const config: Config = await import(config_file_path);
 
 	if (!config.deeplAuthKey) {
 		const deepl_auth_key = process.env.DEEPL_AUTH_KEY;

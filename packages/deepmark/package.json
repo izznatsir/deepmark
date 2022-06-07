@@ -31,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@types/estree": "^0.0.51",
+		"@types/fs-extra": "^9.0.13",
 		"@types/mdast": "^3.0.10"
 	}
 }

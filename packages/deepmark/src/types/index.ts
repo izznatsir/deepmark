@@ -1,4 +1,4 @@
-export * from './eswalk';
+export * from './eswalk.js';
 
 export interface Config {
 	/**
