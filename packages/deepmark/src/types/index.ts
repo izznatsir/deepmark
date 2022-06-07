@@ -1,16 +1,18 @@
+export * from './estree.js';
 export * from './eswalk.js';
 export * from './mdast.js';
+export * from './unist.js';
 
 export interface Config {
 	/**
 	 * Auth key for Deepl developer API. By default
 	 * it will read DEEPL_AUTH_KEY environment variable.
 	 */
-	deeplAuthKey?: string;
+	deepl_auth_key?: string;
 	// Two letter language code of original markdowns.
-	sourceLanguage: string;
+	source_language: string;
 	// Two letter target language codes of the translation.
-	outputLanguages: string[];
+	output_languages: string[];
 	// Directories that contain sources and will contain outputs of every command.
 	directories: {
 		extraction: {
@@ -54,7 +56,7 @@ export interface Config {
 	 * MDAST nodes to not translate, defaults to:
 	 * ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm']
 	 */
-	ignoredNodes?: string[];
+	ignored_nodes?: string[];
 	/**
 	 * Frontmatter fields to be translated, default to not include any field.
 	 */

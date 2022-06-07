@@ -1,21 +1,7 @@
-import type { Program } from 'estree';
-import type { Program as JSXProgram } from 'estree-jsx';
-import type {
-	EstreeNodeTypes,
-	EstreeProcessor,
-	EstreeWalker,
-	EstreeWalkers,
-	EstreeVisitor,
-	EstreeVisitors,
-	EsxtreeNodeTypes,
-	EsxtreeProcessor,
-	EsxtreeWalker,
-	EsxtreeWalkers,
-	EsxtreeVisitor,
-	EsxtreeVisitors
-} from '$types';
+import type { Program as EsProgram } from 'estree';
+import type { EsNodeTypes, EsProcessor, EsWalker, EsWalkers, EsVisitor, EsVisitors } from '$types';
 
-export const DEFAULT_WALKERS: EstreeWalkers = {
+export const DEFAULT_ESWALKERS: EsWalkers = {
 	Program(node, process) {
 		for (const statement of node.body) {
 			process(statement);
@@ -41,43 +27,17 @@ export const DEFAULT_WALKERS: EstreeWalkers = {
 };
 
 export function eswalk(
-	ast: Program,
-	visitors: EstreeVisitors,
-	walkers: EstreeWalkers = DEFAULT_WALKERS
+	ast: EsProgram,
+	visitors: EsVisitors,
+	walkers: EsWalkers = DEFAULT_ESWALKERS
 ) {
-	const process: EstreeProcessor = (node) => {
+	const process: EsProcessor = (node) => {
 		if (!node) return;
 
-		const type = node.type as EstreeNodeTypes;
+		const type = node.type as EsNodeTypes;
 
-		const visitor = visitors[type] as EstreeVisitor<typeof type>;
-		const walker = walkers[type] as EstreeWalker<typeof type>;
-
-		let keepWalking = true;
-
-		if (visitor !== undefined) {
-			const signal = visitor(node);
-			keepWalking = signal === undefined || signal === true ? true : false;
-		}
-
-		if (keepWalking && walker) walker(node, process);
-	};
-
-	process(ast);
-}
-
-export function esxwalk(
-	ast: JSXProgram,
-	visitors: EsxtreeVisitors,
-	walkers: EsxtreeWalkers = DEFAULT_WALKERS
-) {
-	const process: EsxtreeProcessor = (node) => {
-		if (!node) return;
-
-		const type = node.type as EsxtreeNodeTypes;
-
-		const visitor = visitors[type] as EsxtreeVisitor<typeof type>;
-		const walker = walkers[type] as EsxtreeWalker<typeof type>;
+		const visitor = visitors[type] as EsVisitor<typeof type>;
+		const walker = walkers[type] as EsWalker<typeof type>;
 
 		let keepWalking = true;
 

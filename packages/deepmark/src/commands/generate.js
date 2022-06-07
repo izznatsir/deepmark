@@ -7,13 +7,13 @@ import { get_path_tail, get_string_array, is_directory_exist, resolve_path } fro
  * @param { import('$types').Config } config
  * @returns { import('$types').CommandHandler }
  */
-export function generate({ outputLanguages, directories: { generation } }) {
+export function generate({ output_languages, directories: { generation } }) {
 	return async () => {
 		const source_dirs = get_string_array(generation.source);
 		const output_dirs = get_string_array(generation.output);
 
 		for (let i = 0; i < source_dirs.length; i++) {
-			for (const language of outputLanguages) {
+			for (const language of output_languages) {
 				const source_dir = source_dirs[i].replace('%language%', language);
 				if (!is_directory_exist(source_dir)) continue;
 

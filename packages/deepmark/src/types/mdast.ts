@@ -54,7 +54,7 @@ declare module 'mdast' {
 	}
 }
 
-export type MdastNode =
+export type MdNode =
 	| Root
 	| Blockquote
 	| Break
@@ -93,7 +93,7 @@ export type MdastNode =
 	| MdxTextExpression
 	| MdxjsEsm;
 
-export type MdastParent =
+export type MdParent =
 	| Root
 	| Paragraph
 	| Heading
@@ -111,4 +111,4 @@ export type MdastParent =
 	| Link
 	| LinkReference
 	| MdxJsxFlowElement
-	| MdxJsxTextElement
+	| MdxJsxTextElement;

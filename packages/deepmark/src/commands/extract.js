@@ -19,7 +19,7 @@ import {
  */
 export function create_extract_handler(config) {
 	const {
-		sourceLanguage,
+		source_language,
 		directories: { extraction },
 		frontmatter,
 		components
@@ -30,13 +30,13 @@ export function create_extract_handler(config) {
 		const output_dirs = get_string_array(extraction.output);
 
 		for (let i = 0; i < source_dirs.length; i++) {
-			const source_dir = source_dirs[i].replace('%language%', sourceLanguage);
+			const source_dir = source_dirs[i].replace('%language%', source_language);
 			if (!is_directory_exist(source_dir)) continue;
 
 			const source_pattern = np.join(source_dir, '**/*.{md,mdx}');
 			const source_paths = (await fg(source_pattern)).map((path) => resolve_path(path));
 
-			const output_dir = output_dirs[i].replace('%language%', sourceLanguage);
+			const output_dir = output_dirs[i].replace('%language%', source_language);
 
 			for (const source_path of source_paths) {
 				const output_path = resolve_path(output_dir, get_path_tail(output_dir, source_path));

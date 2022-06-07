@@ -1,12 +1,12 @@
-import type { Position } from 'unist';
+import type { UnNode, UnParent } from '$types';
 
 const NEXT = true;
 const STOP = false;
 
-export function unwalk(node: Node | Parent, visit: Visitor, inout: boolean = false) {
+export function unwalk(node: UnNode | UnParent, visit: Visitor, inout: boolean = false) {
 	let next = true;
 
-	function step(node: Node | Parent, parent: Parent | null) {
+	function step(node: UnNode | UnParent, parent: UnParent | null) {
 		if (!inout) {
 			if (!next) return;
 
@@ -14,7 +14,7 @@ export function unwalk(node: Node | Parent, visit: Visitor, inout: boolean = fal
 			next = signal === undefined || NEXT ? NEXT : STOP;
 		}
 
-		if (is_parent(node)) {
+		if (is_unparent(node)) {
 			for (const child of node.children) {
 				if (!next) break;
 
@@ -33,20 +33,10 @@ export function unwalk(node: Node | Parent, visit: Visitor, inout: boolean = fal
 	step(node, null);
 }
 
-function is_parent(node: Node | Parent): node is Parent {
+function is_unparent(node: UnNode | UnParent): node is UnParent {
 	return 'children' in node;
 }
 
-export interface Node {
-	type: string;
-	position?: Position;
-	data?: unknown;
-}
-
-export interface Parent extends Node {
-	children: (Node | Parent)[];
-}
-
 export interface Visitor {
-	(node: Node | Parent, parent: Parent | null): boolean | void;
+	(node: UnNode | UnParent, parent: UnParent | null): boolean | void;
 }

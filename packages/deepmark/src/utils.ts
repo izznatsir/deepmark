@@ -8,14 +8,12 @@ import remark_comment from 'remark-comment';
 import remark_frontmatter from 'remark-frontmatter';
 import remark_mdx from 'remark-mdx';
 import { JSX } from './astring-jsx.js';
-import { esxwalk } from './eswalk.js';
+import { eswalk } from './eswalk.js';
 import { unwalk } from './unwalk.js';
 
-import type { Paragraph, Root as MdastRoot, YAML } from 'mdast';
+import type { Paragraph as MdParagraph, Root as MdRoot, YAML as MdYaml } from 'mdast';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
-import type { Root as MdxastRoot } from 'remark-mdx';
-import type { Config } from '$types';
-import type { Node as UnNode, Parent as UnParent } from './unwalk.js';
+import type { Config, UnNode, UnParent } from '$types';
 
 export function resolve_path(...paths: string[]): string {
 	return np.resolve(process.cwd(), ...paths);
@@ -83,14 +81,14 @@ export function is_json(path: string): boolean {
 /**
  * Get `mdast`.
  */
-export function get_mdast(markdown: string): MdastRoot {
+export function get_mdast(markdown: string): MdRoot {
 	return remark().use(remark_frontmatter, ['yaml']).parse(markdown);
 }
 
 /**
  * Get MDX flavored `mdast`.
  */
-export function get_mdxast(markdown: string): MdxastRoot {
+export function get_mdxast(markdown: string): MdRoot {
 	return (
 		remark()
 			.use(remark_frontmatter, ['yaml'])
@@ -101,15 +99,15 @@ export function get_mdxast(markdown: string): MdxastRoot {
 	);
 }
 
-export function is_mdast_root(parent: UnNode | null): parent is MdastRoot {
+export function is_mdast_root(parent: UnNode | null): parent is MdRoot {
 	return parent && parent.type === 'root' ? true : false;
 }
 
-export function is_mdast_yaml(node: UnNode): node is YAML {
+export function is_mdast_yaml(node: UnNode): node is MdYaml {
 	return node.type === 'yaml' ? true : false;
 }
 
-export function is_mdast_paragraph(node: UnNode): node is Paragraph {
+export function is_mdast_paragraph(node: UnNode): node is MdParagraph {
 	return node.type === 'paragraph' ? true : false;
 }
 
@@ -131,7 +129,7 @@ export function is_mdast_jsx_text_element(node: UnNode | UnParent): node is MdxJ
 	return node.type === 'mdxJsxTextElement' ? true : false;
 }
 
-interface MdxJsxInParagraph extends Paragraph {
+interface MdxJsxInParagraph extends MdParagraph {
 	children: [MdxJsxTextElement];
 }
 
@@ -142,12 +140,12 @@ export function is_mdast_paragraph_jsx_text_element(
 }
 
 export function get_translatable_strings(
-	ast: MdastRoot,
+	ast: MdRoot,
 	source_path: string,
 	{
 		components = {},
 		frontmatter = [],
-		ignoredNodes = ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm']
+		ignored_nodes = ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm']
 	}: Config
 ): string[] {
 	const names = Object.keys(components);
@@ -156,7 +154,7 @@ export function get_translatable_strings(
 	const strings: string[] = [];
 
 	unwalk(ast, (node, parent) => {
-		if (!is_mdast_root(parent) || ignoredNodes.includes(node.type)) return;
+		if (!is_mdast_root(parent) || ignored_nodes.includes(node.type)) return;
 
 		if (is_mdast_yaml(node)) {
 		}
@@ -166,11 +164,7 @@ export function get_translatable_strings(
 				const jsx_element_node =
 					is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)
 						? node
-						: is_mdast_paragraph_jsx_text_element(node)
-						? ((node as Paragraph).children[0] as MdxJsxTextElement)
-						: undefined;
-
-				if (!jsx_element_node) return;
+						: node.children[0];
 
 				const { name, attributes, children } = jsx_element_node;
 
@@ -188,7 +182,7 @@ export function get_translatable_strings(
 
 							if (!estree) continue;
 
-							esxwalk(estree, {
+							eswalk(estree, {
 								Literal(node) {
 									if (typeof node.value === 'string') strings.push(node.value);
 								},
