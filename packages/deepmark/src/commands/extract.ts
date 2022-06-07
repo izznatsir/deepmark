@@ -13,11 +13,9 @@ import {
 	resolve_path
 } from '../utils.js';
 
-/**
- * @param { import('$types').Config } config
- * @returns { import('$types').CommandHandler }
- */
-export function create_extract_handler(config) {
+import type { CommandHandler, Config } from '$types';
+
+export function create_extract_handler(config: Config): CommandHandler {
 	const {
 		source_language,
 		directories: { extraction },
@@ -43,8 +41,7 @@ export function create_extract_handler(config) {
 
 				await extract(source_path, output_path, config);
 
-				/** @type { string[] } */
-				const strings = [];
+				const strings: string[] = [];
 
 				await fs.outputFile(output_path, JSON.stringify(strings));
 			}
@@ -52,14 +49,11 @@ export function create_extract_handler(config) {
 	};
 }
 
-/**
- *
- * @param { string } source_path
- * @param { string } output_path
- * @param { import('$types').Config } config
- * @returns { Promise<{ source: string; output: string } | undefined> }
- */
-export async function extract(source_path, output_path, config) {
+export async function extract(
+	source_path: string,
+	output_path: string,
+	config: Config
+): Promise<{ source: string; output: string } | void> {
 	if (is_markdown(source_path)) {
 		const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
 
