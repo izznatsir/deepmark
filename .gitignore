@@ -5,6 +5,7 @@
 !.yarn/versions
 **/build
 **/dist
+**/IGNORE.md*
 **/node_modules
 **/.cache
 **/.env
