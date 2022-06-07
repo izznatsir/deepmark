@@ -13,7 +13,7 @@ import type {
 	EsxtreeWalkers,
 	EsxtreeVisitor,
 	EsxtreeVisitors
-} from '@types';
+} from '$types';
 
 export const DEFAULT_WALKERS: EstreeWalkers = {
 	Program(node, process) {

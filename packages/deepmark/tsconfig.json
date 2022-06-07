@@ -5,7 +5,7 @@
 		"composite": true,
 		"lib": ["ESNext"],
 		"paths": {
-			"@types": ["./src/types/index.js"]
+			"$types": ["./src/types/index.js"]
 		}
 	},
 	"include": ["./src/**/*.js", "./src/**/*.ts"]

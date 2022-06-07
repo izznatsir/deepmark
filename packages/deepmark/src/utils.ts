@@ -1,9 +1,3 @@
-import type { Identifier } from 'estree';
-import type { Root as MdastRoot } from 'mdast';
-import type { MdxJsxFlowElement } from 'mdast-util-mdx';
-import type { Root as MdxastRoot } from 'remark-mdx';
-import type { Config } from '@types';
-
 import { generate, GENERATOR } from 'astring';
 import fs from 'fs-extra';
 import { mdxToMarkdown } from 'mdast-util-mdx';
@@ -13,9 +7,15 @@ import { remark } from 'remark';
 import remark_comment from 'remark-comment';
 import remark_frontmatter from 'remark-frontmatter';
 import remark_mdx from 'remark-mdx';
-import { visit } from 'unist-util-visit';
 import { JSX } from './astring-jsx.js';
 import { esxwalk } from './eswalk.js';
+import { unwalk } from './unwalk.js';
+
+import type { Paragraph, Root as MdastRoot, YAML } from 'mdast';
+import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
+import type { Root as MdxastRoot } from 'remark-mdx';
+import type { Config } from '$types';
+import type { Node as UnNode, Parent as UnParent } from './unwalk.js';
 
 export function resolve_path(...paths: string[]): string {
 	return np.resolve(process.cwd(), ...paths);
@@ -101,40 +101,48 @@ export function get_mdxast(markdown: string): MdxastRoot {
 	);
 }
 
-export function is_mdast_root_child(parent: { type: string } | null): boolean {
+export function is_mdast_root(parent: UnNode | null): parent is MdastRoot {
 	return parent && parent.type === 'root' ? true : false;
 }
 
-export function is_mdast_frontmatter(node: { type: string }): boolean {
+export function is_mdast_yaml(node: UnNode): node is YAML {
 	return node.type === 'yaml' ? true : false;
 }
 
-export function is_mdxast_jsx_element(node: {
-	type: string;
-	children?: { type: string }[];
-}): boolean {
-	return is_mdxast_jsx_flow_element(node) || is_mdxast_jsx_text_element(node);
+export function is_mdast_paragraph(node: UnNode): node is Paragraph {
+	return node.type === 'paragraph' ? true : false;
 }
 
-export function is_mdxast_jsx_flow_element(node: {
-	type: string;
-	children?: { type: string }[];
-}): boolean {
+export function is_mdast_jsx_element(
+	node: UnNode | UnParent
+): node is MdxJsxFlowElement | MdxJsxTextElement | MdxJsxInParagraph {
+	return (
+		is_mdast_jsx_flow_element(node) ||
+		is_mdast_jsx_text_element(node) ||
+		is_mdast_paragraph_jsx_text_element(node)
+	);
+}
+
+export function is_mdast_jsx_flow_element(node: UnNode | UnParent): node is MdxJsxFlowElement {
 	return node.type === 'mdxJsxFlowElement' ? true : false;
 }
 
-export function is_mdxast_jsx_text_element(node: {
-	type: string;
-	children?: { type: string }[];
-}): boolean {
-	return node.type === 'mdxJsxTextElement' ||
-		(node.type === 'paragraph' && node.children && node.children[0].type === 'mdxJsxTextElement')
-		? true
-		: false;
+export function is_mdast_jsx_text_element(node: UnNode | UnParent): node is MdxJsxTextElement {
+	return node.type === 'mdxJsxTextElement' ? true : false;
+}
+
+interface MdxJsxInParagraph extends Paragraph {
+	children: [MdxJsxTextElement];
+}
+
+export function is_mdast_paragraph_jsx_text_element(
+	node: UnNode | UnParent
+): node is MdxJsxInParagraph {
+	return is_mdast_paragraph(node) && is_mdast_jsx_text_element(node.children[0]) ? true : false;
 }
 
 export function get_translatable_strings(
-	ast: MdxastRoot,
+	ast: MdastRoot,
 	source_path: string,
 	{
 		components = {},
@@ -147,19 +155,20 @@ export function get_translatable_strings(
 
 	const strings: string[] = [];
 
-	visit(ast, (node, __, parent) => {
-		if (!is_mdast_root_child(parent) || ignoredNodes.includes(node.type)) return;
+	unwalk(ast, (node, parent) => {
+		if (!is_mdast_root(parent) || ignoredNodes.includes(node.type)) return;
 
-		if (is_mdast_frontmatter(node)) {
+		if (is_mdast_yaml(node)) {
 		}
 
 		if (is_mdx(source_path)) {
-			if (is_mdxast_jsx_element(node)) {
-				const jsx_element_node: MdxJsxFlowElement = is_mdxast_jsx_flow_element(node)
-					? node
-					: node.children
-					? node.children[0]
-					: undefined;
+			if (is_mdast_jsx_element(node)) {
+				const jsx_element_node =
+					is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)
+						? node
+						: is_mdast_paragraph_jsx_text_element(node)
+						? ((node as Paragraph).children[0] as MdxJsxTextElement)
+						: undefined;
 
 				if (!jsx_element_node) return;
 
@@ -185,8 +194,6 @@ export function get_translatable_strings(
 								},
 								Property(node) {
 									if (node.key.type !== 'Identifier') return;
-
-									const key = node.key as Identifier;
 
 									const name = `${attribute.name}.${node.key.name}`;
 									if (!names.includes(name)) return false;

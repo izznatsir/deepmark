@@ -14,8 +14,8 @@ import {
 } from '../utils.js';
 
 /**
- * @param { import('@types').Config } config
- * @returns { import('@types').CommandHandler }
+ * @param { import('$types').Config } config
+ * @returns { import('$types').CommandHandler }
  */
 export function create_extract_handler(config) {
 	const {
@@ -56,7 +56,7 @@ export function create_extract_handler(config) {
  *
  * @param { string } source_path
  * @param { string } output_path
- * @param { import('@types').Config } config
+ * @param { import('$types').Config } config
  * @returns { Promise<{ source: string; output: string } | undefined> }
  */
 export async function extract(source_path, output_path, config) {

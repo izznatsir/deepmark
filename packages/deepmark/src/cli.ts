@@ -1,4 +1,4 @@
-import type { Config } from '@types';
+import type { Config } from '$types';
 
 import { program } from 'commander';
 import { create_extract_handler } from './commands/extract.js';

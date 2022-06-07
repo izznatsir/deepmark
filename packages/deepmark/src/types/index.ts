@@ -1,4 +1,5 @@
 export * from './eswalk.js';
+export * from './mdast.js';
 
 export interface Config {
 	/**
