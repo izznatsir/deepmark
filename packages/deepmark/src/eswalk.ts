@@ -1,5 +1,12 @@
-import type { Program as EsProgram } from 'estree';
-import type { EsNodeTypes, EsProcessor, EsWalker, EsWalkers, EsVisitor, EsVisitors } from '$types';
+import type {
+	EsNodeTypes,
+	EsProcessor,
+	EsProgram,
+	EsWalker,
+	EsWalkers,
+	EsVisitor,
+	EsVisitors
+} from '$types';
 
 export const DEFAULT_ESWALKERS: EsWalkers = {
 	Program(node, process) {

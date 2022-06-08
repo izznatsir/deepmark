@@ -1,5 +1,4 @@
-import type { Node as EsNode } from 'estree';
-import type { EsNodes } from './estree.js';
+import type { EsNode, EsNodes } from './estree.js';
 
 export type EsNodeTypes = keyof EsNodes;
 

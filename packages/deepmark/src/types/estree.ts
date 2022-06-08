@@ -95,9 +95,10 @@ import type {
 	JSXOpeningFragment,
 	JSXSpreadAttribute,
 	JSXSpreadChild,
-	JSXText,
-	Node as JSXNode
+	JSXText
 } from 'estree-jsx';
+
+export type { Node as EsNode, Program as EsProgram } from 'estree';
 
 export interface EsNodes {
 	Identifier: Identifier;

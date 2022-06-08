@@ -1,42 +1,45 @@
 import type { UnNode, UnParent } from '$types';
 
+import { is_unist_parent } from '$utils';
+
 const NEXT = true;
 const STOP = false;
 
-export function unwalk(node: UnNode | UnParent, visit: Visitor, inout: boolean = false) {
+export function unwalk(node: UnNode, visit: Visitor, inout: boolean = false) {
 	let next = true;
 
-	function step(node: UnNode | UnParent, parent: UnParent | null) {
+	function step(node: UnNode, parent: UnParent | undefined, index: number | undefined) {
 		if (!inout) {
 			if (!next) return;
 
-			const signal = visit(node, parent);
+			const signal = visit(node, parent, index);
 			next = signal === undefined || NEXT ? NEXT : STOP;
 		}
 
-		if (is_unparent(node)) {
-			for (const child of node.children) {
+		if (is_unist_parent(node)) {
+			for (let i = 0; i < node.children.length; i++) {
 				if (!next) break;
 
-				step(child, node);
+				const child = node.children[i];
+				step(child, node, i);
 			}
+
+			node.children = node.children.filter((child) => child);
 		}
 
 		if (inout) {
 			if (!next) return;
 
-			const signal = visit(node, parent);
+			const signal = visit(node, parent, index);
 			next = signal === undefined || NEXT ? NEXT : STOP;
 		}
 	}
 
-	step(node, null);
-}
-
-function is_unparent(node: UnNode | UnParent): node is UnParent {
-	return 'children' in node;
+	step(node, undefined, undefined);
 }
 
 export interface Visitor {
-	(node: UnNode | UnParent, parent: UnParent | null): boolean | void;
+	(node: UnNode | UnParent, parent: UnParent | undefined, index: number | undefined):
+		| boolean
+		| void;
 }

@@ -4,7 +4,7 @@ import { program } from 'commander';
 import { create_extract_handler } from './commands/extract.js';
 import { generate } from './commands/generate.js';
 import { translate } from './commands/translate.js';
-import { is_file_readable, resolve_path } from './utils.js';
+import { is_file_readable, resolve_path } from '$utils';
 
 async function main() {
 	const deepmark_dir = resolve_path('deepmark');
@@ -16,7 +16,7 @@ async function main() {
 
 	const config: Config = await import(config_file_path);
 
-	if (!config.deeplAuthKey) {
+	if (!config.deepl_auth_key) {
 		const deepl_auth_key = process.env.DEEPL_AUTH_KEY;
 
 		if (!deepl_auth_key)
@@ -24,7 +24,7 @@ async function main() {
 				'You must provide Deepl auth key for developer API.Either in the \nconfig file or by setting DEEPL_AUTH_KEY environment variable.'
 			);
 
-		config.deeplAuthKey = deepl_auth_key;
+		config.deepl_auth_key = deepl_auth_key;
 	}
 
 	program

@@ -1,11 +1,6 @@
 import { test } from 'vitest';
-import { extract } from '../src/commands/extract.js';
 
-const config = {};
-
-test('Ignore nodes base on configuration.', async () => {
-	extract;
-});
+test.skip('Ignore nodes base on configuration.', () => {});
 
 test.skip('Remove whitespace expression on root.', () => {});
 

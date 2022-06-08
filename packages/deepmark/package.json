@@ -16,8 +16,8 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"scripts": {
-		"test": "vitest run",
-		"test:watch": "vitest watch"
+		"test": "vitest run --reporter verbose",
+		"test:watch": "vitest watch --reporter verbose"
 	},
 	"dependencies": {
 		"acorn": "^8.7.1",
@@ -37,7 +37,9 @@
 		"@types/estree": "^0.0.51",
 		"@types/fs-extra": "^9.0.13",
 		"@types/mdast": "^3.0.10",
+		"@types/prettier": "^2.6.3",
 		"@types/unist": "^2.0.6",
+		"prettier": "^2.6.2",
 		"vite": "^2.9.10",
 		"vitest": "^0.14.1"
 	}
