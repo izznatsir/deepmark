@@ -12,7 +12,10 @@ import {
 } from '$utils';
 import { unwalk } from '../unwalk.js';
 
-export function prepare(markdown: string): MdRoot {
+export function prepare(
+	markdown: string,
+	config: { convert: boolean } = { convert: true }
+): MdRoot {
 	const formatted = prettier.format(markdown, {
 		parser: 'mdx',
 		printWidth: Infinity,
@@ -44,10 +47,18 @@ export function prepare(markdown: string): MdRoot {
 				return;
 			}
 
+			if (is_mdast_flow_expression(node) && is_mdast_jsx_flow_element(parent!)) {
+				if (index === 0 && is_mdast_empty_text_expression(node.value)) {
+					(parent.children[index] as unknown) = undefined;
+				}
+			}
+
 			if (is_mdast_text(node)) {
 				node.value = linebreaks_to_whitespaces(node.value);
 				return;
 			}
+
+			if (!config.convert) return;
 
 			if (is_mdast_link(node)) {
 				(node as unknown as MdxJsxTextElement).type = 'mdxJsxTextElement';

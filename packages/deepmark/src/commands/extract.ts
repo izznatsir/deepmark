@@ -3,7 +3,6 @@ import fs from 'fs-extra';
 import np from 'path';
 import {
 	get_mdast,
-	get_mdxast,
 	get_path_tail,
 	get_string_array,
 	get_translatable_strings,
@@ -11,7 +10,7 @@ import {
 	is_markdown,
 	is_md,
 	resolve_path
-} from '../utils.js';
+} from '$utils';
 
 import type { CommandHandler, Config } from '$types';
 
@@ -57,7 +56,7 @@ export async function extract(
 	if (is_markdown(source_path)) {
 		const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
 
-		const ast = is_md(source_path) ? get_mdast(markdown) : get_mdxast(markdown);
+		const ast = is_md(source_path) ? get_mdast(markdown) : get_mdast(markdown);
 		const strings = get_translatable_strings(ast, source_path, config);
 
 		await fs.outputFile(output_path.concat('.ast'), JSON.stringify(ast));

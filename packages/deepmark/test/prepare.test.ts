@@ -9,6 +9,12 @@ test('Remove empty flow expression.', ({ expect }) => {
 				"{' '}\n<IfcCard icon=\"✨\" title=\"Three.js, geometry and Typescript\">\n\tIf you are a Three.js developer, you can help us with{' '}\n\t<a href={'https://github.com/IFCjs/web-ifc-three'}>web-ifc-three</a>, which is{' '}\n\t<a href={'https://threejs.org/examples/webgl_loader_ifc.html'}>\n\t\tthe official Three.js IFC Loader\n\t</a>\n\t.\n</IfcCard>\n",
 			expected:
 				'<IfcCard icon="✨" title="Three.js, geometry and Typescript">\n  If you are a Three.js developer, you can help us with <a href={"https://github.com/IFCjs/web-ifc-three"}>web-ifc-three</a>, which is <a href={"https://threejs.org/examples/webgl_loader_ifc.html"}>the official Three.js IFC Loader</a>.\n</IfcCard>'
+		},
+		{
+			source:
+				'  <IfcCard\n    icon="💎"\n    title=\n"Geometry"> IFC.js can generate 3D scenes because it is compatible with 3D libraries such as Three.js or Babylon.js. This means that you can create 3D BIM tools right away.\n  </IfcCard>',
+			expected:
+				'<IfcCard icon="💎" title="Geometry">\n  IFC.js can generate 3D scenes because it is compatible with 3D libraries such as Three.js or Babylon.js. This means that you can create 3D BIM tools right away.\n</IfcCard>'
 		}
 	];
 

@@ -1,7 +1,7 @@
 import fg from 'fast-glob';
 import fs from 'fs-extra';
 import np from 'path';
-import { get_path_tail, get_string_array, is_directory_exist, resolve_path } from '../utils.js';
+import { get_path_tail, get_string_array, is_directory_exist, resolve_path } from '$utils';
 
 /**
  * @param { import('$types').Config } config

@@ -3,6 +3,7 @@
 **/build
 **/dist
 **/node_modules
+**/test/format
 **/yarn.lock
 **/.cache
 **/.env
