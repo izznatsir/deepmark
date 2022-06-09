@@ -1,9 +1,8 @@
 import type { Config } from '$types';
 
 import { program } from 'commander';
-import { create_extract_handler } from './commands/extract.js';
-import { generate } from './commands/generate.js';
-import { translate } from './commands/translate.js';
+import { create_format_handler } from './commands/format.js';
+import { create_translate_handler } from './commands/translate.js';
 import { is_file_readable, resolve_path } from '$utils';
 
 async function main() {
@@ -34,21 +33,16 @@ async function main() {
 		);
 
 	program
-		.command('extract')
+		.command('format')
 		.description(
-			'Extract strings from markdown files that are intended to be translated.\nIt skip some markdown segments such as code block.'
+			'Format markdown files with Prettier and Remark. In some cases, it produces cleaner output than Prettier.'
 		)
-		.action(create_extract_handler(config));
-
-	program
-		.command('generate')
-		.description('Generate translated markdown files from translated strings and AST.')
-		.action(generate(config));
+		.action(create_format_handler(config));
 
 	program
 		.command('translate')
 		.description('Translate strings with Deepl. Skip strings that have been translated previously.')
-		.action(translate(config));
+		.action(create_translate_handler(config));
 
 	program.parse();
 }

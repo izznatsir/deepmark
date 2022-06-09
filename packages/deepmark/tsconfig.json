@@ -9,5 +9,5 @@
 			"$utils": ["./src/utils/index.js"]
 		}
 	},
-	"include": ["./src/**/*.js", "./src/**/*.ts", "./test/**/*.ts"]
+	"include": ["./src/**/*.ts", "./test/**/*.ts"]
 }

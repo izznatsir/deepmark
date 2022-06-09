@@ -1,10 +1,9 @@
 import type { Config } from '$types';
 
 import fg from 'fast-glob';
-import fs from 'fs/promises';
+import fs from 'fs-extra';
 import np from 'path';
-import prettier from 'prettier';
-import { get_string_array, get_markdown, is_directory_exist, resolve_path } from '$utils';
+import { get_string_array, is_directory_exist, resolve_path } from '$utils';
 import { format } from '../features/format.js';
 
 export function create_format_handler(config: Config) {
