@@ -59,6 +59,7 @@ export type {
 	Blockquote as MdBlockquote,
 	Break as MdBreak,
 	Code as MdCode,
+	Content as MdContent,
 	Definition as MdDefinition,
 	Delete as MdDelete,
 	Emphasis as MdEmphasis,

@@ -1,25 +1,97 @@
-import type { Config } from '$types';
+import type { Config, MdContent, MdRoot } from '$types';
 
-import fs from 'fs-extra';
-import { get_mdast, get_translatable_strings, is_md, is_markdown } from '$utils';
+import { mdxToMarkdown } from 'mdast-util-mdx';
+import { toMarkdown } from 'mdast-util-to-markdown';
+import { parse as parse_yaml } from 'yaml';
+import { generate, GENERATOR, JSX } from '../astring-jsx.js';
+import { eswalk } from '../eswalk.js';
+import { unwalk } from '../unwalk.js';
+import {
+	is_mdast_root,
+	is_mdast_yaml,
+	is_mdast_jsx_attribute,
+	is_mdast_jsx_element,
+	is_mdast_jsx_flow_element,
+	is_mdast_jsx_text_element,
+	is_estree_identifier,
+	resolve_estree_property_path
+} from '$utils';
 
-export async function extract(
-	source_path: string,
-	output_path: string,
-	config: Config
-): Promise<{ source: string; output: string } | void> {
-	if (is_markdown(source_path)) {
-		const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
+export function extract(root: MdRoot, { components, frontmatter, ignore_nodes }: Config): string[] {
+	const component_names = Object.keys(components);
 
-		const ast = is_md(source_path) ? get_mdast(markdown) : get_mdast(markdown);
-		const strings = get_translatable_strings(ast, source_path, config);
+	const strings: string[] = [];
 
-		await fs.outputFile(output_path.concat('.ast'), JSON.stringify(ast));
-		await fs.outputFile(output_path.concat('.json'), JSON.stringify(strings));
-	} else {
-		return {
-			source: source_path,
-			output: output_path
-		};
-	}
+	unwalk(root, (node, parent) => {
+		if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
+
+		if (is_mdast_yaml(node)) {
+			if (frontmatter.length === 0) return;
+
+			const object: Record<string, any> = parse_yaml(node.value);
+
+			for (const key in object) {
+				const value = object[key];
+				if (frontmatter.includes(key) && typeof value === 'string') {
+					strings.push(value);
+				}
+			}
+
+			return;
+		}
+
+		if (is_mdast_jsx_element(node)) {
+			const jsx_node =
+				is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)
+					? node
+					: node.children[0];
+
+			const { attributes, children, name } = jsx_node;
+
+			if (!name || component_names.includes(name)) return;
+
+			if (attributes) {
+				for (const attribute of attributes) {
+					if (!is_mdast_jsx_attribute(attribute)) continue;
+
+					const { name, value } = attribute;
+					if (!components[name].includes(name)) continue;
+
+					if (typeof value === 'string') {
+						strings.push(value);
+					} else if (value?.data?.estree) {
+						const estree = value.data.estree;
+
+						eswalk(estree, {
+							Literal(node) {
+								if (typeof node.value === 'string') strings.push(node.value);
+							},
+							Property(node, parents) {
+								if (!is_estree_identifier(node.key)) return;
+
+								let property_path = resolve_estree_property_path(node, parents);
+								if (!property_path) return false;
+								if (!components[jsx_node.name!].includes(property_path)) return false;
+							},
+							JSXElement(node) {
+								strings.push(generate(node, { generator: { ...GENERATOR, ...JSX } }));
+							}
+						});
+					}
+				}
+			}
+
+			if (components[name].includes('children') && children.length > 0) {
+				for (const child of children) {
+					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] });
+					strings.push(string);
+				}
+			}
+		}
+
+		const string = toMarkdown(node as MdContent, { extensions: [mdxToMarkdown()] });
+		strings.push(string);
+	});
+
+	return [];
 }

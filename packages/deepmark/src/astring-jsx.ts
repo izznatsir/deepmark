@@ -14,6 +14,8 @@ import type {
 	JSXText
 } from 'estree-jsx';
 
+export * from 'astring';
+
 type State = Record<any, any>;
 
 // Make sure that character references don’t pop up.

@@ -31,7 +31,8 @@
 		"remark-comment": "^1.0.0",
 		"remark-frontmatter": "^4.0.1",
 		"remark-mdx": "^2.1.1",
-		"unist-util-visit": "^4.1.0"
+		"unist-util-visit": "^4.1.0",
+		"yaml": "^2.1.1"
 	},
 	"devDependencies": {
 		"@types/estree": "^0.0.51",

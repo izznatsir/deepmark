@@ -1,8 +1,11 @@
-import fs from 'fs-extra'
-import np from 'path'
+import fs from 'fs-extra';
+import np from 'path';
 
-export function resolve_path(...paths: string[]): string {
-	return np.resolve(process.cwd(), ...paths);
+export function get_path_tail(base: string, path: string): string {
+	const resolved_base = resolve_path(base);
+	const resolved_path = resolve_path(path);
+
+	return resolved_path.slice(resolved_base.length + 1);
 }
 
 export async function is_directory_exist(path: string): Promise<boolean> {
@@ -23,13 +26,6 @@ export async function is_file_readable(path: string): Promise<boolean> {
 	} catch {
 		return false;
 	}
-}
-
-export function get_path_tail(base: string, path: string): string {
-	const resolved_base = resolve_path(base);
-	const resolved_path = resolve_path(path);
-
-	return resolved_path.slice(resolved_base.length + 1);
 }
 
 export function is_markdown(path: string): boolean {
@@ -56,6 +52,14 @@ export function is_mdx_json(path: string): boolean {
 	return path.endsWith('.mdx.json');
 }
 
+export function is_mjs(path: string): boolean {
+	return path.endsWith('.mjs');
+}
+
 export function is_json(path: string): boolean {
 	return path.endsWith('.json') && !is_ast_json(path);
+}
+
+export function resolve_path(...paths: string[]): string {
+	return np.resolve(process.cwd(), ...paths);
 }
