@@ -3,11 +3,14 @@ import type { MdRoot, MdxJsxTextElement } from '$types';
 import prettier from 'prettier';
 import {
 	get_mdast,
+	is_mdast_emphasis,
 	is_mdast_flow_expression,
+	is_mdast_inline_code,
 	is_mdast_jsx_flow_element,
 	is_mdast_jsx_text_element,
 	is_mdast_link,
 	is_mdast_root,
+	is_mdast_strong,
 	is_mdast_text
 } from '$utils';
 import { unwalk } from '../unwalk.js';
@@ -60,6 +63,21 @@ export function prepare(
 
 			if (!config.convert) return;
 
+			if (is_mdast_emphasis(node)) {
+				(node as unknown as MdxJsxTextElement).type = 'mdxJsxTextElement';
+				(node as unknown as MdxJsxTextElement).name = 'em';
+				(node as unknown as MdxJsxTextElement).attributes = [];
+				return;
+			}
+
+			if (is_mdast_inline_code(node)) {
+				(node as unknown as MdxJsxTextElement).children = [{ ...node, type: 'text' }];
+				(node as unknown as MdxJsxTextElement).type = 'mdxJsxTextElement';
+				(node as unknown as MdxJsxTextElement).name = 'code';
+				(node as unknown as MdxJsxTextElement).attributes = [];
+				return;
+			}
+
 			if (is_mdast_link(node)) {
 				(node as unknown as MdxJsxTextElement).type = 'mdxJsxTextElement';
 				(node as unknown as MdxJsxTextElement).name = 'a';
@@ -69,6 +87,14 @@ export function prepare(
 
 				delete node.title;
 				delete (node as unknown as { url?: string }).url;
+				return;
+			}
+
+			if (is_mdast_strong(node)) {
+				(node as unknown as MdxJsxTextElement).type = 'mdxJsxTextElement';
+				(node as unknown as MdxJsxTextElement).name = 'strong';
+				(node as unknown as MdxJsxTextElement).attributes = [];
+				return;
 			}
 		},
 		true

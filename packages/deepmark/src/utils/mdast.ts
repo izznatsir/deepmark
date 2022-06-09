@@ -12,7 +12,10 @@ import type {
 	MdxJsxAttribute,
 	MdxTextExpression,
 	UnNode,
-	UnParent
+	UnParent,
+	MdStrong,
+	MdInlineCode,
+	MdEmphasis
 } from '$types';
 
 import { generate, GENERATOR } from 'astring';
@@ -27,24 +30,16 @@ import { JSX } from '../astring-jsx.js';
 import { eswalk } from '../eswalk.js';
 import { unwalk } from '../unwalk.js';
 
-export function is_mdast_root(node: UnNode | undefined): node is MdRoot {
-	return node ? node.type === 'root' : false;
-}
-
-export function is_mdast_yaml(node: UnNode): node is MdYaml {
-	return node.type === 'yaml';
-}
-
-export function is_mdast_paragraph(node: UnNode): node is MdParagraph {
-	return node.type === 'paragraph';
-}
-
-export function is_mdast_text(node: UnNode): node is MdText {
-	return node.type === 'text';
+export function is_mdast_emphasis(node: UnNode): node is MdEmphasis {
+	return node.type === 'emphasis';
 }
 
 export function is_mdast_flow_expression(node: UnNode): node is MdxFlowExpression {
 	return node.type === 'mdxFlowExpression';
+}
+
+export function is_mdast_inline_code(node: UnNode): node is MdInlineCode {
+	return node.type === 'inlineCode';
 }
 
 export function is_mdast_jsx_element(
@@ -76,11 +71,31 @@ export function is_mdast_jsx_attribute(node: UnNode): node is MdxJsxAttribute {
 }
 
 export function is_mdast_link(node: UnNode): node is MdLink {
-	return node.type === 'link'
+	return node.type === 'link';
+}
+
+export function is_mdast_paragraph(node: UnNode): node is MdParagraph {
+	return node.type === 'paragraph';
+}
+
+export function is_mdast_root(node: UnNode | undefined): node is MdRoot {
+	return node ? node.type === 'root' : false;
+}
+
+export function is_mdast_text(node: UnNode): node is MdText {
+	return node.type === 'text';
 }
 
 export function is_mdast_text_expression(node: UnNode): node is MdxTextExpression {
 	return node.type === 'mdxTextExpression';
+}
+
+export function is_mdast_strong(node: UnNode): node is MdStrong {
+	return node.type === 'strong';
+}
+
+export function is_mdast_yaml(node: UnNode): node is MdYaml {
+	return node.type === 'yaml';
 }
 
 /**
