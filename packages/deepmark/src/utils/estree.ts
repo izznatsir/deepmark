@@ -34,9 +34,10 @@ export function is_estree_property(node: EsNode): node is EsProperty {
 
 export function resolve_estree_property_path(
 	node: EsProperty,
-	parents: EsNode[]
+	parents: EsNode[],
+	attribute_name: string
 ): string | undefined {
-	if (!is_estree_array_expression(parents[2]) || !is_estree_object_expression(parents[2])) return;
+	if (!is_estree_array_expression(parents[2]) && !is_estree_object_expression(parents[2])) return;
 	if (!is_estree_identifier(node.key)) return;
 
 	const names = [node.key.name];
@@ -52,6 +53,8 @@ export function resolve_estree_property_path(
 
 		return;
 	}
+
+	names.push(attribute_name);
 
 	return names.reverse().join('.');
 }

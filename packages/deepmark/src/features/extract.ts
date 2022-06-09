@@ -48,16 +48,16 @@ export function extract(root: MdRoot, { components, frontmatter, ignore_nodes }:
 
 			const { attributes, children, name } = jsx_node;
 
-			if (!name || component_names.includes(name)) return;
+			if (!name || !component_names.includes(name)) return;
 
 			if (attributes) {
 				for (const attribute of attributes) {
 					if (!is_mdast_jsx_attribute(attribute)) continue;
 
 					const { name, value } = attribute;
-					if (!components[name].includes(name)) continue;
 
 					if (typeof value === 'string') {
+						if (!components[jsx_node.name!].includes(name)) continue;
 						strings.push(value);
 					} else if (value?.data?.estree) {
 						const estree = value.data.estree;
@@ -67,9 +67,10 @@ export function extract(root: MdRoot, { components, frontmatter, ignore_nodes }:
 								if (typeof node.value === 'string') strings.push(node.value);
 							},
 							Property(node, parents) {
-								if (!is_estree_identifier(node.key)) return;
+								if (!is_estree_identifier(node.key)) return false;
 
-								let property_path = resolve_estree_property_path(node, parents);
+								let property_path = resolve_estree_property_path(node, parents, name);
+								// console.log(property_path);
 								if (!property_path) return false;
 								if (!components[jsx_node.name!].includes(property_path)) return false;
 							},
@@ -83,15 +84,17 @@ export function extract(root: MdRoot, { components, frontmatter, ignore_nodes }:
 
 			if (components[name].includes('children') && children.length > 0) {
 				for (const child of children) {
-					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] });
+					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
 					strings.push(string);
 				}
 			}
+
+			return;
 		}
 
-		const string = toMarkdown(node as MdContent, { extensions: [mdxToMarkdown()] });
+		const string = toMarkdown(node as MdContent, { extensions: [mdxToMarkdown()] }).trimEnd();
 		strings.push(string);
 	});
 
-	return [];
+	return strings;
 }

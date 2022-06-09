@@ -1,0 +1,29 @@
+import Tab from '@site/src/components/tab.js';
+
+<Tab
+	items={[
+		{
+			icon: '🌏',
+			content: (
+				<p>
+					<b>Frontend web applications</b> that read and write IFC files and display 3D without
+					relying on server communication can be created using <b>vanilla JavaScript</b> or other
+					tools such as <b>React, Vue, Angular, Svelte, etc</b>. That is,{' '}
+					<i>with IFC.js we can turn any web browser into an open BIM app.</i>
+				</p>
+			)
+		},
+		{
+			icon: '🏢',
+			content: (
+				<p>
+					There are cases where the IFC file cannot be processed by the client. For example, a
+					mobile device may not have the power to display several medium or large IFCs. In this
+					case, it is possible to <b>use IFC.js on the server</b> via{' '}
+					<a href="https://nodejs.org/en/">Node.js</a> and send the Three.js scene already prepared
+					to the client.
+				</p>
+			)
+		}
+	]}
+/>

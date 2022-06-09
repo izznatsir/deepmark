@@ -1,5 +1,4 @@
 export * from './estree.js';
-export * from './eswalk.js';
 export * from './mdast.js';
 export * from './unist.js';
 
@@ -17,42 +16,8 @@ export interface UserConfig {
 	output_languages: string[];
 	// Directories that contain sources and will contain outputs of every command.
 	directories: {
-		extraction: {
-			/**
-			 * The directory(s) pattern that contains original markdown files.
-			 * The number of directories being provided must match the output field.
-			 */
-			source: string | string[];
-			/**
-			 * The directory(s) pattern where the strings JSON and AST files will be written to.
-			 * The number of directories being provided must match the source field.
-			 */
-			output: string | string[];
-		};
-		generation: {
-			/**
-			 * The directory(s) pattern that contains translated AST files.
-			 * The number of directories being provided must match the output field.
-			 */
-			source: string | string[];
-			/**
-			 * The directory(s) pattern where the translated markdown files will be written to.
-			 * The number of directories being provided must match the source field.
-			 */
-			output: string | string[];
-		};
-		translation: {
-			/**
-			 * The directory(s) pattern that contains original strings JSON files.
-			 * The number of directories being provided must match the output field.
-			 */
-			source: string | string[];
-			/**
-			 * The directory(s) where the translated AST files will be written to.
-			 * The number of directories being provided must match the source field.
-			 */
-			output: string | string[];
-		};
+		sources: string[];
+		outputs: string[];
 	};
 	/**
 	 * JSX Components and optionally their props that should be translated.
