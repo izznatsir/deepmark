@@ -5,6 +5,7 @@ import { is_mjs } from './fs.js';
 export * from './estree.js';
 export * from './fs.js';
 export * from './mdast.js';
+export * from './memory.js';
 export * from './unist.js';
 
 export async function resolve_config(path: string): Promise<Config> {
@@ -12,17 +13,6 @@ export async function resolve_config(path: string): Promise<Config> {
 		throw new Error('Configuration file must be defined as ES module with .mjs extension.');
 
 	const config: UserConfig = await import(path);
-
-	if (!config.deepl_auth_key) {
-		const deepl_auth_key = process.env.DEEPL_AUTH_KEY;
-
-		if (!deepl_auth_key)
-			throw new Error(
-				'You must provide auth key for Deepl developer API. Either in the \nconfig file or by setting DEEPL_AUTH_KEY environment variable.'
-			);
-
-		config.deepl_auth_key = deepl_auth_key;
-	}
 
 	if (!config.components) config.components = {};
 	if (!config.frontmatter) config.frontmatter = [];

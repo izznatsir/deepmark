@@ -28,6 +28,10 @@ export async function is_file_readable(path: string): Promise<boolean> {
 	}
 }
 
+export function is_json(path: string): boolean {
+	return path.endsWith('.json') && !is_ast_json(path);
+}
+
 export function is_markdown(path: string): boolean {
 	return is_md(path) || is_mdx(path);
 }
@@ -54,10 +58,6 @@ export function is_mdx_json(path: string): boolean {
 
 export function is_mjs(path: string): boolean {
 	return path.endsWith('.mjs');
-}
-
-export function is_json(path: string): boolean {
-	return path.endsWith('.json') && !is_ast_json(path);
 }
 
 export function resolve_path(...paths: string[]): string {
