@@ -10,16 +10,17 @@ import type {
 	MdxJsxTextElement,
 	MdxJsxInParagraph,
 	MdxJsxAttribute,
+	MdxJsxAttributeValueExpression,
 	MdxTextExpression,
 	UnNode,
 	UnParent,
 	MdStrong,
 	MdInlineCode,
-	MdEmphasis
+	MdEmphasis,
+	MdNodeUnion
 } from '$types';
 
 import { generate, GENERATOR } from 'astring';
-import { mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { remark } from 'remark';
 import remark_comment from 'remark-comment';
@@ -70,6 +71,12 @@ export function is_mdast_jsx_attribute(node: UnNode): node is MdxJsxAttribute {
 	return node.type === 'mdxJsxAttribute';
 }
 
+export function is_mdast_jsx_attribute_value_expression(
+	node: UnNode
+): node is MdxJsxAttributeValueExpression {
+	return node.type === 'mdxJsxAttributeValueExpression';
+}
+
 export function is_mdast_link(node: UnNode): node is MdLink {
 	return node.type === 'link';
 }
@@ -112,7 +119,7 @@ export function get_mdast(markdown: string): MdRoot {
 	);
 }
 
-export function get_markdown(ast: MdRoot) {
+export function get_markdown(ast: MdRoot): string {
 	return (
 		remark()
 			.use(remark_frontmatter, ['yaml'])

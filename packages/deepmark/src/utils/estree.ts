@@ -5,8 +5,27 @@ import type {
 	EsNode,
 	EsObjectExpression,
 	EsProgram,
-	EsProperty
+	EsProperty,
+	JSXElement
 } from '$types';
+
+import { Parser as AcornParser } from 'acorn';
+import acorn_jsx from 'acorn-jsx';
+import { generate, GENERATOR, JSX } from '../astring-jsx.js';
+
+export function get_estree(code: string): EsProgram {
+	const JsxParser = AcornParser.extend(acorn_jsx());
+	return JsxParser.parse(code, {
+		ecmaVersion: 2020
+	}) as unknown as EsProgram;
+}
+
+export function get_js(estree: EsProgram): string {
+	return generate(estree, {
+		generator: { ...GENERATOR, ...JSX },
+		lineEnd: ''
+	}).replace(/;$/, '');
+}
 
 export function is_estree_array_expression(node: EsNode): node is EsArrayExpression {
 	return node.type === 'ArrayExpression';
@@ -18,6 +37,10 @@ export function is_estree_identifier(node: EsNode): node is EsIdentifier {
 
 export function is_estree_expression_statement(node: EsNode): node is EsExpressionStatement {
 	return node.type === 'ExpressionStatement';
+}
+
+export function is_estree_jsx_element(node: EsNode): node is JSXElement {
+	return node.type === 'JSXElement';
 }
 
 export function is_estree_object_expression(node: EsNode): node is EsObjectExpression {

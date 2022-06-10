@@ -14,8 +14,9 @@ export async function resolve_config(path: string): Promise<Config> {
 
 	const config: UserConfig = await import(path);
 
-	if (!config.components) config.components = {};
+	if (!config.components_attributes) config.components_attributes = {};
 	if (!config.frontmatter) config.frontmatter = [];
+	if (!config.ignore_components) config.ignore_components = [];
 	if (!config.ignore_nodes)
 		config.ignore_nodes = ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm'];
 

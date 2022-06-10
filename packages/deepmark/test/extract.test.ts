@@ -8,17 +8,16 @@ import { prepare } from '../src/features/prepare.js';
 
 const config: Config = {
 	output_languages: [],
-	source_language: '',
-	deepl_auth_key: '',
+	source_language: 'en',
 	directories: {
 		sources: [],
 		outputs: []
 	},
-	components: {
-		Card: ['children'],
+	components_attributes: {
 		Tab: ['children', 'items.content']
 	},
 	frontmatter: ['title', 'author_title'],
+	ignore_components: [],
 	ignore_nodes: ['code', 'mdxjsEsm']
 };
 

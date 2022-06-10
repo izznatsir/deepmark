@@ -176,9 +176,44 @@ export type {
 	ImportSpecifier as EsImportSpecifier,
 	ImportNamespaceSpecifier as EsImportNamespaceSpecifier,
 	ImportDefaultSpecifier as EsImportDefaultSpecifier,
-	ExportSpecifier as EsExportSpecifier,
-	Node as EsNode
+	ExportSpecifier as EsExportSpecifier
 } from 'estree';
+
+export type {
+	JSXAttribute,
+	JSXClosingElement,
+	JSXClosingFragment,
+	JSXElement,
+	JSXEmptyExpression,
+	JSXExpressionContainer,
+	JSXFragment,
+	JSXIdentifier,
+	JSXMemberExpression,
+	JSXNamespacedName,
+	JSXOpeningElement,
+	JSXOpeningFragment,
+	JSXSpreadAttribute,
+	JSXSpreadChild,
+	JSXText
+} from 'estree-jsx';
+
+export type EsNode =
+	| Node
+	| JSXAttribute
+	| JSXClosingElement
+	| JSXClosingFragment
+	| JSXElement
+	| JSXEmptyExpression
+	| JSXExpressionContainer
+	| JSXFragment
+	| JSXIdentifier
+	| JSXMemberExpression
+	| JSXNamespacedName
+	| JSXOpeningElement
+	| JSXOpeningFragment
+	| JSXSpreadAttribute
+	| JSXSpreadChild
+	| JSXText;
 
 export type EsNodeTypes = keyof EsNodeMap;
 

@@ -18,16 +18,21 @@ export interface UserConfig {
 		outputs: string | string[];
 	};
 	/**
-	 * JSX Components and optionally their props that should be translated.
-	 * Pass an empty array if you do not want to translate any props.
+	 * JSX Components attributes that should be translated.
+	 * Only translate `children` by default. `children` need
+	 * to be listed if you customize the attribute list.
 	 */
-	components?: {
+	components_attributes?: {
 		[Name: string]: string[];
 	};
 	/**
 	 * Frontmatter fields to be translated, default to not include any field.
 	 */
 	frontmatter?: string[];
+	/**
+	 * JSX components that will not be translated.
+	 */
+	ignore_components?: string[];
 	/**
 	 * MDAST nodes to not translate, defaults to:
 	 * ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm']
