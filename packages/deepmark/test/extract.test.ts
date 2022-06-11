@@ -3,7 +3,7 @@ import type { Config } from '$types';
 import fs from 'fs-extra';
 import np from 'path';
 import { test } from 'vitest';
-import { extract } from '../src/features/extract.js';
+import { extract_mdast_strings } from '../src/features/extract.js';
 import { prepare } from '../src/features/prepare.js';
 
 const config: Config = {
@@ -22,11 +22,11 @@ const config: Config = {
 };
 
 test('Extract YAML frontmatter fields based on configuration.', async ({ expect }) => {
-	const markdown_path = np.resolve(process.cwd(), 'test/extract/yaml.mdx');
+	const markdown_path = np.resolve(process.cwd(), 'test/samples/yaml.mdx');
 	const markdown = await fs.readFile(markdown_path, { encoding: 'utf-8' });
 
 	const root = prepare(markdown);
-	const strings = extract(root, config);
+	const strings = extract_mdast_strings(root, config);
 
 	const expected: string[] = ['Hello IFC.js!', 'Open BIM has come to the browser to stay.'];
 
@@ -34,11 +34,11 @@ test('Extract YAML frontmatter fields based on configuration.', async ({ expect 
 });
 
 test('Ignore nodes base on configuration.', async ({ expect }) => {
-	const markdown_path = np.resolve(process.cwd(), 'test/extract/ignore-nodes.mdx');
+	const markdown_path = np.resolve(process.cwd(), 'test/samples/ignore-nodes.mdx');
 	const markdown = await fs.readFile(markdown_path, { encoding: 'utf-8' });
 
 	const root = prepare(markdown);
-	const strings = extract(root, config);
+	const strings = extract_mdast_strings(root, config);
 
 	const expected: string[] = [
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -50,11 +50,11 @@ test('Ignore nodes base on configuration.', async ({ expect }) => {
 });
 
 test('Extract JSX element attributes and children based on configuration.', async ({ expect }) => {
-	const markdown_path = np.resolve(process.cwd(), 'test/extract/jsx.mdx');
+	const markdown_path = np.resolve(process.cwd(), 'test/samples/jsx.mdx');
 	const markdown = await fs.readFile(markdown_path, { encoding: 'utf-8' });
 
 	const root = prepare(markdown);
-	const strings = extract(root, config);
+	const strings = extract_mdast_strings(root, config);
 
 	const expected: string[] = [
 		'<p>\n          <b>Frontend web applications</b> that read and write IFC files and display 3D without relying on server communication can be created using <b>vanilla JavaScript</b> or other tools such as <b>React, Vue, Angular, Svelte, etc</b>. That is, <i>with IFC.js we can turn any web browser into an open BIM app.</i>\n        </p>',

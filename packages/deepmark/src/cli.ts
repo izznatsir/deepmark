@@ -1,10 +1,7 @@
-import type { Context } from '$types';
-
 import { program } from 'commander';
 import { create_format_handler } from './commands/format.js';
 import { create_translate_handler } from './commands/translate.js';
-import { is_file_readable, resolve_config, resolve_path, TranslationMemory } from '$utils';
-import { Translator } from 'deepl-node';
+import { create_context, is_file_readable, resolve_config, resolve_path } from '$utils';
 
 async function main() {
 	const deepmark_dir = resolve_path('deepmark');
@@ -39,17 +36,3 @@ async function main() {
 }
 
 await main();
-
-function create_context(): Context {
-	const deepl_key = process.env.DEEPL_AUTH_KEY;
-
-	if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
-
-	const deepl = new Translator(deepl_key);
-	const memory = new TranslationMemory('./deepmark/memory.json');
-
-	return {
-		deepl,
-		memory
-	};
-}

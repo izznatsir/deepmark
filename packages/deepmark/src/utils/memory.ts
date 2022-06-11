@@ -18,10 +18,11 @@ export class TranslationMemory {
 	}
 
 	get(source: string, language: string): string | undefined {
-		return this.data[source][language];
+		return this.data[source] ? this.data[source][language] : undefined;
 	}
 
 	set(source: string, language: string, translation: string) {
+		if (!this.data[source]) this.data[source] = {};
 		this.data[source][language] = translation;
 	}
 
