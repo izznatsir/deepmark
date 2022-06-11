@@ -2,11 +2,13 @@
 	"name": "root",
 	"private": true,
 	"workspaces": [
+		"demo",
 		"packages/*"
 	],
 	"scripts": {
 		"build": "yarn workspaces foreach run build",
 		"check": "yarn workspaces foreach run check",
+		"demo": "yarn workspace demo start",
 		"format": "prettier --write .",
 		"lint": "prettier --check ."
 	},
