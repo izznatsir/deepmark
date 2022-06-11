@@ -5,6 +5,7 @@
 		"packages/*"
 	],
 	"scripts": {
+		"build": "yarn workspaces foreach run build",
 		"check": "yarn workspaces foreach run check",
 		"format": "prettier --write .",
 		"lint": "prettier --check ."

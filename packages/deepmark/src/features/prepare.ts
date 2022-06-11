@@ -11,9 +11,9 @@ import {
 	is_mdast_link,
 	is_mdast_root,
 	is_mdast_strong,
-	is_mdast_text
+	is_mdast_text,
+	unwalk
 } from '$utils';
-import { unwalk } from '../unwalk.js';
 
 export function prepare(
 	markdown: string,

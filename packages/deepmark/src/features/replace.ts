@@ -3,6 +3,7 @@ import type { Config, DocusaurusTranslations, JSXElement, MdRoot } from '$types'
 
 import { parse as parse_yaml, stringify as stringify_yaml } from 'yaml';
 import {
+	eswalk,
 	is_mdast_root,
 	is_mdast_yaml,
 	is_mdast_jsx_attribute,
@@ -20,10 +21,9 @@ import {
 	is_estree_expression_statement,
 	is_mdast_jsx_attribute_value_expression,
 	is_mdast_text,
-	is_mdast_paragraph
+	is_mdast_paragraph,
+	unwalk
 } from '$utils';
-import { eswalk } from '../eswalk.js';
-import { unwalk } from '../unwalk.js';
 
 export function replace_mdast_strings(
 	mdast: MdRoot,

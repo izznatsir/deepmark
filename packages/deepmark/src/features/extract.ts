@@ -3,8 +3,11 @@ import type { Config, DocusaurusTranslations, MdContent, MdRoot } from '$types';
 import { mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { parse as parse_yaml } from 'yaml';
-import { generate, GENERATOR, JSX } from '../astring-jsx.js';
 import {
+	eswalk,
+	generate,
+	GENERATOR,
+	JSX,
 	is_mdast_root,
 	is_mdast_yaml,
 	is_mdast_jsx_attribute,
@@ -12,10 +15,9 @@ import {
 	is_mdast_jsx_flow_element,
 	is_mdast_jsx_text_element,
 	is_estree_identifier,
-	resolve_estree_property_path
+	resolve_estree_property_path,
+	unwalk
 } from '$utils';
-import { eswalk } from '../eswalk.js';
-import { unwalk } from '../unwalk.js';
 
 export function extract_mdast_strings(
 	mdast: MdRoot,

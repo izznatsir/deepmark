@@ -1,5 +1,4 @@
 import type {
-	Config,
 	MdLink,
 	MdParagraph,
 	MdRoot,
@@ -17,19 +16,12 @@ import type {
 	MdStrong,
 	MdInlineCode,
 	MdEmphasis,
-	MdNodeUnion
 } from '$types';
 
-import { generate, GENERATOR } from 'astring';
-import { toMarkdown } from 'mdast-util-to-markdown';
 import { remark } from 'remark';
 import remark_comment from 'remark-comment';
 import remark_frontmatter from 'remark-frontmatter';
 import remark_mdx from 'remark-mdx';
-import { is_mdx } from './fs.js';
-import { JSX } from '../astring-jsx.js';
-import { eswalk } from '../eswalk.js';
-import { unwalk } from '../unwalk.js';
 
 export function is_mdast_emphasis(node: UnNode): node is MdEmphasis {
 	return node.type === 'emphasis';

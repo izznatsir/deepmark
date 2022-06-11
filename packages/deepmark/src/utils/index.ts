@@ -4,11 +4,14 @@ import { Translator } from 'deepl-node';
 import { is_mjs } from './fs.js';
 import { TranslationMemory } from './memory.js';
 
+export * from './astring-jsx.js';
 export * from './estree.js';
+export * from './eswalk.js';
 export * from './fs.js';
 export * from './mdast.js';
 export * from './memory.js';
 export * from './unist.js';
+export * from './unwalk.js';
 
 export function create_context(): Context {
 	const deepl_key = process.env.DEEPL_AUTH_KEY;

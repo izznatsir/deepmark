@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 import { program } from 'commander';
+import { create_context, is_file_readable, resolve_config, resolve_path } from '$utils';
 import { create_format_handler } from './commands/format.js';
 import { create_translate_handler } from './commands/translate.js';
-import { create_context, is_file_readable, resolve_config, resolve_path } from '$utils';
 
 async function main() {
 	const deepmark_dir = resolve_path('deepmark');
@@ -35,4 +36,4 @@ async function main() {
 	program.parse();
 }
 
-await main();
+main();

@@ -1,6 +1,6 @@
 import type { UnNode, UnParent } from '$types';
 
-import { is_unist_parent } from '$utils';
+import { is_unist_parent } from './unist.js';
 
 const NEXT = true;
 const STOP = false;

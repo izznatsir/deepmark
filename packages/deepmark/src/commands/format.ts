@@ -8,11 +8,11 @@ import { format } from '../features/format.js';
 
 export function create_format_handler(config: Config) {
 	const {
-		directories: { extraction }
+		directories: { sources }
 	} = config;
 
 	return async () => {
-		const source_dirs = get_string_array(extraction.source);
+		const source_dirs = get_string_array(sources);
 
 		for (const source_dir of source_dirs) {
 			if (!is_directory_exist(source_dir)) continue;

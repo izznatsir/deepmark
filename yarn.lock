@@ -532,6 +532,7 @@ __metadata:
     remark-comment: ^1.0.0
     remark-frontmatter: ^4.0.1
     remark-mdx: ^2.1.1
+    rollup-plugin-preserve-shebang: ^1.0.1
     unist-util-visit: ^4.1.0
     vite: ^2.9.10
     vitest: ^0.14.1
@@ -1309,6 +1310,15 @@ __metadata:
   version: 7.10.1
   resolution: "lru-cache@npm:7.10.1"
   checksum: e8b190d71ed0fcd7b29c71a3e9b01f851c92d1ef8865ff06b5581ca991db1e5e006920ed4da8b56da1910664ed51abfd76c46fb55e82ac252ff6c970ff910d72
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.25.7":
+  version: 0.25.9
+  resolution: "magic-string@npm:0.25.9"
+  dependencies:
+    sourcemap-codec: ^1.4.8
+  checksum: 9a0e55a15c7303fc360f9572a71cffba1f61451bc92c5602b1206c9d17f492403bf96f946dfce7483e66822d6b74607262e24392e87b0ac27b786e69a40e9b1a
   languageName: node
   linkType: hard
 
@@ -2256,6 +2266,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rollup-plugin-preserve-shebang@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "rollup-plugin-preserve-shebang@npm:1.0.1"
+  dependencies:
+    magic-string: ^0.25.7
+  checksum: 880c042af35f0dd1b6915020ac466441bdaa1ad3f78e395c77bbc1afe929f13eaa96e9d32d689f6750fc69322af71d6eea9cd5a475eaeed06df547f2f2ba2a80
+  languageName: node
+  linkType: hard
+
 "rollup@npm:^2.59.0":
   version: 2.75.5
   resolution: "rollup@npm:2.75.5"
@@ -2372,6 +2391,13 @@ __metadata:
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
+  languageName: node
+  linkType: hard
+
+"sourcemap-codec@npm:^1.4.8":
+  version: 1.4.8
+  resolution: "sourcemap-codec@npm:1.4.8"
+  checksum: b57981c05611afef31605732b598ccf65124a9fcb03b833532659ac4d29ac0f7bfacbc0d6c5a28a03e84c7510e7e556d758d0bb57786e214660016fb94279316
   languageName: node
   linkType: hard
 
