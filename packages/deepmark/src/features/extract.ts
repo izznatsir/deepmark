@@ -32,9 +32,20 @@ export function extract_mdast_strings(
 			const object: Record<string, any> = parse_yaml(node.value);
 
 			for (const key in object) {
+				if (!frontmatter.includes(key)) continue;
+
 				const value = object[key];
-				if (frontmatter.includes(key) && typeof value === 'string') {
+
+				if (typeof value === 'string') {
 					strings.push(value);
+					continue;
+				}
+
+				if (Array.isArray(value)) {
+					for (const item of value) {
+						if (typeof item !== 'string') continue;
+						strings.push(item);
+					}
 				}
 			}
 
@@ -58,7 +69,7 @@ export function extract_mdast_strings(
 					const { name, value } = attribute;
 
 					if (typeof value === 'string') {
-						if (!components_attributes[jsx_node.name!].includes(name)) continue;
+						if (!components_attributes[jsx_node.name!]?.includes(name)) continue;
 						strings.push(value);
 					} else if (value?.data?.estree) {
 						const estree = value.data.estree;

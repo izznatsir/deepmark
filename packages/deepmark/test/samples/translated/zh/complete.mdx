@@ -1,0 +1,39 @@
+---
+slug: Open BIM
+title: 你好，IFC.js!
+author: Ansoni
+author_title: 开放式BIM已经来到了浏览器上，并在此停留。
+author_url: https://github.com/agviegas
+author_image_url: https://secure.gravatar.com/avatar/9263b9f81d351788e46bc64000c03cb6
+tags:
+  - 行业
+  - 社区
+  - 项目
+
+---
+
+import Card from "@site/src/components/card.js";
+import Ignore from "@site/src/components/ignore.js";
+import Tab from "@site/src/components/tab.js";
+
+🧑 我们的patreon系统超级简单：你<strong>每个月</strong>给项目捐<strong>5美元</strong>，帮助IFC.js继续成长。然而，<strong>我们不相信开放源代码应该依赖于利他主义的捐赠</strong>。出于这个原因，所有的赞助人都可以获得以下服务。
+
+<Card icon="👩‍🏫" title="适用于所有级别的BIM编程课程">
+  我们有适合所有级别的BIM编程课程。每门课程的费用为100美元，但赞助人<a href="https://ifcjs.github.io/info/docs/Courses/Getting-started#for-patreons">只需25美元</a>就可以获得这些课程。
+</Card>
+
+```js
+function main() {
+  console.log("boom");
+}
+
+main();
+```
+
+<Ignore>This component will not be translated.</Ignore>
+
+<Tab
+  items={[{  icon: "🌏",  content: <p>
+            可以使用<b>vanilla JavaScript</b>或其他工具（如<b>React、Vue、Angular、Svelte等</b>）来创建读写IFC文件和显示3D的<b>前端网络应用</b>，而无需依赖服务器通信。也就是说，<i>通过IFC.js，我们可以把任何网络浏览器变成一个开放的BIM应用</i>。        </p>}, {  icon: "🏢",  content: <p>
+            有些情况下，IFC文件不能被客户端处理。例如，移动设备可能没有能力显示几个中型或大型IFC。在这种情况下，可以通过<a href="https://nodejs.org/en/">Node.js</a> <b>在服务器上使用IFC.js</b>，并将已经准备好的Three.js场景发送到客户端。        </p>}]}
+/>

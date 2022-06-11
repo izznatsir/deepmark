@@ -18,7 +18,9 @@ import {
 	get_mdast,
 	resolve_estree_property_path,
 	is_estree_expression_statement,
-	is_mdast_jsx_attribute_value_expression
+	is_mdast_jsx_attribute_value_expression,
+	is_mdast_text,
+	is_mdast_paragraph
 } from '$utils';
 import { eswalk } from '../eswalk.js';
 import { unwalk } from '../unwalk.js';
@@ -38,15 +40,28 @@ export function replace_mdast_strings(
 		unwalk(mdast, (node, parent) => {
 			if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
 
+			if (node.position) delete node.position;
+
 			if (is_mdast_yaml(node)) {
 				if (frontmatter.length === 0) return;
 
 				const object: Record<string, any> = parse_yaml(node.value);
 
 				for (const key in object) {
+					if (!frontmatter.includes(key)) continue;
+
 					const value = object[key];
-					if (frontmatter.includes(key) && typeof value === 'string') {
+
+					if (typeof value === 'string') {
 						object[key] = _strings.pop();
+						continue;
+					}
+
+					if (Array.isArray(value)) {
+						object[key] = value.map((item) => {
+							if (typeof item !== 'string') return item;
+							return _strings.pop();
+						});
 					}
 				}
 
@@ -151,13 +166,28 @@ export function replace_mdast_strings(
 
 							continue;
 						}
+
+						if (is_mdast_paragraph(child) && is_mdast_paragraph(translated_node)) {
+							child.children = translated_node.children;
+
+							continue;
+						}
+
+						if (is_mdast_text(child) && is_mdast_paragraph(translated_node)) {
+							if (is_mdast_text(translated_node.children[0]))
+								child.value = translated_node.children[0].value;
+
+							continue;
+						}
+
+						console.log(translated_node);
 					}
 				}
 
 				return;
 			}
 
-			const translated_node = get_mdast(_strings.pop()!);
+			const translated_node = get_mdast(_strings.pop()!).children[0];
 
 			for (const property in node) {
 				// @ts-ignore

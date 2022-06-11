@@ -1,6 +1,6 @@
 import type { Config, Context } from '$types';
 
-import { afterAll, test } from 'vitest';
+import { test } from 'vitest';
 import { create_context } from '$utils';
 import { translate } from '../src/features/translate';
 import type { TargetLanguageCode } from 'deepl-node';
@@ -20,11 +20,7 @@ const config: Config = {
 
 const context: Context = create_context();
 
-afterAll(() => {
-	context.memory.reset();
-});
-
-test('HTML in between sentence.', async ({ expect }) => {
+test.skip('HTML in between sentence.', async ({ expect }) => {
 	const strings: string[] = [
 		'<p><b>Frontend web applications</b> that read and write IFC files and display 3D without relying on server communication can be created using <b>vanilla JavaScript</b>.</p>',
 		'<p>Frontend web applications that read and write IFC files and display 3D without relying on server communication can be created using vanilla JavaScript.</p>'

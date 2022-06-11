@@ -4,6 +4,7 @@ import { resolve_path } from '$utils';
 export class TranslationMemory {
 	data: TMData;
 	path: string;
+	updated: boolean = false;
 
 	constructor(path: string) {
 		const resolved_path = resolve_path(path);
@@ -24,10 +25,13 @@ export class TranslationMemory {
 	set(source: string, language: string, translation: string) {
 		if (!this.data[source]) this.data[source] = {};
 		this.data[source][language] = translation;
+		this.updated = true;
 	}
 
 	async serialize() {
+		if (!this.updated) return;
 		await fs.writeFile(this.path, JSON.stringify(this.data));
+		this.updated = false;
 	}
 
 	async reset() {

@@ -1,3 +1,4 @@
+packages/deepmark/test/**/*.mdx
 .DS_Store
 .yarn
 **/build

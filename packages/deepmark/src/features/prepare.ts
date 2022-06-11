@@ -30,9 +30,7 @@ export function prepare(
 	unwalk(
 		root,
 		(node, parent, index) => {
-			if ('position' in node) {
-				delete node.position;
-			}
+			if (node.position) delete node.position;
 
 			if (is_mdast_flow_expression(node) && is_mdast_root(parent)) {
 				if (is_mdast_empty_text_expression(node.value)) {
@@ -54,6 +52,7 @@ export function prepare(
 				if (index === 0 && is_mdast_empty_text_expression(node.value)) {
 					(parent.children[index] as unknown) = undefined;
 				}
+				return;
 			}
 
 			if (is_mdast_text(node)) {
