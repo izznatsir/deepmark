@@ -60,6 +60,10 @@ export function is_mjs(path: string): boolean {
 	return path.endsWith('.mjs');
 }
 
+export function join_path(...paths: string[]): string {
+	return np.join(process.cwd(), ...paths);
+}
+
 export function resolve_path(...paths: string[]): string {
 	return np.resolve(process.cwd(), ...paths);
 }

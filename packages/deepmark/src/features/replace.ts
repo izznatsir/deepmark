@@ -1,5 +1,5 @@
 import type { TargetLanguageCode } from 'deepl-node';
-import type { Config, JSXElement, MdRoot, MdxJsxFlowElement, MdxJsxTextElement } from '$types';
+import type { Config, DocusaurusTranslations, JSXElement, MdRoot } from '$types';
 
 import { parse as parse_yaml, stringify as stringify_yaml } from 'yaml';
 import {
@@ -23,19 +23,19 @@ import {
 import { eswalk } from '../eswalk.js';
 import { unwalk } from '../unwalk.js';
 
-export function replace(
-	root: MdRoot,
-	translations: { [Language in TargetLanguageCode]?: string[] },
+export function replace_mdast_strings(
+	mdast: MdRoot,
+	strings: { [Language in TargetLanguageCode]?: string[] },
 	{ components_attributes, frontmatter, ignore_components, ignore_nodes }: Config
 ): { [Language in TargetLanguageCode]?: string } {
-	const replaced: { [Language in TargetLanguageCode]?: string } = {};
+	const markdowns: { [Language in TargetLanguageCode]?: string } = {};
 
-	for (const language in translations) {
-		const _translations = translations[language as TargetLanguageCode];
+	for (const language in strings) {
+		const _strings = strings[language as TargetLanguageCode]?.reverse();
 
-		if (!_translations) continue;
+		if (!_strings) continue;
 
-		unwalk(root, (node, parent) => {
+		unwalk(mdast, (node, parent) => {
 			if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
 
 			if (is_mdast_yaml(node)) {
@@ -46,7 +46,7 @@ export function replace(
 				for (const key in object) {
 					const value = object[key];
 					if (frontmatter.includes(key) && typeof value === 'string') {
-						object[key] = _translations.pop();
+						object[key] = _strings.pop();
 					}
 				}
 
@@ -75,7 +75,7 @@ export function replace(
 
 						if (typeof attribute.value === 'string') {
 							if (!components_attributes[jsx_node.name!].includes(name)) continue;
-							attribute.value = _translations.pop();
+							attribute.value = _strings.pop();
 						} else if (
 							is_mdast_jsx_attribute_value_expression(attribute.value) &&
 							attribute.value.data?.estree
@@ -84,7 +84,7 @@ export function replace(
 
 							eswalk(estree, {
 								Literal(node) {
-									if (typeof node.value === 'string') node.value = _translations.pop()!;
+									if (typeof node.value === 'string') node.value = _strings.pop()!;
 								},
 								Property(node, parents) {
 									if (!is_estree_identifier(node.key)) return false;
@@ -94,7 +94,7 @@ export function replace(
 									if (!components_attributes[jsx_node.name!].includes(property_path)) return false;
 								},
 								JSXElement(node) {
-									const estree = get_estree(_translations.pop()!);
+									const estree = get_estree(_strings.pop()!);
 
 									if (
 										!is_estree_expression_statement(estree.body[0]) ||
@@ -125,7 +125,7 @@ export function replace(
 					children.length > 0
 				) {
 					for (const child of children) {
-						const mdast = get_mdast(_translations.pop()!);
+						const mdast = get_mdast(_strings.pop()!);
 						const translated_node = mdast.children[0];
 
 						if (
@@ -157,7 +157,7 @@ export function replace(
 				return;
 			}
 
-			const translated_node = get_mdast(_translations.pop()!);
+			const translated_node = get_mdast(_strings.pop()!);
 
 			for (const property in node) {
 				// @ts-ignore
@@ -165,8 +165,27 @@ export function replace(
 			}
 		});
 
-		replaced[language as TargetLanguageCode] = get_markdown(root);
+		markdowns[language as TargetLanguageCode] = get_markdown(mdast);
 	}
 
-	return replaced;
+	return markdowns;
+}
+
+export function replace_docusaurus_strings(
+	object: DocusaurusTranslations,
+	strings: { [Language in TargetLanguageCode]?: string[] }
+): { [Language in TargetLanguageCode]?: string } {
+	const keys = Object.keys(object);
+	const jsons: { [Language in TargetLanguageCode]?: string } = {};
+
+	for (const language in strings) {
+		const _strings = strings[language as TargetLanguageCode];
+		for (let i = 0; i < _strings!.length; i++) {
+			object[keys[i]].message = _strings![i];
+		}
+
+		jsons[language as TargetLanguageCode] = JSON.stringify(object);
+	}
+
+	return jsons;
 }

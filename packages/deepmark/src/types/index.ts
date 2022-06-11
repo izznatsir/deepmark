@@ -1,6 +1,7 @@
 import type { SourceLanguageCode, TargetLanguageCode, Translator } from 'deepl-node';
 import type { TranslationMemory } from '$utils';
 
+export * from './docusaurus.js';
 export * from './estree.js';
 export * from './mdast.js';
 export * from './unist.js';

@@ -1,4 +1,4 @@
-import type { Config, MdContent, MdRoot } from '$types';
+import type { Config, DocusaurusTranslations, MdContent, MdRoot } from '$types';
 
 import { mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
@@ -17,13 +17,13 @@ import {
 import { eswalk } from '../eswalk.js';
 import { unwalk } from '../unwalk.js';
 
-export function extract(
-	root: MdRoot,
+export function extract_mdast_strings(
+	mdast: MdRoot,
 	{ components_attributes, frontmatter, ignore_components, ignore_nodes }: Config
 ): string[] {
 	const strings: string[] = [];
 
-	unwalk(root, (node, parent) => {
+	unwalk(mdast, (node, parent) => {
 		if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
 
 		if (is_mdast_yaml(node)) {
@@ -83,7 +83,10 @@ export function extract(
 				}
 			}
 
-			if ((!components_attributes[name] || components_attributes[name].includes('children')) && children.length > 0) {
+			if (
+				(!components_attributes[name] || components_attributes[name].includes('children')) &&
+				children.length > 0
+			) {
 				for (const child of children) {
 					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
 					strings.push(string);
@@ -96,6 +99,16 @@ export function extract(
 		const string = toMarkdown(node as MdContent, { extensions: [mdxToMarkdown()] }).trimEnd();
 		strings.push(string);
 	});
+
+	return strings;
+}
+
+export function extract_docusaurus_strings(object: DocusaurusTranslations): string[] {
+	const strings: string[] = [];
+
+	for (const key in object) {
+		strings.push(object[key].message);
+	}
 
 	return strings;
 }

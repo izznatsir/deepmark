@@ -9,10 +9,11 @@ import {
 	is_directory_exist,
 	is_json,
 	is_markdown,
+	join_path,
 	resolve_path
 } from '$utils';
-import { extract } from '../features/extract.js';
-import { replace } from '../features/replace.js';
+import { extract_docusaurus_strings, extract_mdast_strings } from '../features/extract.js';
+import { replace_docusaurus_strings, replace_mdast_strings } from '../features/replace.js';
 import { prepare } from '../features/prepare.js';
 import { translate } from '../features/translate.js';
 import type { TargetLanguageCode } from 'deepl-node';
@@ -30,6 +31,7 @@ export function create_translate_handler(config: Config, context: Context): Comm
 
 		for (let i = 0; i < source_dirs.length; i++) {
 			const source_dir = source_dirs[i].replace('%language%', source_language);
+			const output_dir = output_dirs[i];
 			if (!is_directory_exist(source_dir)) continue;
 
 			const source_pattern = np.join(source_dir, '**/*.*');
@@ -39,14 +41,14 @@ export function create_translate_handler(config: Config, context: Context): Comm
 			const copyable_paths = source_paths.filter((path) => !is_markdown(path) && !is_json(path));
 
 			for (const source_path of translatable_paths) {
-				const output_path = '';
+				const output_path = join_path(output_dir, get_path_tail(source_dir, source_path));
 
 				if (is_markdown(source_path)) {
 					const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
 					const root = prepare(markdown);
-					const sources = extract(root, config);
-					const translations = await translate(sources, config, context);
-					const markdowns = replace(root, translations, config);
+					const strings = extract_mdast_strings(root, config);
+					const translations = await translate(strings, config, context);
+					const markdowns = replace_mdast_strings(root, translations, config);
 
 					for (const language in markdowns) {
 						const _markdown = markdowns[language as TargetLanguageCode];
@@ -57,14 +59,30 @@ export function create_translate_handler(config: Config, context: Context): Comm
 				}
 
 				if (is_json(source_path)) {
+					const json = await fs.readFile(source_path, { encoding: 'utf-8' });
+					const object = JSON.parse(json);
+					const strings = extract_docusaurus_strings(object);
+					const translations = await translate(strings, config, context);
+					const jsons = replace_docusaurus_strings(object, translations);
+
+					for (const language in jsons) {
+						const _json = jsons[language as TargetLanguageCode];
+						await fs.outputFile(_json!, output_path.replace('%language%', language));
+					}
+
 					continue;
 				}
 			}
 
 			for (const source_path of copyable_paths) {
-				const destination_path = '';
-				await fs.copyFile(source_path, destination_path);
+				const output_path = join_path(output_dir, get_path_tail(source_dir, source_path));
+
+				for (const language in output_languages) {
+					await fs.copyFile(source_path, output_path.replace('%language%', language));
+				}
 			}
 		}
+
+		context.memory.serialize();
 	};
 }
