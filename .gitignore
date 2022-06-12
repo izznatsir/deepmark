@@ -7,6 +7,8 @@
 **/dist
 **/IGNORE.md*
 **/node_modules
+**/out
+**/tsconfig.tsbuildinfo
 **/.cache
 **/.env
 **/.env.*

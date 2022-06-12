@@ -3,11 +3,8 @@ import type { Config, Context } from '$types';
 import fs from 'fs-extra';
 import np from 'path';
 import { test } from 'vitest';
+import { extract_mdast_strings, prepare, replace_mdast_strings, translate } from '$feats';
 import { create_context } from '$utils';
-import { extract_mdast_strings } from '../src/features/extract.js';
-import { prepare } from '../src/features/prepare.js';
-import { replace_mdast_strings } from '../src/features/replace.js';
-import { translate } from '../src/features/translate.js';
 import type { TargetLanguageCode } from 'deepl-node';
 
 const config: Config = {

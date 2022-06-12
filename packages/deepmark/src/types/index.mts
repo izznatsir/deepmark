@@ -1,10 +1,10 @@
 import type { SourceLanguageCode, TargetLanguageCode, Translator } from 'deepl-node';
 import type { TranslationMemory } from '$utils';
 
-export * from './docusaurus.js';
-export * from './estree.js';
-export * from './mdast.js';
-export * from './unist.js';
+export * from './docusaurus.mjs';
+export * from './estree.mjs';
+export * from './mdast.mjs';
+export * from './unist.mjs';
 
 export type Config = Required<UserConfig>;
 

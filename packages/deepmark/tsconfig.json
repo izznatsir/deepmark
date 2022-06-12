@@ -3,11 +3,17 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"composite": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
 		"lib": ["ESNext"],
+		"noEmit": false,
+		"outDir": "./dist",
 		"paths": {
-			"$types": ["./src/types/index.js"],
-			"$utils": ["./src/utils/index.js"]
-		}
+			"$feats": ["./src/features/index.mjs"],
+			"$types": ["./src/types/index.mjs"],
+			"$utils": ["./src/utilities/index.mjs"]
+		},
+		"rootDir": "./src"
 	},
-	"include": ["./src/**/*.ts", "./test/**/*.ts"]
+	"include": ["./src/**/*.mts"]
 }

@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import { get_markdown } from '$utils';
-import { prepare } from '../src/features/prepare.js';
+import { prepare } from '$feats';
 
 test('Remove empty flow expression.', ({ expect }) => {
 	const markdowns = [

@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { resolve_path } from './fs.js';
+import { resolve_path } from './fs.mjs';
 
 export class TranslationMemory {
 	data: TMData;

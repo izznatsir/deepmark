@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import np from 'path';
 
 import { test } from 'vitest';
-import { format } from '../src/features/format.js';
+import { format } from '$feats';
 
 const BASE_DIR = np.resolve(process.cwd(), 'test/format');
 const FORMATTED_DIR = np.resolve(BASE_DIR, 'formatted');

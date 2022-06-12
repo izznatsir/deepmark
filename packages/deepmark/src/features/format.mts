@@ -1,6 +1,6 @@
 import prettier from 'prettier';
-import { get_markdown } from '$utils';
-import { prepare } from '../features/prepare.js';
+import { prepare } from './prepare.mjs';
+import { get_markdown } from '../utilities/index.mjs';
 
 export async function format(
 	markdown: string,

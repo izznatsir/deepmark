@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "format": "deepmark format",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
@@ -24,7 +25,8 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.21",
-    "deepmark": "workspace:*"
+    "deepmark": "workspace:*",
+    "prettier": "^2.6.2"
   },
   "browserslist": {
     "production": [

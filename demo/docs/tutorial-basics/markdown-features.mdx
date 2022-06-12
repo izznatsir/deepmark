@@ -57,17 +57,15 @@ You can reference images relative to the current file as well, as shown in [the 
 
 Markdown code blocks are supported with Syntax highlighting.
 
-    ```jsx title="src/components/HelloDocusaurus.js"
-    function HelloDocusaurus() {
-        return (
-            <h1>Hello, Docusaurus!</h1>
-        )
-    }
-    ```
+```jsx title="src/components/HelloDocusaurus.js"
+function HelloDocusaurus() {
+	return <h1>Hello, Docusaurus!</h1>;
+}
+```
 
 ```jsx title="src/components/HelloDocusaurus.js"
 function HelloDocusaurus() {
-  return <h1>Hello, Docusaurus!</h1>;
+	return <h1>Hello, Docusaurus!</h1>;
 }
 ```
 
@@ -75,17 +73,17 @@ function HelloDocusaurus() {
 
 Docusaurus has a special syntax to create admonitions and callouts:
 
-    :::tip My tip
+:::tip My tip
 
-    Use this awesome feature option
+Use this awesome feature option
 
-    :::
+:::
 
-    :::danger Take care
+:::danger Take care
 
-    This action is dangerous
+This action is dangerous
 
-    :::
+:::
 
 :::tip My tip
 
@@ -125,20 +123,21 @@ This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
 This is <Highlight color="#1877F2">Facebook blue</Highlight> !
 ```
 
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`);
-    }}>
-    {children}
-  </span>
+export const Highlight = ({ children, color }) => (
+	<span
+		style={{
+			backgroundColor: color,
+			borderRadius: '20px',
+			color: '#fff',
+			padding: '10px',
+			cursor: 'pointer'
+		}}
+		onClick={() => {
+			alert(`You clicked the color ${color} with label ${children}`);
+		}}
+	>
+		{children}
+	</span>
 );
 
 This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !

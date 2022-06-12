@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { create_context, is_file_readable, resolve_config, resolve_path } from '$utils';
-import { create_format_handler } from './commands/format.js';
-import { create_translate_handler } from './commands/translate.js';
+import {
+	create_context,
+	is_file_readable,
+	resolve_config,
+	resolve_path
+} from './utilities/index.mjs';
+import { create_format_handler } from './commands/format.mjs';
+import { create_translate_handler } from './commands/translate.mjs';
 
 async function main() {
 	const deepmark_dir = resolve_path('deepmark');

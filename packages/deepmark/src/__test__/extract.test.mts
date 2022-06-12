@@ -3,8 +3,7 @@ import type { Config } from '$types';
 import fs from 'fs-extra';
 import np from 'path';
 import { test } from 'vitest';
-import { extract_mdast_strings } from '../src/features/extract.js';
-import { prepare } from '../src/features/prepare.js';
+import { extract_mdast_strings, prepare } from '$feats';
 
 const config: Config = {
 	output_languages: [],

@@ -2,7 +2,7 @@ import type { Config, Context } from '$types';
 
 import { test } from 'vitest';
 import { create_context } from '$utils';
-import { translate } from '../src/features/translate';
+import { translate } from '$feats';
 import type { TargetLanguageCode } from 'deepl-node';
 
 const config: Config = {

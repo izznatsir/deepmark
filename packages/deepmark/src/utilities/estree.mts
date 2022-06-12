@@ -11,7 +11,7 @@ import type {
 
 import { Parser as AcornParser } from 'acorn';
 import acorn_jsx from 'acorn-jsx';
-import { generate, GENERATOR, JSX } from './astring-jsx.js';
+import { generate, GENERATOR, JSX } from './astring-jsx.mjs';
 
 export function get_estree(code: string): EsProgram {
 	const JsxParser = AcornParser.extend(acorn_jsx());

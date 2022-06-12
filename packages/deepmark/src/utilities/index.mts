@@ -1,17 +1,17 @@
 import type { Config, Context, UserConfig } from '$types';
 
 import { Translator } from 'deepl-node';
-import { is_mjs } from './fs.js';
-import { TranslationMemory } from './memory.js';
+import { is_mjs } from './fs.mjs';
+import { TranslationMemory } from './memory.mjs';
 
-export * from './astring-jsx.js';
-export * from './estree.js';
-export * from './eswalk.js';
-export * from './fs.js';
-export * from './mdast.js';
-export * from './memory.js';
-export * from './unist.js';
-export * from './unwalk.js';
+export * from './astring-jsx.mjs';
+export * from './estree.mjs';
+export * from './eswalk.mjs';
+export * from './fs.mjs';
+export * from './mdast.mjs';
+export * from './memory.mjs';
+export * from './unist.mjs';
+export * from './unwalk.mjs';
 
 export function create_context(): Context {
 	const deepl_key = process.env.DEEPL_AUTH_KEY;
@@ -31,7 +31,7 @@ export async function resolve_config(path: string): Promise<Config> {
 	if (!is_mjs(path))
 		throw new Error('Configuration file must be defined as ES module with .mjs extension.');
 
-	const config: UserConfig = await import(path);
+	const config: UserConfig = (await import(path)).default;
 
 	if (!config.components_attributes) config.components_attributes = {};
 	if (!config.frontmatter) config.frontmatter = [];

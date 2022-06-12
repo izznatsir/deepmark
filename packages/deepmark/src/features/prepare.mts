@@ -13,7 +13,7 @@ import {
 	is_mdast_strong,
 	is_mdast_text,
 	unwalk
-} from '$utils';
+} from '../utilities/index.mjs';
 
 export function prepare(
 	markdown: string,

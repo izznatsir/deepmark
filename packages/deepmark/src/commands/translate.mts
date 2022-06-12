@@ -1,8 +1,17 @@
+import type { TargetLanguageCode } from 'deepl-node';
 import type { CommandHandler, Config, Context } from '$types';
 
 import fg from 'fast-glob';
 import fs from 'fs-extra';
 import np from 'path';
+import {
+	extract_docusaurus_strings,
+	extract_mdast_strings,
+	prepare,
+	replace_docusaurus_strings,
+	replace_mdast_strings,
+	translate
+} from '../features/index.mjs';
 import {
 	get_path_tail,
 	get_string_array,
@@ -11,12 +20,7 @@ import {
 	is_markdown,
 	join_path,
 	resolve_path
-} from '$utils';
-import { extract_docusaurus_strings, extract_mdast_strings } from '../features/extract.js';
-import { replace_docusaurus_strings, replace_mdast_strings } from '../features/replace.js';
-import { prepare } from '../features/prepare.js';
-import { translate } from '../features/translate.js';
-import type { TargetLanguageCode } from 'deepl-node';
+} from '../utilities/index.mjs';
 
 export function create_translate_handler(config: Config, context: Context): CommandHandler {
 	const {

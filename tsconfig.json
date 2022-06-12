@@ -1,9 +1,8 @@
 {
 	"references": [
 		{
-			"deepmark": "./packages/deepmark",
-			"deepmark-studio": "./packages/deepmark-studio",
-			"@izznatsir/deepl-js": "./packages/deepl-js"
+			"path": "./packages/deepmark"
 		}
-	]
+	],
+	"files": []
 }

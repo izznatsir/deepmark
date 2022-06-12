@@ -17,7 +17,7 @@ import {
 	is_estree_identifier,
 	resolve_estree_property_path,
 	unwalk
-} from '$utils';
+} from '../utilities/index.mjs';
 
 export function extract_mdast_strings(
 	mdast: MdRoot,

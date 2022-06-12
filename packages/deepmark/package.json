@@ -10,7 +10,7 @@
 	"bin": "./dist/cli.mjs",
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
+		"build": "node ./scripts/transform.js",
 		"test": "vitest run --reporter verbose",
 		"test:watch": "vitest watch --reporter verbose"
 	},
@@ -36,7 +36,10 @@
 		"@types/mdast": "^3.0.10",
 		"@types/prettier": "^2.6.3",
 		"@types/unist": "^2.0.6",
+		"esbuild": "^0.14.43",
+		"esbuild-plugin-path-alias": "^1.0.6",
 		"prettier": "^2.6.2",
+		"tsup": "^6.1.2",
 		"vite": "3.0.0-alpha.10",
 		"vitest": "^0.14.1"
 	},

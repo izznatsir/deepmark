@@ -23,7 +23,7 @@ import {
 	is_mdast_text,
 	is_mdast_paragraph,
 	unwalk
-} from '$utils';
+} from '../utilities/index.mjs';
 
 export function replace_mdast_strings(
 	mdast: MdRoot,
