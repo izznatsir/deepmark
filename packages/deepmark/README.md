@@ -51,23 +51,22 @@ You can also use something like `dotenv` package. For CI and remote environment 
 ```json
 {
 	"scripts": {
-		"format:markdown": "deepmark format",
 		"translate": "deepmark translate"
 	}
 }
 ```
 
-5. Format your markdowns first to avoid parsing error due to bad formatting. Then, translate!
+5. Format your markdowns first with Prettier and `printWidth` set to `Infinity` to avoid parsing error due to bad formatting. Then, translate!
 
 ```bash
 # NPM
-npm run format:markdown & npm run translate
+npm run translate
 
 # PNPM
-pnpm run format:markdown & pnpm run translate
+pnpm run translate
 
 # Yarn
-yarn format:markdown & yarn translate
+yarn translate
 ```
 
 Notes:

@@ -6,7 +6,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc -b & yarn workspaces foreach run build",
+		"build": "tsc -b && yarn workspaces foreach run build",
 		"check": "yarn workspaces foreach run check",
 		"demo": "yarn workspace demo start",
 		"format": "prettier --write .",
