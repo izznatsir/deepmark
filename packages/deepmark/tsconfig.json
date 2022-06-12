@@ -9,11 +9,9 @@
 		"noEmit": false,
 		"outDir": "./dist",
 		"paths": {
-			"$feats": ["./src/features/index.mjs"],
-			"$types": ["./src/types/index.mjs"],
-			"$utils": ["./src/utilities/index.mjs"]
+			"$types": ["./src/types/index.js"]
 		},
 		"rootDir": "./src"
 	},
-	"include": ["./src/**/*.mts"]
+	"include": ["./src/**/*.mts", "./src/**/*.ts"]
 }

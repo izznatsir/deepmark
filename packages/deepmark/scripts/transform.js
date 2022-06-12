@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import np from 'path';
 
 async function main() {
-	const paths = (await fg('./src/**/*.mts'))
+	const paths = (await fg('./src/**/*.ts'))
 		.filter((path) => !path.includes('__test__') && !path.includes('/types/'))
 		.map((path) => np.resolve(process.cwd(), path));
 
@@ -16,7 +16,12 @@ async function main() {
 			target: 'es2021'
 		});
 
-		await fs.outputFile(path.replace('/src/', '/dist/').replace(/mts$/, 'mjs'), output.code);
+		const output_path =
+			path === np.resolve(process.cwd(), 'src/cli.ts')
+				? path.replace('/src/', '/dist/').replace(/\.ts$/, '.mjs')
+				: path.replace('/src/', '/dist/').replace(/\.ts$/, '.js');
+
+		await fs.outputFile(output_path, output.code);
 	}
 }
 
