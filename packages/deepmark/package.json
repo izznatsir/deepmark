@@ -1,7 +1,7 @@
 {
 	"name": "deepmark",
 	"description": "Translate markdown files correctly with `remark` and Deepl.",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"license": "MIT",
 	"author": "Izzuddin Natsir",
 	"files": [
