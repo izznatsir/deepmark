@@ -1,4 +1,4 @@
-import type { MdRoot, MdxJsxTextElement } from '$types';
+import type { MdRoot, MdxJsxTextElement } from '../types/index.js';
 
 import prettier from 'prettier';
 import {

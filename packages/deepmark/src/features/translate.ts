@@ -1,5 +1,5 @@
-import type { Config, Context } from '$types';
 import type { TargetLanguageCode } from 'deepl-node';
+import type { Config, Context } from '../types/index.js';
 
 export async function translate(
 	strings: string[],

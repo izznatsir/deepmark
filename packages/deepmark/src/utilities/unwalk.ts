@@ -1,4 +1,4 @@
-import type { UnNode, UnParent } from '$types';
+import type { UnNode, UnParent } from '../types/index.js';
 
 import { is_unist_parent } from './unist.js';
 

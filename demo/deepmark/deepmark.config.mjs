@@ -1,3 +1,4 @@
+/** @type { import('deepmark').UserConfig } */
 export default {
 	source_language: 'en',
 	output_languages: ['ja', 'zh'],

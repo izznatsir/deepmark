@@ -1,4 +1,4 @@
-import type { Config, Context, UserConfig } from '$types';
+import type { Config, Context, UserConfig } from '../types/index.js';
 
 import { Translator } from 'deepl-node';
 import { is_mjs } from './fs.js';

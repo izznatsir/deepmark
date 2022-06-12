@@ -1,4 +1,4 @@
-import type { EsNode, EsNodeMap, EsNodeTypes, EsProgram } from '$types';
+import type { EsNode, EsNodeMap, EsNodeTypes, EsProgram } from '../types/index.js';
 
 export const DEFAULT_ESWALKERS: EsWalkers = {
 	Program(node, parents, process) {
@@ -11,7 +11,7 @@ export const DEFAULT_ESWALKERS: EsWalkers = {
 	ExpressionStatement(node, parents, process) {
 		parents.push(node);
 		process(node.expression, parents);
-		parents.pop()
+		parents.pop();
 	},
 	ArrayExpression(node, parents, process) {
 		parents.push(node);

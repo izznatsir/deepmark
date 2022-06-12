@@ -1,5 +1,5 @@
 import type { TargetLanguageCode } from 'deepl-node';
-import type { CommandHandler, Config, Context } from '$types';
+import type { CommandHandler, Config, Context } from '../types/index.js';
 
 import fg from 'fast-glob';
 import fs from 'fs-extra';

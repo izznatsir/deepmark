@@ -7,7 +7,7 @@ import type {
 	EsProgram,
 	EsProperty,
 	JSXElement
-} from '$types';
+} from '../types/index.js';
 
 import { Parser as AcornParser } from 'acorn';
 import acorn_jsx from 'acorn-jsx';

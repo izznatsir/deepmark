@@ -1,5 +1,5 @@
 import type { TargetLanguageCode } from 'deepl-node';
-import type { Config, DocusaurusTranslations, JSXElement, MdRoot } from '$types';
+import type { Config, DocusaurusTranslations, JSXElement, MdRoot } from '../types/index.js';
 
 import { parse as parse_yaml, stringify as stringify_yaml } from 'yaml';
 import {

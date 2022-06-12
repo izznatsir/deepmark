@@ -1,4 +1,4 @@
-import type { Config } from '$types';
+import type { Config } from '../types/index.js';
 
 import fg from 'fast-glob';
 import fs from 'fs-extra';

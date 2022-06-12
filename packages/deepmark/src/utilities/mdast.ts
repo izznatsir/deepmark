@@ -18,7 +18,7 @@ import type {
 	MdStrong,
 	MdInlineCode,
 	MdEmphasis
-} from '$types';
+} from '../types/index.js';
 
 import { remark } from 'remark';
 import remark_comment from 'remark-comment';

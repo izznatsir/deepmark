@@ -1,4 +1,4 @@
-import type { Config, DocusaurusTranslations, MdContent, MdRoot } from '$types';
+import type { Config, DocusaurusTranslations, MdContent, MdRoot } from '../types/index.js';
 
 import { mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
