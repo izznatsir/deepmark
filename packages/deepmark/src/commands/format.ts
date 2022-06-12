@@ -17,7 +17,7 @@ export function create_format_handler(config: Config) {
 		for (const source_dir of source_dirs) {
 			if (!is_directory_exist(source_dir)) continue;
 
-			const source_pattern = np.join(source_dir, '**/*.{md,mdx}');
+			const source_pattern = source_dir.replace(/\/$/, '') + '/**/*.{md,mdx}';
 			const source_paths = (await fg(source_pattern)).map((path) => resolve_path(path));
 
 			for (const source_path of source_paths) {

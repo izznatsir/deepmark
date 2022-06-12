@@ -40,7 +40,7 @@ export function create_translate_handler(config: Config): CommandHandler {
 			const output_dir = output_dirs[i];
 			if (!is_directory_exist(source_dir)) continue;
 
-			const source_pattern = np.join(source_dir, '**/*.*');
+			const source_pattern = source_dir.replace(/\/$/, '') + '/**/*.*';
 			const source_paths = (await fg(source_pattern)).map((path) => resolve_path(path));
 
 			const translatable_paths = source_paths.filter((path) => is_markdown(path) || is_json(path));
