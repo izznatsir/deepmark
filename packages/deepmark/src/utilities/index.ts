@@ -1,6 +1,7 @@
 import type { Config, Context, UserConfig } from '../types/index.js';
 
 import { Translator } from 'deepl-node';
+import { pathToFileURL } from 'url';
 import { is_mjs } from './fs.js';
 import { TranslationMemory } from './memory.js';
 
@@ -31,7 +32,8 @@ export async function resolve_config(path: string): Promise<Config> {
 	if (!is_mjs(path))
 		throw new Error('Configuration file must be defined as ES module with .mjs extension.');
 
-	const config: UserConfig = (await import(path)).default;
+	const url = pathToFileURL(path);
+	const config: UserConfig = (await import(url.href)).default;
 
 	if (!config.components_attributes) config.components_attributes = {};
 	if (!config.frontmatter) config.frontmatter = [];

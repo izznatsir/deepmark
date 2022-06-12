@@ -13,6 +13,7 @@ import {
 	translate
 } from '../features/index.js';
 import {
+	create_context,
 	get_path_tail,
 	get_string_array,
 	is_directory_exist,
@@ -22,12 +23,13 @@ import {
 	resolve_path
 } from '../utilities/index.js';
 
-export function create_translate_handler(config: Config, context: Context): CommandHandler {
+export function create_translate_handler(config: Config): CommandHandler {
 	const {
 		source_language,
 		output_languages,
 		directories: { sources, outputs }
 	} = config;
+	const context: Context = create_context();
 
 	return async () => {
 		const source_dirs = get_string_array(sources);

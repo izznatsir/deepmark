@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
 import {
-	create_context,
 	is_file_readable,
 	resolve_config,
 	resolve_path
@@ -18,7 +17,7 @@ async function main() {
 		throw new Error(`No configuration file found at the expected path: \n${config_file_path}`);
 
 	const config = await resolve_config(config_file_path);
-	const context = create_context();
+	
 
 	program
 		.name('deepmark')
@@ -36,7 +35,7 @@ async function main() {
 	program
 		.command('translate')
 		.description('Translate strings with Deepl. Skip strings that have been translated previously.')
-		.action(create_translate_handler(config, context));
+		.action(create_translate_handler(config));
 
 	program.parse();
 }
