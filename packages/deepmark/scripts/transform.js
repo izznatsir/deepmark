@@ -1,5 +1,4 @@
 import { transform } from 'esbuild';
-import alias from 'esbuild-plugin-path-alias'
 import fg from 'fast-glob';
 import fs from 'fs-extra';
 import np from 'path';
