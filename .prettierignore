@@ -1,10 +1,8 @@
-packages/deepmark/test/**/*.mdx
 .DS_Store
 .yarn
 **/build
 **/dist
 **/node_modules
-**/test/format
 **/yarn.lock
 **/.cache
 **/.env

@@ -6,16 +6,16 @@ sidebar_position: 2
 
 <code>让我们把</code>フランス語に翻訳してみましょう。
 
-## 配置i18n
+## 配置 i18n
 
 <code>修改</code>を修正し、<code>fr</code>ロケールのサポートを追加しました。
 
 ```js title="docusaurus.config.js"
 module.exports = {
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "fr"],
-  },
+	i18n: {
+		defaultLocale: 'en',
+		locales: ['en', 'fr']
+	}
 };
 ```
 
@@ -55,17 +55,17 @@ npm run start -- --locale fr
 
 ```js title="docusaurus.config.js"
 module.exports = {
-  themeConfig: {
-    navbar: {
-      items: [
-        // highlight-start
-        {
-          type: "localeDropdown",
-        },
-        // highlight-end
-      ],
-    },
-  },
+	themeConfig: {
+		navbar: {
+			items: [
+				// highlight-start
+				{
+					type: 'localeDropdown'
+				}
+				// highlight-end
+			]
+		}
+	}
 };
 ```
 

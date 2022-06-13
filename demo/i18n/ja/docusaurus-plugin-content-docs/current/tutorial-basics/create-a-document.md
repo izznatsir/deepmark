@@ -6,13 +6,13 @@ sidebar_position: 2
 
 ドキュメントは、<strong>ページがつながっているグループ</strong>です。
 
-*   <strong>サイドバー</strong>
-*   <strong>前/次のナビゲーション</strong>
-*   <strong>バージョニング</strong>
+- <strong>サイドバー</strong>
+- <strong>前/次のナビゲーション</strong>
+- <strong>バージョニング</strong>
 
-## 最初のDocを作成する
+## 最初の Doc を作成する
 
-<code>docs/hello.mdに</code>マークダウンファイルを作成します。
+<code>docs/hello.md に</code>マークダウンファイルを作成します。
 
 ```md title="docs/hello.md"
 # Hello
@@ -30,7 +30,7 @@ This is my **first Docusaurus document**!
 
 ```md title="docs/hello.md" {1-4}
 ---
-sidebar_label: "Hi!"
+sidebar_label: 'Hi!'
 sidebar_position: 3
 ---
 
@@ -39,17 +39,17 @@ sidebar_position: 3
 This is my **first Docusaurus document**!
 ```
 
-また、<code>sidebars.jsで</code>明示的にサイドバーを作成することも可能です。
+また、<code>sidebars.js で</code>明示的にサイドバーを作成することも可能です。
 
 ```js title="sidebars.js"
 module.exports = {
-  tutorialSidebar: [
-    {
-      type: "category",
-      label: "Tutorial",
-      // highlight-next-line
-      items: ["hello"],
-    },
-  ],
+	tutorialSidebar: [
+		{
+			type: 'category',
+			label: 'Tutorial',
+			// highlight-next-line
+			items: ['hello']
+		}
+	]
 };
 ```

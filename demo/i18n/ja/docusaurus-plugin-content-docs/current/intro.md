@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # チュートリアルの紹介
 
-<strong>5分以内にドキュサウルスを</strong>発見しよう。
+<strong>5 分以内にドキュサウルスを</strong>発見しよう。
 
 ## Getting Started
 
@@ -14,8 +14,8 @@ sidebar_position: 1
 
 ### 必要なもの
 
-*   <a href="https://nodejs.org/en/download/">Node.jsの</a>バージョン14以上。
-    *   When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- <a href="https://nodejs.org/en/download/">Node.js の</a>バージョン 14 以上。
+  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
 ## 新しいサイトを生成する
 

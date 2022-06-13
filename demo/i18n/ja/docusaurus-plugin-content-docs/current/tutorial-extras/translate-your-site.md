@@ -4,18 +4,18 @@ sidebar_position: 2
 
 # あなたのサイトを翻訳する
 
-<code>docs/intro.mdを</code>フランス語に翻訳してみましょう。
+<code>docs/intro.md を</code>フランス語に翻訳してみましょう。
 
-## i18nの設定
+## i18n の設定
 
 <code>docusaurus.config.js</code>を修正し、<code>fr</code>ロケールのサポートを追加しました。
 
 ```js title="docusaurus.config.js"
 module.exports = {
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "fr"],
-  },
+	i18n: {
+		defaultLocale: 'en',
+		locales: ['en', 'fr']
+	}
 };
 ```
 
@@ -43,7 +43,7 @@ npm run start -- --locale fr
 
 :::注意
 
-開発では、同時に使用できるロケールは1つだけです。
+開発では、同時に使用できるロケールは 1 つだけです。
 
 :::
 
@@ -55,17 +55,17 @@ npm run start -- --locale fr
 
 ```js title="docusaurus.config.js"
 module.exports = {
-  themeConfig: {
-    navbar: {
-      items: [
-        // highlight-start
-        {
-          type: "localeDropdown",
-        },
-        // highlight-end
-      ],
-    },
-  },
+	themeConfig: {
+		navbar: {
+			items: [
+				// highlight-start
+				{
+					type: 'localeDropdown'
+				}
+				// highlight-end
+			]
+		}
+	}
 };
 ```
 

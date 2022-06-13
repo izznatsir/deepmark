@@ -33,13 +33,13 @@ export interface UserConfig {
 	 *
 	 * You can provide an access path for object property.
 	 * The access path can also bypass a wrapper array.
-	 * 
-	 * E.g. `items.content` will access: 
+	 *
+	 * E.g. `items.content` will access:
 	 * ```js
 	 * items={ { content } }
-	 * 
+	 *
 	 * // or
-	 * 
+	 *
 	 * items={ [ { content } ] }
 	 * ```
 	 */

@@ -5,7 +5,9 @@ import np from 'path';
 
 async function main() {
 	const paths = (await fg('./src/**/*.ts'))
-		.filter((path) => !path.includes('__test__') && !path.includes('/types/') && path !== './src/index.ts')
+		.filter(
+			(path) => !path.includes('__test__') && !path.includes('/types/') && path !== './src/index.ts'
+		)
 		.map((path) => np.resolve(process.cwd(), path));
 
 	for (const path of paths) {

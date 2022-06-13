@@ -4,9 +4,9 @@ sidebar_position: 5
 
 # 部署你的网站
 
-Docusaurus是一个<strong>静态网站生成器</strong>（也叫<strong><a href="https://jamstack.org/">Jamstack</a></strong>）。
+Docusaurus 是一个<strong>静态网站生成器</strong>（也叫<strong><a href="https://jamstack.org/">Jamstack</a></strong>）。
 
-它将你的网站建成简单的<strong>静态HTML、JavaScript和CSS文件</strong>。
+它将你的网站建成简单的<strong>静态 HTML、JavaScript 和 CSS 文件</strong>。
 
 \##建立你的网站
 

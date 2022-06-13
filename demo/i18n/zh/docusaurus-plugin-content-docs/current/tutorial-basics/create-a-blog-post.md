@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 创建一篇博客文章
 
-Docusaurus<strong>为每篇博客文章</strong>创建一个<strong>页面</strong>，同时也是一个<strong>博客索引页面</strong>，一个<strong>标签系统</strong>，一个<strong>RSS订阅</strong>...
+Docusaurus<strong>为每篇博客文章</strong>创建一个<strong>页面</strong>，同时也是一个<strong>博客索引页面</strong>，一个<strong>标签系统</strong>，一个<strong>RSS 订阅</strong>...
 
 \##创建你的第一个帖子
 

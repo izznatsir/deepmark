@@ -4,11 +4,11 @@ sidebar_position: 3
 
 # ブログ記事を作成する
 
-Docusaurusは、<strong>ブログの各記事のページを</strong>作成するだけでなく、<strong>ブログのインデックスページ</strong>、<strong>タグシステム</strong>、<strong>RSS</strong>フィード...を作成します。
+Docusaurus は、<strong>ブログの各記事のページを</strong>作成するだけでなく、<strong>ブログのインデックスページ</strong>、<strong>タグシステム</strong>、<strong>RSS</strong>フィード...を作成します。
 
 ## 最初の投稿を作成する
 
-<code>blog/2021-02-28-greetings.mdに</code>ファイルを作成します。
+<code>blog/2021-02-28-greetings.md に</code>ファイルを作成します。
 
 ```md title="blog/2021-02-28-greetings.md"
 ---

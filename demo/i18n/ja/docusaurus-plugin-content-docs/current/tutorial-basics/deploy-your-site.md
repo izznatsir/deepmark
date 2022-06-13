@@ -4,9 +4,9 @@ sidebar_position: 5
 
 # サイトをデプロイする
 
-Docusaurusは、<strong>静的サイトジェネレータ</strong>（<strong><a href="https://jamstack.org/">Jamstackとも</a></strong>呼ばれる）です。
+Docusaurus は、<strong>静的サイトジェネレータ</strong>（<strong><a href="https://jamstack.org/">Jamstack とも</a></strong>呼ばれる）です。
 
-シンプルな<strong>静的HTML、JavaScript、CSSファイルとして</strong>サイトを構築します。
+シンプルな<strong>静的 HTML、JavaScript、CSS ファイルとして</strong>サイトを構築します。
 
 ## サイトを構築する
 

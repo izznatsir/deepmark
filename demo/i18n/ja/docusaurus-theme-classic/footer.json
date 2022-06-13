@@ -1,1 +1,42 @@
-{"link.title.Docs":{"message":"ドックス","description":"フッターのリンク欄のタイトルが title=Docs in footer の場合"},"link.title.Community":{"message":"コミュニティ","description":"フッターのリンク欄のタイトルがtitle=Communityの場合"},"link.title.More":{"message":"もっと見る","description":"フッターのリンク欄のタイトルに、title=More in Footerを設定した場合"},"link.item.label.Tutorial":{"message":"チュートリアル","description":"label=Tutorial のフッターリンクのラベルは /docs/intro にリンクしています。"},"link.item.label.Stack Overflow":{"message":"スタックオーバーフロー","description":"label=Stack Overflow のフッターリンクのラベルが https://stackoverflow.com/questions/tagged/docusaurus にリンクしている。"},"link.item.label.Discord":{"message":"不協和","description":"label=Discord のフッターリンクのラベルは https://discordapp.com/invite/docusaurus にリンクしています。"},"link.item.label.Twitter":{"message":"ツイッター","description":"label=Twitterでリンクしているフッターリンクのラベルは、https://twitter.com/docusaurus。"},"link.item.label.Blog":{"message":"ブログ","description":"label=Blogのフッターリンクのラベルは、/blogにリンクしています。"},"link.item.label.GitHub":{"message":"GitHub","description":"label=GitHub のフッターリンクのラベルは、https://github.com/facebook/docusaurus にリンクしています。"},"copyright":{"message":"Copyright © 2022 My Project, Inc.Docusaurusで構築されています。","description":"フッターのコピーライト"}}
+{
+	"link.title.Docs": {
+		"message": "ドックス",
+		"description": "フッターのリンク欄のタイトルが title=Docs in footer の場合"
+	},
+	"link.title.Community": {
+		"message": "コミュニティ",
+		"description": "フッターのリンク欄のタイトルがtitle=Communityの場合"
+	},
+	"link.title.More": {
+		"message": "もっと見る",
+		"description": "フッターのリンク欄のタイトルに、title=More in Footerを設定した場合"
+	},
+	"link.item.label.Tutorial": {
+		"message": "チュートリアル",
+		"description": "label=Tutorial のフッターリンクのラベルは /docs/intro にリンクしています。"
+	},
+	"link.item.label.Stack Overflow": {
+		"message": "スタックオーバーフロー",
+		"description": "label=Stack Overflow のフッターリンクのラベルが https://stackoverflow.com/questions/tagged/docusaurus にリンクしている。"
+	},
+	"link.item.label.Discord": {
+		"message": "不協和",
+		"description": "label=Discord のフッターリンクのラベルは https://discordapp.com/invite/docusaurus にリンクしています。"
+	},
+	"link.item.label.Twitter": {
+		"message": "ツイッター",
+		"description": "label=Twitterでリンクしているフッターリンクのラベルは、https://twitter.com/docusaurus。"
+	},
+	"link.item.label.Blog": {
+		"message": "ブログ",
+		"description": "label=Blogのフッターリンクのラベルは、/blogにリンクしています。"
+	},
+	"link.item.label.GitHub": {
+		"message": "GitHub",
+		"description": "label=GitHub のフッターリンクのラベルは、https://github.com/facebook/docusaurus にリンクしています。"
+	},
+	"copyright": {
+		"message": "Copyright © 2022 My Project, Inc.Docusaurusで構築されています。",
+		"description": "フッターのコピーライト"
+	}
+}

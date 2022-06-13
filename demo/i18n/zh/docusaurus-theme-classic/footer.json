@@ -1,1 +1,39 @@
-{"link.title.Docs":{"message":"文件","description":"页脚链接栏的标题为title=Docs in the footer"},"link.title.Community":{"message":"社区","description":"页脚链接栏的标题，标题为：页脚的社区"},"link.title.More":{"message":"更多","description":"页脚链接栏的标题，标题为：页脚中的更多"},"link.item.label.Tutorial":{"message":"教程","description":"带有label=Tutorial的页脚链接的标签，链接到/docs/intro。"},"link.item.label.Stack Overflow":{"message":"堆栈溢出","description":"标签=堆栈溢出的页脚链接的标签，链接到https://stackoverflow.com/questions/tagged/docusaurus"},"link.item.label.Discord":{"message":"纪元","description":"标签=Discord的页脚链接的标签，链接到https://discordapp.com/invite/docusaurus"},"link.item.label.Twitter":{"message":"推特","description":"标签=Twitter的页脚链接的标签，链接到https://twitter.com/docusaurus"},"link.item.label.Blog":{"message":"博客","description":"标签=博客链接到/blog的页脚链接的标签"},"link.item.label.GitHub":{"message":"GitHub","description":"标签=GitHub的页脚链接的标签链接到https://github.com/facebook/docusaurus"},"copyright":{"message":"Copyright © 2022年我的项目公司。用Docusaurus建造。","description":"页脚的版权"}}
+{
+	"link.title.Docs": {
+		"message": "文件",
+		"description": "页脚链接栏的标题为title=Docs in the footer"
+	},
+	"link.title.Community": {
+		"message": "社区",
+		"description": "页脚链接栏的标题，标题为：页脚的社区"
+	},
+	"link.title.More": { "message": "更多", "description": "页脚链接栏的标题，标题为：页脚中的更多" },
+	"link.item.label.Tutorial": {
+		"message": "教程",
+		"description": "带有label=Tutorial的页脚链接的标签，链接到/docs/intro。"
+	},
+	"link.item.label.Stack Overflow": {
+		"message": "堆栈溢出",
+		"description": "标签=堆栈溢出的页脚链接的标签，链接到https://stackoverflow.com/questions/tagged/docusaurus"
+	},
+	"link.item.label.Discord": {
+		"message": "纪元",
+		"description": "标签=Discord的页脚链接的标签，链接到https://discordapp.com/invite/docusaurus"
+	},
+	"link.item.label.Twitter": {
+		"message": "推特",
+		"description": "标签=Twitter的页脚链接的标签，链接到https://twitter.com/docusaurus"
+	},
+	"link.item.label.Blog": {
+		"message": "博客",
+		"description": "标签=博客链接到/blog的页脚链接的标签"
+	},
+	"link.item.label.GitHub": {
+		"message": "GitHub",
+		"description": "标签=GitHub的页脚链接的标签链接到https://github.com/facebook/docusaurus"
+	},
+	"copyright": {
+		"message": "Copyright © 2022年我的项目公司。用Docusaurus建造。",
+		"description": "页脚的版权"
+	}
+}

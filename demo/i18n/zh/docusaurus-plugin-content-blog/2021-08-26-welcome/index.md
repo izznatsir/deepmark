@@ -5,16 +5,16 @@ authors: [slorber, yangshun]
 tags: [facebook, hello, docusaurus]
 ---
 
-<a href="https://docusaurus.io/docs/blog">Docusaurus博客的特点</a> are powered by the <a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog">blog plugin</a>.
+<a href="https://docusaurus.io/docs/blog">Docusaurus 博客的特点</a> are powered by the <a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog">blog plugin</a>.
 
-<code>只需将Markdown文件（或文件夹）添加到</code>Markdownファイル（またはフォルダ）を追加するだけです。
+<code>只需将 Markdown 文件（或文件夹）添加到</code>Markdown ファイル（またはフォルダ）を追加するだけです。
 
 常规的博客作者可以被添加到<code>author.yml</code>中。
 
 博客文章的日期可以从文件名中提取出来，比如说。
 
-*   <code>2019-05-30-welcome.md</code>
-*   <code>2019-05-30-welcome/index.md</code>
+- <code>2019-05-30-welcome.md</code>
+- <code>2019-05-30-welcome/index.md</code>
 
 一个博客文章文件夹可以方便地将博客文章的图片放在一起。
 
