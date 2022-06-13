@@ -1,6 +1,26 @@
+import type { MdRoot } from '../types/index.js';
+
+import fs from 'fs-extra';
+import np from 'path';
 import { test } from 'vitest';
 import { get_markdown } from '../utilities/index.js';
 import { prepare } from '../features/index.js';
+import user_config from './deepmark.config.mjs';
+import { resolve_config } from '../utilities/index.js';
+
+const config = await resolve_config(user_config);
+const cwd = process.cwd();
+const dir = 'src/__test__/samples';
+
+async function job(path: string): Promise<MdRoot> {
+	const resolved = np.resolve(cwd, dir, path);
+	const value = await fs.readFile(resolved, { encoding: 'utf-8' });
+	return prepare(value);
+}
+
+test.fails('Throw errors on badly formatted YAML frontmatter.', async () => {
+	await job('frontmatter/bad-format.md');
+});
 
 test('Remove empty flow expression.', ({ expect }) => {
 	const markdowns = [

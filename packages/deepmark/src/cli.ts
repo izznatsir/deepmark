@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { is_file_readable, resolve_config, resolve_path } from './utilities/index.js';
+import { get_user_config, resolve_config, resolve_path } from './utilities/index.js';
 import { create_format_handler } from './commands/format.js';
 import { create_translate_handler } from './commands/translate.js';
 
@@ -8,11 +8,7 @@ async function main() {
 	const deepmark_dir = resolve_path('deepmark');
 	const config_file_name = 'deepmark.config.mjs';
 	const config_file_path = resolve_path(deepmark_dir, config_file_name);
-
-	if (!is_file_readable(config_file_path))
-		throw new Error(`No configuration file found at the expected path: \n${config_file_path}`);
-
-	const config = await resolve_config(config_file_path);
+	const config = await resolve_config(await get_user_config(config_file_path));
 
 	program
 		.name('deepmark')

@@ -8,17 +8,22 @@ import {
 	generate,
 	GENERATOR,
 	JSX,
-	is_mdast_root,
-	is_mdast_yaml,
+	is_array,
+	is_empty_array,
+	is_empty_string,
+	is_estree_identifier,
 	is_mdast_jsx_attribute,
 	is_mdast_jsx_element,
 	is_mdast_jsx_flow_element,
 	is_mdast_jsx_text_element,
-	is_estree_identifier,
-	resolve_estree_property_path,
-	unwalk,
 	is_mdast_list,
-	is_mdast_paragraph
+	is_mdast_paragraph,
+	is_mdast_root,
+	is_mdast_yaml,
+	is_object,
+	is_string,
+	resolve_estree_property_path,
+	unwalk
 } from '../utilities/index.js';
 
 export function extract_mdast_strings(
@@ -31,7 +36,8 @@ export function extract_mdast_strings(
 		if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
 
 		if (is_mdast_yaml(node)) {
-			if (frontmatter.length === 0) return;
+			if (is_empty_array(frontmatter)) return;
+			if (is_empty_string(node.value)) return;
 
 			const object: Record<string, any> = parse_yaml(node.value);
 
@@ -40,14 +46,14 @@ export function extract_mdast_strings(
 
 				const value = object[key];
 
-				if (typeof value === 'string') {
+				if (is_string(value)) {
 					strings.push(value);
 					continue;
 				}
 
-				if (Array.isArray(value)) {
+				if (is_array(value)) {
 					for (const item of value) {
-						if (typeof item !== 'string') continue;
+						if (!is_string(item)) continue;
 						strings.push(item);
 					}
 				}
@@ -72,7 +78,7 @@ export function extract_mdast_strings(
 
 					const { name, value } = attribute;
 
-					if (typeof value === 'string') {
+					if (is_string(value)) {
 						if (!components_attributes[jsx_node.name!]?.includes(name)) continue;
 						strings.push(value);
 					} else if (value?.data?.estree) {
@@ -80,7 +86,7 @@ export function extract_mdast_strings(
 
 						eswalk(estree, {
 							Literal(node) {
-								if (typeof node.value === 'string') strings.push(node.value);
+								if (is_string(node.value)) strings.push(node.value);
 							},
 							Property(node, parents) {
 								if (!is_estree_identifier(node.key)) return false;
@@ -99,7 +105,7 @@ export function extract_mdast_strings(
 
 			if (
 				(!components_attributes[name] || components_attributes[name].includes('children')) &&
-				children.length > 0
+				!is_empty_array(children)
 			) {
 				for (const child of children) {
 					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
@@ -136,12 +142,12 @@ export function extract_docusaurus_strings(object: DocusaurusTranslations): stri
 	for (const key in object) {
 		const value = object[key];
 
-		if (typeof value === 'string') {
+		if (is_string(value)) {
 			strings.push(value);
 			continue;
 		}
 
-		if (typeof value === 'object') {
+		if (is_object(value)) {
 			if ('message' in value) {
 				strings.push(value.message);
 				if ('description' in value) strings.push(value.description);

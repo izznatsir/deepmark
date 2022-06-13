@@ -1,14 +1,16 @@
 import type { Config, Context, UserConfig } from '../types/index.js';
 
 import { Translator } from 'deepl-node';
+import np from 'path';
 import { pathToFileURL } from 'url';
-import { is_mjs } from './fs.js';
+import { is_file_readable, is_mjs, resolve_path } from './fs.js';
 import { TranslationMemory } from './memory.js';
 
 export * from './astring-jsx.js';
 export * from './estree.js';
 export * from './eswalk.js';
 export * from './fs.js';
+export * from './literal.js'
 export * from './mdast.js';
 export * from './memory.js';
 export * from './unist.js';
@@ -28,20 +30,23 @@ export function create_context(): Context {
 	};
 }
 
-export async function resolve_config(path: string): Promise<Config> {
-	if (!is_mjs(path))
-		throw new Error('Configuration file must be defined as ES module with .mjs extension.');
+export async function get_user_config(path: string): Promise<UserConfig> {
+	if (!is_file_readable(path))
+		throw new Error('Configuration file either not exist or not readable.');
 
 	const url = pathToFileURL(path);
-	const config: UserConfig = (await import(url.href)).default;
 
-	if (!config.components_attributes) config.components_attributes = {};
-	if (!config.frontmatter) config.frontmatter = [];
-	if (!config.ignore_components) config.ignore_components = [];
-	if (!config.ignore_nodes)
-		config.ignore_nodes = ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm'];
+	return (await import(url.href)).default as UserConfig;
+}
 
-	return config as Config;
+export async function resolve_config(user_config: UserConfig): Promise<Config> {
+	return {
+		...user_config,
+		frontmatter: user_config.frontmatter ?? [],
+		ignore_nodes: user_config.ignore_nodes ?? ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm'],
+		ignore_components: user_config.ignore_components ?? [],
+		components_attributes: user_config.components_attributes ?? {}
+	} as Config;
 }
 
 export function get_string_array(string_or_array: string | string[]): string[] {
