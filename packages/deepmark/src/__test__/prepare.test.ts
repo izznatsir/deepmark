@@ -5,10 +5,7 @@ import np from 'path';
 import { test } from 'vitest';
 import { get_markdown } from '../utilities/index.js';
 import { prepare } from '../features/index.js';
-import user_config from './deepmark.config.mjs';
-import { resolve_config } from '../utilities/index.js';
 
-const config = await resolve_config(user_config);
 const cwd = process.cwd();
 const dir = 'src/__test__/samples';
 
