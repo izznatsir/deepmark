@@ -1,7 +1,7 @@
 {
 	"name": "deepmark",
 	"description": "Translate markdown files correctly with `remark` and Deepl.",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"license": "MIT",
 	"author": "Izzuddin Natsir",
 	"files": [
@@ -10,7 +10,7 @@
 	"bin": "./dist/cli.mjs",
 	"types": "./dist/@types/index.d.ts",
 	"scripts": {
-		"build": "node ./scripts/transform.js && del ./dist/**/__test__ ./dist/@types/cli.d.ts",
+		"build": "node ./scripts/transform.js && del ./dist/@types/__test__ ./dist/@types/cli.d.ts",
 		"test": "vitest run --reporter verbose",
 		"test:watch": "vitest watch --reporter verbose"
 	},
