@@ -6,9 +6,9 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc -b && yarn workspaces foreach run build",
-		"check": "yarn workspaces foreach run check",
-		"demo": "yarn workspace demo start",
+		"build": "yarn build:dts && yarn build:packages",
+		"build:dts": "tsc --build .",
+		"build:packages": "yarn workspaces foreach --exclude root --exclude demo run build",
 		"format": "prettier --write .",
 		"lint": "prettier --check ."
 	},

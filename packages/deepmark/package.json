@@ -8,9 +8,9 @@
 		"dist/*"
 	],
 	"bin": "./dist/cli.mjs",
-	"types": "./dist/index.d.ts",
+	"types": "./dist/@types/index.d.ts",
 	"scripts": {
-		"build": "node ./scripts/transform.js & del ./dist/__test__ ./dist/cli.d.ts",
+		"build": "node ./scripts/transform.js && del ./dist/**/__test__ ./dist/@types/cli.d.ts",
 		"test": "vitest run --reporter verbose",
 		"test:watch": "vitest watch --reporter verbose"
 	},

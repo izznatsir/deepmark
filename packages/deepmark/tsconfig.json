@@ -1,17 +1,13 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"baseUrl": ".",
 		"composite": true,
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"lib": ["ESNext"],
 		"noEmit": false,
-		"outDir": "./dist",
-		"paths": {
-			"$types": ["./src/types/index.js"]
-		},
+		"outDir": "./dist/@types",
 		"rootDir": "./src"
 	},
-	"include": ["./src/**/*.mts", "./src/**/*.ts"]
+	"include": ["src/**/*.ts"]
 }

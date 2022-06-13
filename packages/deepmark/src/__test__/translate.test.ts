@@ -1,4 +1,4 @@
-import type { Config, Context } from '$types';
+import type { Config, Context } from '../types/index.js';
 
 import { test } from 'vitest';
 import { create_context } from '../utilities/index.js';

@@ -1,4 +1,4 @@
-import type { Config, Context } from '$types';
+import type { Config, Context } from '../types/index.js';
 
 import fs from 'fs-extra';
 import np from 'path';
