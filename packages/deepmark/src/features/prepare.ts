@@ -12,6 +12,7 @@ import {
 	is_mdast_root,
 	is_mdast_strong,
 	is_mdast_text,
+	is_mdast_yaml,
 	unwalk
 } from '../utilities/index.js';
 
@@ -31,6 +32,14 @@ export function prepare(
 		root,
 		(node, parent, index) => {
 			if (node.position) delete node.position;
+
+			if (is_mdast_yaml(node)) {
+				node.value = prettier.format(node.value, {
+					parser: 'yaml'
+				});
+
+				return;
+			}
 
 			if (is_mdast_flow_expression(node) && is_mdast_root(parent)) {
 				if (is_mdast_empty_text_expression(node.value)) {
