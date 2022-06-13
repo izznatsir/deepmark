@@ -8,6 +8,7 @@
 **/IGNORE.md*
 **/node_modules
 **/out
+**/TODO.md
 **/tsconfig.tsbuildinfo
 **/.cache
 **/.env
