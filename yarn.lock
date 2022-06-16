@@ -7837,7 +7837,6 @@ __metadata:
     mdast-util-to-markdown: ^1.3.0
     micromark-extension-html-comment: "workspace:*"
     micromark-extension-mdxjs: ^1.0.0
-    remark-comment: ^1.0.0
     vite: 3.0.0-alpha.11
     vitest: ^0.15.1
   languageName: unknown

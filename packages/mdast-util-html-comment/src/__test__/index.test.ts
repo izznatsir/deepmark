@@ -4,7 +4,6 @@ import { mdxFromMarkdown, mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { htmlComment } from 'micromark-extension-html-comment';
 import { mdxjs } from 'micromark-extension-mdxjs';
-import { comment, commentFromMarkdown } from 'remark-comment';
 import { test } from 'vitest';
 import { htmlCommentFromMarkdown, htmlCommentToMarkdown } from '../index.js';
 
