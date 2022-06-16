@@ -24,10 +24,9 @@ export class TranslationMemory {
 
 	set(source: string, language?: string, translation?: string) {
 		if (!this.data[source]) this.data[source] = {};
-		if (!language || !translation) return;
-
-		this.data[source][language] = translation;
 		this.updated = true;
+		if (!language || !translation) return;
+		this.data[source][language] = translation;
 	}
 
 	async serialize() {
