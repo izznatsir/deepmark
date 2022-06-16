@@ -7,6 +7,9 @@ import type { Code, Extension, HtmlExtension, State, Tokenizer } from 'micromark
 export function htmlComment(): Extension {
 	return {
 		flow: {
+			[codes.lessThan]: { tokenize, concrete: true }
+		},
+		text: {
 			[codes.lessThan]: { tokenize }
 		}
 	};
@@ -36,7 +39,6 @@ const tokenize: Tokenizer = (effects, ok, nok) => {
 		effects.enter('htmlComment');
 		effects.enter('htmlCommentMarker');
 		effects.consume(code);
-
 		value += '<';
 
 		return open;
@@ -85,7 +87,13 @@ const tokenize: Tokenizer = (effects, ok, nok) => {
 		}
 
 		effects.consume(code);
-		value += '_';
+
+		if (code === codes.dash) {
+			value += '-';
+		} else {
+			value += '*';
+		}
+
 		return inside;
 	}
 

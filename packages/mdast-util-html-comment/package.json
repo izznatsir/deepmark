@@ -2,7 +2,20 @@
 	"name": "mdast-util-html-comment",
 	"version": "0.0.1",
 	"license": "MIT",
+	"scripts": {
+		"test": "vitest run --reporter verbose"
+	},
 	"dependencies": {
 		"micromark-extension-html-comment": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/mdast": "^3.0.10",
+		"mdast-util-from-markdown": "^1.2.0",
+		"mdast-util-mdx": "^2.0.0",
+		"mdast-util-to-markdown": "^1.3.0",
+		"micromark-extension-mdxjs": "^1.0.0",
+		"remark-comment": "^1.0.0",
+		"vite": "3.0.0-alpha.11",
+		"vitest": "^0.15.1"
 	}
 }
