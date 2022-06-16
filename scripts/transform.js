@@ -17,7 +17,8 @@ async function main() {
 		});
 
 		const output_path =
-			path === np.resolve(process.cwd(), 'src/index.ts')
+			path === np.resolve(process.cwd(), 'src/index.ts') ||
+			path === np.resolve(process.cwd(), 'src/bin.ts')
 				? path.replace('/src/', '/dist/').replace(/\.ts$/, '.mjs')
 				: path.replace('/src/', '/dist/').replace(/\.ts$/, '.js');
 
