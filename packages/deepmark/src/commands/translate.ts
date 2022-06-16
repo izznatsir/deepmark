@@ -3,7 +3,6 @@ import type { CommandHandler, Config, Context } from '../types/index.js';
 
 import fg from 'fast-glob';
 import fs from 'fs-extra';
-import np from 'path';
 import {
 	extract_docusaurus_strings,
 	extract_mdast_strings,
