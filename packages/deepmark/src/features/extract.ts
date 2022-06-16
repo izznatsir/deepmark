@@ -108,6 +108,12 @@ export function extract_mdast_strings(
 				!is_empty_array(children)
 			) {
 				for (const child of children) {
+					if (
+						(is_mdast_jsx_flow_element(child) || is_mdast_jsx_text_element(child)) &&
+						child.name === 'code'
+					)
+						continue;
+
 					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
 					strings.push(string);
 				}

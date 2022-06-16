@@ -142,6 +142,12 @@ export function replace_mdast_strings(
 					children.length > 0
 				) {
 					for (const child of children) {
+						if (
+							(is_mdast_jsx_flow_element(child) || is_mdast_jsx_text_element(child)) &&
+							child.name === 'code'
+						)
+							continue;
+
 						const mdast = get_mdast(_strings.pop()!);
 						const translated_node = mdast.children[0];
 
