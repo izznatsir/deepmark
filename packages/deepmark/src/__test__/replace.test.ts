@@ -35,7 +35,7 @@ const options: TranslateOptions = {
 	offline: true
 };
 
-const context: Context = create_context();
+const context: Context = create_context(options);
 
 test.todo(
 	'Replace translatable strings in a Docusaurus translation JSON with their translation strings.',

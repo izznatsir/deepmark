@@ -25,7 +25,7 @@ const options: TranslateOptions = {
 	offline: true
 };
 
-const context: Context = create_context();
+const context: Context = create_context(options);
 
 test.skip('HTML in between sentence.', async ({ expect }) => {
 	const strings: string[] = [
