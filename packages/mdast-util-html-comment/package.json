@@ -1,8 +1,12 @@
 {
 	"name": "mdast-util-html-comment",
+	"description": "Create a dedicated node for HTML comment in markdown.",
 	"version": "0.0.1",
 	"license": "MIT",
+	"main": "dist/index.mjs",
+	"types": "dist/index.d.ts",
 	"scripts": {
+		"build": "node ../../scripts/transform.js && del ./dist/__test__",
 		"test": "vitest run --reporter verbose"
 	},
 	"dependencies": {
