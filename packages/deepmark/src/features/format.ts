@@ -1,27 +1,27 @@
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { frontmatterFromMarkdown, frontmatterToMarkdown } from 'mdast-util-frontmatter';
+import { htmlCommentFromMarkdown, htmlCommentToMarkdown } from 'mdast-util-html-comment';
 import { mdxFromMarkdown, mdxToMarkdown } from 'mdast-util-mdx';
 import { toMarkdown } from 'mdast-util-to-markdown';
 import { frontmatter } from 'micromark-extension-frontmatter';
+import { htmlComment } from 'micromark-extension-html-comment';
 import { mdxjs } from 'micromark-extension-mdxjs';
 import type { Options } from 'prettier';
 import prettier from 'prettier';
-import { comment, commentFromMarkdown, commentToMarkdown } from 'remark-comment';
 import type { UnNode } from '../types/index.js';
 import {
 	is_mdast_flow_expression,
 	is_mdast_jsx_flow_element,
 	is_mdast_jsx_text_element,
 	is_mdast_root,
+	get_markdown,
+	get_mdast,
 	unwalk
 } from '../utilities/index.js';
 
 export async function format_markdown(markdown: string) {
 	// Get mdast.
-	const mdast = fromMarkdown(markdown, 'utf-8', {
-		extensions: [frontmatter('yaml'), mdxjs(), comment],
-		mdastExtensions: [frontmatterFromMarkdown('yaml'), mdxFromMarkdown(), [commentFromMarkdown, {}]]
-	});
+	const mdast = get_mdast(markdown);
 
 	// Remove useless surface nodes.
 	unwalk(mdast, (node, parent, index) => {
@@ -33,19 +33,9 @@ export async function format_markdown(markdown: string) {
 	});
 
 	// Serialize. Inside JSX elements, there will be no blank line between blocks.
-	const clean = toMarkdown(mdast, {
-		extensions: [frontmatterToMarkdown('yaml'), mdxToMarkdown(), commentToMarkdown()],
-		join: [
-			(__, _, parent) => {
-				if (is_mdast_jsx_flow_element(parent) || is_mdast_jsx_text_element(parent)) {
-					return 0;
-				}
+	const clean = get_markdown(mdast);
 
-				return 1;
-			}
-		]
-	});
-
+	// Format with Prettier.
 	const config_or_null = await prettier.resolveConfig(process.cwd());
 	const config = config_or_null
 		? config_or_null

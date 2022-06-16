@@ -20,10 +20,14 @@ import type {
 	MdEmphasis
 } from '../types/index.js';
 
-import { remark } from 'remark';
-import remark_comment from 'remark-comment';
-import remark_frontmatter from 'remark-frontmatter';
-import remark_mdx from 'remark-mdx';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { frontmatterFromMarkdown, frontmatterToMarkdown } from 'mdast-util-frontmatter';
+import { htmlCommentFromMarkdown, htmlCommentToMarkdown } from 'mdast-util-html-comment';
+import { mdxFromMarkdown, mdxToMarkdown } from 'mdast-util-mdx';
+import { toMarkdown } from 'mdast-util-to-markdown';
+import { frontmatter } from 'micromark-extension-frontmatter';
+import { htmlComment } from 'micromark-extension-html-comment';
+import { mdxjs } from 'micromark-extension-mdxjs';
 
 export function is_mdast_emphasis(node: UnNode): node is MdEmphasis {
 	return node.type === 'emphasis';
@@ -111,23 +115,23 @@ export function is_mdast_yaml(node: UnNode): node is MdYaml {
  * Get MDX flavored `mdast`.
  */
 export function get_mdast(markdown: string): MdRoot {
-	return (
-		remark()
-			.use(remark_frontmatter, ['yaml'])
-			.use(remark_mdx)
-			// @ts-ignore
-			.use(remark_comment, { ast: true })
-			.parse(markdown)
-	);
+	return fromMarkdown(markdown, {
+		extensions: [frontmatter('yaml'), mdxjs(), htmlComment()],
+		mdastExtensions: [frontmatterFromMarkdown('yaml'), mdxFromMarkdown(), htmlCommentFromMarkdown()]
+	});
 }
 
-export function get_markdown(ast: MdRoot): string {
-	return (
-		remark()
-			.use(remark_frontmatter, ['yaml'])
-			.use(remark_mdx)
-			// @ts-ignore
-			.use(remark_comment, { ast: true })
-			.stringify(ast)
-	);
+export function get_markdown(mdast: MdRoot): string {
+	return toMarkdown(mdast, {
+		extensions: [frontmatterToMarkdown('yaml'), mdxToMarkdown(), htmlCommentToMarkdown()],
+		join: [
+			(__, _, parent) => {
+				if (is_mdast_jsx_flow_element(parent) || is_mdast_jsx_text_element(parent)) {
+					return 0;
+				}
+
+				return 1;
+			}
+		]
+	});
 }
