@@ -6,7 +6,6 @@ export function htmlCommentFromMarkdown(): Extension {
 		canContainEols: ['htmlComment'],
 		enter: {
 			htmlComment() {
-				console.log('aye');
 				this.buffer();
 			}
 		},
@@ -14,7 +13,6 @@ export function htmlCommentFromMarkdown(): Extension {
 			htmlComment(token) {
 				const string = this.resume();
 
-				console.log(string);
 				this.enter(
 					{
 						// @ts-ignore
