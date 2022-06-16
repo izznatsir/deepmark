@@ -47,7 +47,7 @@ test('Replace translatable strings in a MdAST with their translation strings.', 
 }) => {
 	const markdown_path = np.resolve(process.cwd(), 'src/__test__/samples/complete.mdx');
 	const markdown = await fs.readFile(markdown_path, { encoding: 'utf-8' });
-	const root = prepare(markdown);
+	const root = await prepare(markdown);
 	const strings = extract_mdast_strings(root, config);
 	const _strings = await translate(strings, options, config, context);
 	context.memory.serialize();

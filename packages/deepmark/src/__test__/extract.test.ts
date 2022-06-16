@@ -12,7 +12,7 @@ const dir = 'src/__test__/samples';
 async function job(path: string): Promise<string[]> {
 	const resolved = np.resolve(cwd, dir, path);
 	const value = await fs.readFile(resolved, { encoding: 'utf-8' });
-	return extract_mdast_strings(prepare(value), config);
+	return extract_mdast_strings(await prepare(value), config);
 }
 
 test('Handle empty YAML.', async ({ expect }) => {

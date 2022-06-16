@@ -1,33 +1,34 @@
+import type { TranslateOptions } from '../features/index.js';
 import type { Config, Context, UserConfig } from '../types/index.js';
 
 import { Translator } from 'deepl-node';
-import np from 'path';
 import { pathToFileURL } from 'url';
-import { is_file_readable, is_mjs, resolve_path } from './fs.js';
+import { is_file_readable } from './fs.js';
 import { TranslationMemory } from './memory.js';
 
 export * from './astring-jsx.js';
 export * from './estree.js';
 export * from './eswalk.js';
 export * from './fs.js';
-export * from './literal.js'
+export * from './literal.js';
 export * from './mdast.js';
 export * from './memory.js';
 export * from './unist.js';
 export * from './unwalk.js';
 
-export function create_context(): Context {
-	const deepl_key = process.env.DEEPL_AUTH_KEY;
+export function create_context(options: TranslateOptions): Context {
+	const context: Context = {
+		memory: new TranslationMemory('./deepmark/memory.json')
+	}
 
-	if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
+	if (!options.offline) {
+		const deepl_key = process.env.DEEPL_AUTH_KEY;
+		if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
+	
+		context.deepl = new Translator(deepl_key);
+	}
 
-	const deepl = new Translator(deepl_key);
-	const memory = new TranslationMemory('./deepmark/memory.json');
-
-	return {
-		deepl,
-		memory
-	};
+	return context
 }
 
 export async function get_user_config(path: string): Promise<UserConfig> {

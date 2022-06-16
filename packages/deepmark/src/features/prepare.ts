@@ -1,6 +1,6 @@
 import type { MdRoot, MdxJsxTextElement } from '../types/index.js';
 
-import prettier from 'prettier';
+import { format_markdown } from '../features/index.js';
 import {
 	get_mdast,
 	is_mdast_emphasis,
@@ -9,44 +9,22 @@ import {
 	is_mdast_jsx_flow_element,
 	is_mdast_jsx_text_element,
 	is_mdast_link,
-	is_mdast_root,
 	is_mdast_strong,
 	is_mdast_text,
-	is_mdast_yaml,
 	unwalk
 } from '../utilities/index.js';
 
-export function prepare(
+export async function prepare(
 	markdown: string,
 	config: { convert: boolean } = { convert: true }
-): MdRoot {
-	const formatted = prettier.format(markdown, {
-		parser: 'mdx',
-		printWidth: Infinity,
-		proseWrap: 'never'
-	});
-
-	const root = get_mdast(formatted);
+): Promise<MdRoot> {
+	const _markdown = await format_markdown(markdown, { prettier: false });
+	const mdast = get_mdast(_markdown);
 
 	unwalk(
-		root,
+		mdast,
 		(node, parent, index) => {
 			if (node.position) delete node.position;
-
-			if (is_mdast_yaml(node)) {
-				node.value = prettier.format(node.value, {
-					parser: 'yaml'
-				});
-
-				return;
-			}
-
-			if (is_mdast_flow_expression(node) && is_mdast_root(parent)) {
-				if (is_mdast_empty_text_expression(node.value)) {
-					(parent.children[index!] as unknown) = undefined;
-				}
-				return;
-			}
 
 			if (is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)) {
 				for (const attribute of node.attributes) {
@@ -108,7 +86,7 @@ export function prepare(
 		true
 	);
 
-	return root;
+	return mdast;
 }
 
 function is_mdast_empty_text_expression(text: string): boolean {

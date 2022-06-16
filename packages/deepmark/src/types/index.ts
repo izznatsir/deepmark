@@ -62,7 +62,7 @@ export interface UserConfig {
 }
 
 export interface Context {
-	deepl: Translator;
+	deepl?: Translator;
 	memory: TranslationMemory;
 }
 

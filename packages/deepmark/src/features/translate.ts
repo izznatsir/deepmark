@@ -43,7 +43,7 @@ export async function translate(
 					const indexes = container.map(([index]) => index);
 					const _strings = container.map(([__, string]) => string);
 
-					const results = await deepl.translateText(_strings, source_language, target_language, {
+					const results = await deepl!.translateText(_strings, source_language, target_language, {
 						tagHandling: 'html',
 						splitSentences: 'nonewlines'
 					});
@@ -78,7 +78,7 @@ export async function translate(
 					const indexes = container.map(([index]) => index);
 					const _strings = container.map(([__, string]) => string);
 
-					const results = await deepl.translateText(_strings, source_language, target_language, {
+					const results = await deepl!.translateText(_strings, source_language, target_language, {
 						tagHandling: 'html',
 						splitSentences: 'nonewlines'
 					});

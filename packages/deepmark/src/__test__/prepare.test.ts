@@ -19,7 +19,7 @@ test.fails('Throw errors on badly formatted YAML frontmatter.', async () => {
 	await job('frontmatter/bad-format.md');
 });
 
-test('Remove empty flow expression.', ({ expect }) => {
+test('Remove empty flow expression.', async ({ expect }) => {
 	const markdowns = [
 		{
 			source:
@@ -36,12 +36,12 @@ test('Remove empty flow expression.', ({ expect }) => {
 	];
 
 	for (const { source, expected } of markdowns) {
-		const actual = get_markdown(prepare(source)).trim();
+		const actual = get_markdown(await prepare(source)).trim();
 		expect(actual).toBe(expected);
 	}
 });
 
-test('Remove line break in the midle of sentence and around attribute.', ({ expect }) => {
+test('Remove line break in the midle of sentence and around attribute.', async ({ expect }) => {
 	const markdowns = [
 		{
 			source:
@@ -64,12 +64,12 @@ test('Remove line break in the midle of sentence and around attribute.', ({ expe
 	];
 
 	for (const { source, expected } of markdowns) {
-		const actual = get_markdown(prepare(source)).trim();
+		const actual = get_markdown(await prepare(source)).trim();
 		expect(actual).toBe(expected);
 	}
 });
 
-test('Convert markdown markup to html.', ({ expect }) => {
+test('Convert markdown markup to html.', async ({ expect }) => {
 	const markdowns = [
 		{
 			source:
@@ -80,7 +80,7 @@ test('Convert markdown markup to html.', ({ expect }) => {
 	];
 
 	for (const { source, expected } of markdowns) {
-		const actual = get_markdown(prepare(source)).trim();
+		const actual = get_markdown(await prepare(source)).trim();
 		expect(actual).toBe(expected);
 	}
 });

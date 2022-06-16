@@ -4737,7 +4737,7 @@ __metadata:
     vitest: ^0.15.1
     yaml: ^2.1.1
   bin:
-    deepmark: ./dist/cli.mjs
+    deepmark: ./dist/bin.mjs
   languageName: unknown
   linkType: soft
 

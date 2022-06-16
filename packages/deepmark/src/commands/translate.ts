@@ -29,9 +29,9 @@ export function create_translate_handler(config: Config): CommandHandler {
 		output_languages,
 		directories: { sources, outputs }
 	} = config;
-	const context: Context = create_context();
 
 	return async (__: string, options: TranslateOptions) => {
+		const context: Context = create_context(options);
 		const source_dirs = get_string_array(sources);
 		const output_dirs = get_string_array(outputs);
 
@@ -53,7 +53,7 @@ export function create_translate_handler(config: Config): CommandHandler {
 
 				if (is_markdown(source_path)) {
 					const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
-					const root = prepare(markdown);
+					const root = await prepare(markdown);
 					const strings = extract_mdast_strings(root, config);
 					const translations = await translate(strings, options, config, context);
 					const markdowns = replace_mdast_strings(root, translations, config);
