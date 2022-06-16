@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { program } from 'commander';
+import { Option, program } from 'commander';
 import { get_user_config, resolve_config, resolve_path } from './utilities/index.js';
 import { create_format_handler } from './commands/format.js';
 import { create_translate_handler } from './commands/translate.js';
@@ -21,11 +21,26 @@ async function main() {
 		.description(
 			'Format markdown files with Prettier and Remark. In some cases, it produces cleaner output than Prettier.'
 		)
+		.option('-p, --prettier', 'Format with Prettier.')
 		.action(create_format_handler(config));
 
 	program
 		.command('translate')
 		.description('Translate strings with Deepl. Skip strings that have been translated previously.')
+		.addOption(
+			new Option('--hybrid', 'Use both Translation Memory and Deepl API.')
+				.conflicts(['online', 'ofline'])
+				.default(true)
+		)
+		.addOption(
+			new Option('--online', 'Only use Deepl API to translate.').conflicts(['hybrid', 'ofline'])
+		)
+		.addOption(
+			new Option(
+				'--offline',
+				'Only use Translation Memory to translate. Fallback to source string if not exists.'
+			).conflicts(['hybrid', 'online'])
+		)
 		.action(create_translate_handler(config));
 
 	program.parse();

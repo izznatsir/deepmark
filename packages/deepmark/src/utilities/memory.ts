@@ -22,8 +22,10 @@ export class TranslationMemory {
 		return this.data[source] ? this.data[source][language] : undefined;
 	}
 
-	set(source: string, language: string, translation: string) {
+	set(source: string, language?: string, translation?: string) {
 		if (!this.data[source]) this.data[source] = {};
+		if (!language || !translation) return;
+
 		this.data[source][language] = translation;
 		this.updated = true;
 	}

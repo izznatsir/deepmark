@@ -1,4 +1,5 @@
 import type { TargetLanguageCode } from 'deepl-node';
+import type { TranslateOptions } from '../features/index.js';
 import type { CommandHandler, Config, Context } from '../types/index.js';
 
 import fg from 'fast-glob';
@@ -30,7 +31,7 @@ export function create_translate_handler(config: Config): CommandHandler {
 	} = config;
 	const context: Context = create_context();
 
-	return async () => {
+	return async (__: string, options: TranslateOptions) => {
 		const source_dirs = get_string_array(sources);
 		const output_dirs = get_string_array(outputs);
 
@@ -54,7 +55,7 @@ export function create_translate_handler(config: Config): CommandHandler {
 					const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
 					const root = prepare(markdown);
 					const strings = extract_mdast_strings(root, config);
-					const translations = await translate(strings, config, context);
+					const translations = await translate(strings, options, config, context);
 					const markdowns = replace_mdast_strings(root, translations, config);
 
 					for (const language in markdowns) {
@@ -69,7 +70,7 @@ export function create_translate_handler(config: Config): CommandHandler {
 					const json = await fs.readFile(source_path, { encoding: 'utf-8' });
 					const object = JSON.parse(json);
 					const strings = extract_docusaurus_strings(object);
-					const translations = await translate(strings, config, context);
+					const translations = await translate(strings, options, config, context);
 					const jsons = replace_docusaurus_strings(object, translations);
 
 					for (const language in jsons) {

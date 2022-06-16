@@ -1,3 +1,4 @@
+import type { FormatOptions } from '../features/index.js';
 import type { Config } from '../types/index.js';
 
 import fg from 'fast-glob';
@@ -10,7 +11,7 @@ export function create_format_handler(config: Config) {
 		directories: { sources }
 	} = config;
 
-	return async () => {
+	return async (__: string, options: FormatOptions) => {
 		const source_dirs = get_string_array(sources);
 
 		for (const source_dir of source_dirs) {
@@ -23,7 +24,7 @@ export function create_format_handler(config: Config) {
 				const output_path = source_path;
 
 				const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
-				const formatted = await format_markdown(markdown);
+				const formatted = await format_markdown(markdown, options);
 
 				await fs.writeFile(output_path, formatted);
 			}
