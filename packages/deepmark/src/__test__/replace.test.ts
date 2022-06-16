@@ -1,3 +1,4 @@
+import type { TranslateOptions } from '../features/index.js';
 import type { Config, Context } from '../types/index.js';
 
 import fs from 'fs-extra';
@@ -28,6 +29,12 @@ const config: Config = {
 	ignore_nodes: ['code', 'mdxjsEsm']
 };
 
+const options: TranslateOptions = {
+	hybrid: false,
+	online: false,
+	offline: true
+};
+
 const context: Context = create_context();
 
 test.todo(
@@ -42,7 +49,7 @@ test('Replace translatable strings in a MdAST with their translation strings.', 
 	const markdown = await fs.readFile(markdown_path, { encoding: 'utf-8' });
 	const root = prepare(markdown);
 	const strings = extract_mdast_strings(root, config);
-	const _strings = await translate(strings, config, context);
+	const _strings = await translate(strings, options, config, context);
 	context.memory.serialize();
 	const _markdowns = replace_mdast_strings(root, _strings, config);
 

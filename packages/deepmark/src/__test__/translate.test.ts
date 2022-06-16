@@ -1,3 +1,4 @@
+import type { TranslateOptions } from '../features/index.js';
 import type { Config, Context } from '../types/index.js';
 
 import { test } from 'vitest';
@@ -18,6 +19,12 @@ const config: Config = {
 	ignore_nodes: []
 };
 
+const options: TranslateOptions = {
+	hybrid: false,
+	online: false,
+	offline: true
+};
+
 const context: Context = create_context();
 
 test.skip('HTML in between sentence.', async ({ expect }) => {
@@ -25,7 +32,7 @@ test.skip('HTML in between sentence.', async ({ expect }) => {
 		'<p><b>Frontend web applications</b> that read and write IFC files and display 3D without relying on server communication can be created using <b>vanilla JavaScript</b>.</p>',
 		'<p>Frontend web applications that read and write IFC files and display 3D without relying on server communication can be created using vanilla JavaScript.</p>'
 	];
-	const translations = await translate(strings, config, context);
+	const translations = await translate(strings, options, config, context);
 	const expected: { [Language in TargetLanguageCode]?: string[] } = {
 		ja: [
 			'<p>サーバ通信に依存せずにIFCファイルを読み書きし、3D表示を行う<b>フロントエンドのWebアプリケーションを</b> <b>バニラJavaScriptで</b>作成することが可能です。</p>',

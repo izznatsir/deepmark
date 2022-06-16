@@ -10,7 +10,7 @@
 	"bin": "./dist/bin.mjs",
 	"types": "./dist/@types/index.d.ts",
 	"scripts": {
-		"build": "node ../../scripts/transform.js && del ./dist/index.mjs ./dist/@types/__test__ ./dist/@types/cli.d.ts",
+		"build": "node ../../scripts/transform.js && del ./dist/index.mjs ./dist/@types/__test__ ./dist/@types/bin.d.ts",
 		"test": "vitest run --reporter verbose",
 		"test:watch": "vitest watch --reporter verbose"
 	},
