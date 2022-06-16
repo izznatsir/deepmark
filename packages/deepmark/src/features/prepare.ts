@@ -18,7 +18,11 @@ export async function prepare(
 	markdown: string,
 	config: { convert: boolean } = { convert: true }
 ): Promise<MdRoot> {
-	const _markdown = await format_markdown(markdown, { prettier: false });
+	const _markdown = await format_markdown(
+		markdown,
+		{ prettier: true },
+		{ parser: 'mdx', printWidth: Infinity, proseWrap: 'never' }
+	);
 	const mdast = get_mdast(_markdown);
 
 	unwalk(

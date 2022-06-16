@@ -1,4 +1,4 @@
-import type { Options } from 'prettier';
+import type { Options as PrettierOptions } from 'prettier';
 import prettier from 'prettier';
 import type { UnNode } from '../types/index.js';
 import {
@@ -13,7 +13,11 @@ export interface FormatOptions {
 	prettier: boolean;
 }
 
-export async function format_markdown(markdown: string, options: FormatOptions) {
+export async function format_markdown(
+	markdown: string,
+	options: FormatOptions,
+	prettier_options?: PrettierOptions
+) {
 	// Get mdast.
 	const mdast = get_mdast(markdown);
 
@@ -34,10 +38,12 @@ export async function format_markdown(markdown: string, options: FormatOptions) 
 		const config_or_null = await prettier.resolveConfig(process.cwd());
 		const config = config_or_null
 			? config_or_null
+			: prettier_options
+			? prettier_options
 			: ({
 					printWidth: Infinity,
 					proseWrap: 'never'
-			  } as Options);
+			  } as PrettierOptions);
 
 		// Format with prettier.
 		return prettier.format(_markdown, {
