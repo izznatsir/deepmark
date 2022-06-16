@@ -14,8 +14,9 @@ sidebar_position: 1
 
 ### 你将需要什么
 
-- <a href="https://nodejs.org/en/download/">Node.js</a>14 版或以上。
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+*   <a href="https://nodejs.org/en/download/">Node.js</a>14版或以上。
+
+    *   When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
 \##生成一个新的网站
 
@@ -29,7 +30,7 @@ npm init docusaurus@latest my-website classic
 
 你可以在命令提示符、Powershell、终端或你的代码编辑器的任何其他集成终端中输入这个命令。
 
-该命令还安装了你运行 Docusaurus 所需的所有必要的依赖性。
+该命令还安装了你运行Docusaurus所需的所有必要的依赖性。
 
 \##开始你的网站
 

@@ -2,13 +2,13 @@
 sidebar_position: 4
 ---
 
-# Markdown の特徴
+# Markdownの特徴
 
 Docusaurus は<strong><a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a></strong>といくつかの<strong>追加</strong>機能をサポートしています。
 
 ## フロントマター
 
-Markdown 文書には、<a href="https://jekyllrb.com/docs/front-matter/">Front Matter と</a>呼ばれるメタデータが上部にあります。
+Markdown文書には、<a href="https://jekyllrb.com/docs/front-matter/">Front Matterと</a>呼ばれるメタデータが上部にあります。
 
 ```text title="my-doc.md"
 // highlight-start
@@ -27,7 +27,7 @@ Markdown text with [links](./hello.md)
 
 ## リンク
 
-通常の Markdown リンクは、URL パスまたは相対ファイルパスを使用してサポートされています。
+通常のMarkdownリンクは、URLパスまたは相対ファイルパスを使用してサポートされています。
 
 ```md
 Let's see how to [Create a page](/create-a-page).
@@ -41,7 +41,7 @@ Let's see how to [Create a page](./create-a-page.md).
 
 \#画像
 
-通常の Markdown 画像に対応しています。
+通常のMarkdown画像に対応しています。
 
 静的ディレクトリにある画像<code>（static/img/docusaurus.png</code>）を参照するために絶対パスを使用することができます。
 
@@ -51,12 +51,11 @@ Let's see how to [Create a page](./create-a-page.md).
 
 ドクソーラスロゴ]\(/img/docusaurus.png)
 
-<a href="../tutorial-extras/manage-docs-versions.md">追加ガイドに</a>
-あるように、現在のファイルからの相対的な画像参照も可能です。
+<a href="../tutorial-extras/manage-docs-versions.md">追加ガイドに</a>あるように、現在のファイルからの相対的な画像参照も可能です。
 
 ## コードブロック
 
-Markdown のコードブロックは、Syntax ハイライトに対応しています。
+Markdownのコードブロックは、Syntaxハイライトに対応しています。
 
 ```jsx title="src/components/HelloDocusaurus.js"
 function HelloDocusaurus() {
@@ -98,10 +97,9 @@ function HelloDocusaurus() {
 
 :::
 
-## MDX と React コンポーネント
+## MDXとReactコンポーネント
 
-<a href="https://mdxjs.com/">MDX</a> can make your documentation more <strong>interactive</strong> and
-allows using any <strong>React components inside Markdown</strong>:
+<a href="https://mdxjs.com/">MDX</a> can make your documentation more <strong>interactive</strong> and allows using any <strong>React components inside Markdown</strong>:
 
 ```jsx
 export const Highlight = ({children, color}) => (

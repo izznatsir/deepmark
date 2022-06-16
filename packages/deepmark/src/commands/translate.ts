@@ -30,7 +30,8 @@ export function create_translate_handler(config: Config): CommandHandler {
 		directories: { sources, outputs }
 	} = config;
 
-	return async (__: string, options: TranslateOptions) => {
+	return async (options: TranslateOptions) => {
+		console.log(options);
 		const context: Context = create_context(options);
 		const source_dirs = get_string_array(sources);
 		const output_dirs = get_string_array(outputs);

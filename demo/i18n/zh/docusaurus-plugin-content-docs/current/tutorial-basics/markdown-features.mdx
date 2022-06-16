@@ -2,13 +2,13 @@
 sidebar_position: 4
 ---
 
-# Markdown 功能
+# Markdown功能
 
-Docusaurus 支持<strong><a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a></strong>和一些<strong>额外的功能</strong>。
+Docusaurus支持<strong><a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a></strong>和一些<strong>额外的功能</strong>。
 
 ## 前面的内容
 
-Markdown 文档在顶部有称为<a href="https://jekyllrb.com/docs/front-matter/">Front Matter</a>的元数据。
+Markdown文档在顶部有称为<a href="https://jekyllrb.com/docs/front-matter/">Front Matter</a>的元数据。
 
 ```text title="my-doc.md"
 // highlight-start
@@ -27,7 +27,7 @@ Markdown text with [links](./hello.md)
 
 ## 链接
 
-支持常规的 Markdown 链接，使用 url 路径或相对文件路径。
+支持常规的Markdown链接，使用url路径或相对文件路径。
 
 ```md
 Let's see how to [Create a page](/create-a-page).
@@ -41,7 +41,7 @@ Let's see how to [Create a page](./create-a-page.md).
 
 ## 图像
 
-支持常规的 Markdown 图像。
+支持常规的Markdown图像。
 
 你可以使用绝对路径来引用静态目录中的图像<code>（static/img/docusaurus.png</code>）。
 
@@ -51,12 +51,11 @@ Let's see how to [Create a page](./create-a-page.md).
 
 恐龙标志]\(/img/docusaurus.png)
 
-<a href="../tutorial-extras/manage-docs-versions.md">你也可以参考相对于当前文件的图像，如</a>
-あるように、現在のファイルからの相対的な画像参照も可能です。
+<a href="../tutorial-extras/manage-docs-versions.md">你也可以参考相对于当前文件的图像，如</a>あるように、現在のファイルからの相対的な画像参照も可能です。
 
 \##代码区块
 
-支持 Markdown 代码块的语法高亮。
+支持Markdown代码块的语法高亮。
 
 ```jsx title="src/components/HelloDocusaurus.js"
 function HelloDocusaurus() {
@@ -72,7 +71,7 @@ function HelloDocusaurus() {
 
 ## 告诫
 
-Docusaurus 有一个特殊的语法来创建训诫和呼告。
+Docusaurus有一个特殊的语法来创建训诫和呼告。
 
 ::提示 我的提示
 
@@ -98,10 +97,9 @@ Docusaurus 有一个特殊的语法来创建训诫和呼告。
 
 :::
 
-## MDX 和 React 组件
+## MDX和React组件
 
-<a href="https://mdxjs.com/">MDX</a> can make your documentation more <strong>interactive</strong> and
-allows using any <strong>React components inside Markdown</strong>:
+<a href="https://mdxjs.com/">MDX</a> can make your documentation more <strong>interactive</strong> and allows using any <strong>React components inside Markdown</strong>:
 
 ```jsx
 export const Highlight = ({children, color}) => (
@@ -142,6 +140,6 @@ export const Highlight = ({ children, color }) => (
 	</span>
 );
 
-这是<Highlight color="#25c2a0">绿色的 Docusaurus</Highlight>!
+这是<Highlight color="#25c2a0">绿色的Docusaurus</Highlight>!
 
-这就是<Highlight color="#1877F2">Facebook 的蓝色</Highlight>!
+这就是<Highlight color="#1877F2">Facebook的蓝色</Highlight>!

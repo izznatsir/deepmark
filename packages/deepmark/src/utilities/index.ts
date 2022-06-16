@@ -19,16 +19,16 @@ export * from './unwalk.js';
 export function create_context(options: TranslateOptions): Context {
 	const context: Context = {
 		memory: new TranslationMemory('./deepmark/memory.json')
-	}
+	};
 
 	if (!options.offline) {
 		const deepl_key = process.env.DEEPL_AUTH_KEY;
 		if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
-	
+
 		context.deepl = new Translator(deepl_key);
 	}
 
-	return context
+	return context;
 }
 
 export async function get_user_config(path: string): Promise<UserConfig> {
@@ -44,7 +44,12 @@ export async function resolve_config(user_config: UserConfig): Promise<Config> {
 	return {
 		...user_config,
 		frontmatter: user_config.frontmatter ?? [],
-		ignore_nodes: user_config.ignore_nodes ?? ['code', 'comment', 'mdxFlowExpression', 'mdxjsEsm'],
+		ignore_nodes: user_config.ignore_nodes ?? [
+			'code',
+			'htmlComment',
+			'mdxFlowExpression',
+			'mdxjsEsm'
+		],
 		ignore_components: user_config.ignore_components ?? [],
 		components_attributes: user_config.components_attributes ?? {}
 	} as Config;

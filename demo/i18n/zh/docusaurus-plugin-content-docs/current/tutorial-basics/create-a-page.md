@@ -4,13 +4,15 @@ sidebar_position: 1
 
 # 创建一个页面
 
-<code>将</code> <strong>Markdown や React の</strong>ファイルを追加して、<strong>独立したページを</strong>作成します。
+<code>将</code> <strong>MarkdownやReactの</strong>ファイルを追加して、<strong>独立したページを</strong>作成します。
 
-- <code>src/pages/index.js</code>-><code>localhost:3000/</code>
-- <code>src/pages/foo.md</code>-><code>localhost:3000/foo</code>
-- <code>src/pages/foo/bar.js</code>-><code>localhost:3000/foo/bar</code>
+*   <code>src/pages/index.js</code>-><code>localhost:3000/</code>
 
-\##创建你的第一个 React 页面
+*   <code>src/pages/foo.md</code>-><code>localhost:3000/foo</code>
+
+*   <code>src/pages/foo/bar.js</code>-><code>localhost:3000/foo/bar</code>
+
+\##创建你的第一个React页面
 
 <code>在</code> にファイルを作成します。
 
@@ -30,7 +32,7 @@ export default function MyReactPage() {
 
 现在有一个新的页面，<code>http://localhost:3000/my-react-page。</code>
 
-## 创建你的第一个 Markdown 页面
+## 创建你的第一个Markdown页面
 
 <code>在</code> にファイルを作成します。
 

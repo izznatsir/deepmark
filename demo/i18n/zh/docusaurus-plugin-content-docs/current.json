@@ -1,15 +1,1 @@
-{
-	"version.label": { "message": "下一页", "description": "当前版本的标签" },
-	"sidebar.tutorialSidebar.category.Tutorial - Basics": {
-		"message": "教程 - 基础知识",
-		"description": "类别教程的标签--侧边栏的基础知识 tutorialSidebar"
-	},
-	"sidebar.tutorialSidebar.category.Tutorial - Basics.link.generated-index.description": {
-		"message": "5分钟学习最重要的Docusaurus概念。",
-		"description": "生成的索引页面描述为类别教程--侧边栏的基础知识 tutorialSidebar"
-	},
-	"sidebar.tutorialSidebar.category.Tutorial - Extras": {
-		"message": "教程 - 额外内容",
-		"description": "教程类别的标签 - 侧边栏中的额外内容 tutorialSidebar"
-	}
-}
+{"version.label":{"message":"下一页","description":"当前版本的标签"},"sidebar.tutorialSidebar.category.Tutorial - Basics":{"message":"教程 - 基础知识","description":"类别教程的标签--侧边栏的基础知识 tutorialSidebar"},"sidebar.tutorialSidebar.category.Tutorial - Basics.link.generated-index.description":{"message":"5分钟学习最重要的Docusaurus概念。","description":"生成的索引页面描述为类别教程--侧边栏的基础知识 tutorialSidebar"},"sidebar.tutorialSidebar.category.Tutorial - Extras":{"message":"教程 - 额外内容","description":"教程类别的标签 - 侧边栏中的额外内容 tutorialSidebar"}}

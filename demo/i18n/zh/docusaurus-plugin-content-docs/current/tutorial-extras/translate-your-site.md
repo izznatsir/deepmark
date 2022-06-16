@@ -6,7 +6,7 @@ sidebar_position: 2
 
 <code>让我们把</code>フランス語に翻訳してみましょう。
 
-## 配置 i18n
+## 配置i18n
 
 <code>修改</code>を修正し、<code>fr</code>ロケールのサポートを追加しました。
 

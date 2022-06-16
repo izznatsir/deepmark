@@ -11,7 +11,7 @@ export function create_format_handler(config: Config) {
 		directories: { sources }
 	} = config;
 
-	return async (__: string, options: FormatOptions) => {
+	return async (options: FormatOptions) => {
 		const source_dirs = get_string_array(sources);
 
 		for (const source_dir of source_dirs) {
