@@ -14,6 +14,10 @@
 		"publish": "npm publish --workspace deepmark --access public"
 	},
 	"devDependencies": {
+		"del-cli": "^4.0.1",
+		"esbuild": "^0.14.44",
+		"fast-glob": "^3.2.11",
+		"fs-extra": "^10.1.0",
 		"prettier": "^2.7.0",
 		"typescript": "~4.7.3"
 	},

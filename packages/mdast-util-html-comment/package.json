@@ -1,5 +1,8 @@
 {
 	"name": "mdast-util-html-comment",
 	"version": "0.0.1",
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"micromark-extension-html-comment": "workspace:*"
+	}
 }

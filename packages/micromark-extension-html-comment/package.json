@@ -2,10 +2,18 @@
 	"name": "micromark-extension-html-comment",
 	"version": "0.0.1",
 	"license": "MIT",
+	"files": [
+		"dist/*"
+	],
+	"main": "dist/index.mjs",
+	"types": "dist/index.d.ts",
 	"scripts": {
+		"build": "node ../../scripts/transform.js && del ./dist/__test__",
 		"test": "vitest run --reporter verbose"
 	},
 	"dependencies": {
+		"micromark-factory-space": "^1.0.0",
+		"micromark-util-character": "^1.1.0",
 		"micromark-util-symbol": "^1.0.1"
 	},
 	"devDependencies": {

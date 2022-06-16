@@ -1,7 +1,10 @@
-import type { Code, Extension, State, Tokenizer } from 'micromark-util-types';
+import { factorySpace } from 'micromark-factory-space';
+import { markdownLineEnding } from 'micromark-util-character';
 import { codes } from 'micromark-util-symbol/codes.js';
+import { types } from 'micromark-util-symbol/types.js';
+import type { Code, Extension, HtmlExtension, State, Tokenizer } from 'micromark-util-types';
 
-export function mdxHtmlComment(): Extension {
+export function htmlComment(): Extension {
 	return {
 		flow: {
 			[codes.lessThan]: { tokenize }
@@ -9,10 +12,22 @@ export function mdxHtmlComment(): Extension {
 	};
 }
 
+export function htmlCommentToHtml(): HtmlExtension {
+	return {
+		enter: {
+			htmlComment() {
+				this.buffer();
+			}
+		},
+		exit: {
+			htmlComment() {
+				this.resume();
+			}
+		}
+	};
+}
+
 const tokenize: Tokenizer = (effects, ok, nok) => {
-	let previous: Code = null;
-	let isMarker = true;
-	let marker: string = '';
 	let value: string = '';
 
 	return start;
@@ -20,30 +35,31 @@ const tokenize: Tokenizer = (effects, ok, nok) => {
 	function start(code: Code): State | void {
 		effects.enter('htmlComment');
 		effects.enter('htmlCommentMarker');
-		previous = code;
 		effects.consume(code);
+
+		value += '<';
 
 		return open;
 	}
 
 	function open(code: Code): State | void {
-		if (previous === codes.lessThan && code === codes.exclamationMark) {
-			previous = code;
+		if (value === '<' && code === codes.exclamationMark) {
 			effects.consume(code);
+			value += '!';
 			return open;
 		}
 
 		if (code === codes.dash) {
-			if (previous === codes.exclamationMark) {
-				previous = code;
+			if (value === '<!') {
 				effects.consume(code);
+				value += '-';
 				return open;
 			}
 
-			if (previous === codes.dash) {
-				previous = null;
+			if (value === '<!-') {
 				effects.consume(code);
 				effects.exit('htmlCommentMarker');
+				value += '-';
 				return inside;
 			}
 		}
@@ -52,75 +68,52 @@ const tokenize: Tokenizer = (effects, ok, nok) => {
 	}
 
 	function inside(code: Code): State | void {
-		effects.enter('htmlCommentString');
+		if (code === codes.eof) return nok(code);
 
-		if (isMarker && code === codes.dash) {
-			effects.check(
-				{
-					tokenize: (effects, ok, nok) => {
-						return close;
-
-						function close(code: Code): State | void {
-							if (marker === '') {
-								effects.enter('htmlCommentMarker');
-								effects.consume(code);
-								previous = codes.dash;
-								marker += '-';
-								return close;
-							}
-
-							if (code === codes.dash && marker === '-') {
-								effects.consume(code);
-								marker += '-';
-								return close;
-							}
-
-							if (code === codes.greaterThan && value === '--') {
-								effects.consume(code);
-								effects.exit('htmlCommentMarker');
-								marker = '';
-								return ok;
-							}
-
-							isMarker = false;
-							return nok;
-						}
-					}
-				},
-				close,
-				inside
-			)(code);
-		}
-	}
-
-	function close(code: Code): State | void {
-		if (marker === '') {
-			effects.enter('htmlCommentMarker');
-			effects.consume(code);
-			previous = codes.dash;
-			marker += '-';
-			return close;
+		if (markdownLineEnding(code)) {
+			effects.exit(types.data);
+			return atLineEnding(code);
 		}
 
-		if (code === codes.dash && marker === '-') {
-			effects.consume(code);
-			marker += '-';
-			return close;
+		if (code === codes.greaterThan) {
+			return close(code);
 		}
 
-		if (code === codes.greaterThan && value === '--') {
-			effects.consume(code);
-			effects.exit('htmlCommentMarker');
-			marker = '';
-			return end;
+		if (value === '<!--') {
+			effects.enter('htmlCommentString');
+			effects.enter(types.data);
 		}
 
-		isMarker = false;
+		effects.consume(code);
+		value += '_';
 		return inside;
 	}
 
-	function end(code: Code): State | void {
-		effects.exit('htmlComment');
-		return ok;
+	function atLineEnding(code: Code): State | void {
+		effects.enter(types.lineEnding);
+		effects.consume(code);
+		effects.exit(types.lineEnding);
+
+		return factorySpace(effects, afterLinePrefix, types.linePrefix);
+	}
+
+	function afterLinePrefix(code: Code): State | void {
+		if (markdownLineEnding(code)) return atLineEnding(code);
+		effects.enter(types.data);
+		return inside(code);
+	}
+
+	function close(code: Code): State | void {
+		if (value.length >= 6 && value.slice(-2) === '--') {
+			effects.consume(code);
+			effects.exit(types.data);
+			effects.exit('htmlCommentString');
+			effects.exit('htmlComment');
+			value += '>';
+
+			return ok;
+		}
+
+		return nok(code);
 	}
 };
