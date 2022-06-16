@@ -2,8 +2,7 @@ import type { Config } from '../types/index.js';
 
 import fg from 'fast-glob';
 import fs from 'fs-extra';
-import np from 'path';
-import { format } from '../features/index.js';
+import { format_markdown } from '../features/index.js';
 import { get_string_array, is_directory_exist, resolve_path } from '../utilities/index.js';
 
 export function create_format_handler(config: Config) {
@@ -24,7 +23,7 @@ export function create_format_handler(config: Config) {
 				const output_path = source_path;
 
 				const markdown = await fs.readFile(source_path, { encoding: 'utf-8' });
-				const formatted = await format(markdown);
+				const formatted = await format_markdown(markdown);
 
 				await fs.writeFile(output_path, formatted);
 			}

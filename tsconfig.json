@@ -2,6 +2,12 @@
 	"references": [
 		{
 			"path": "./packages/deepmark"
+		},
+		{
+			"path": "./packages/mdast-util-html-comment"
+		},
+		{
+			"path": "./packages/micromark-extension-html-comment"
 		}
 	],
 	"files": []
