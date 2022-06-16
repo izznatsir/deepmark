@@ -11,7 +11,9 @@
 		"build:packages": "yarn workspaces foreach --exclude root --exclude demo run build",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
-		"publish": "npm publish --workspace deepmark --access public"
+		"publish:deepmark": "npm publish --workspace deepmark --access public",
+		"publish:muhc": "npm publish --workspace mdast-util-html-comment --access public",
+		"publish:mehc": "npm publish --workspace micromark-extension-html-comment --access public"
 	},
 	"devDependencies": {
 		"del-cli": "^4.0.1",
