@@ -36,10 +36,10 @@ export async function format_markdown(
 	if (options.prettier) {
 		// Format with Prettier.
 		const config_or_null = await prettier.resolveConfig(process.cwd());
-		const config = config_or_null
-			? config_or_null
-			: prettier_options
+		const config = prettier_options
 			? prettier_options
+			: config_or_null
+			? config_or_null
 			: ({
 					printWidth: Infinity,
 					proseWrap: 'never'
