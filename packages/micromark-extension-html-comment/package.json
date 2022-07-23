@@ -20,8 +20,8 @@
 	"devDependencies": {
 		"micromark": "^3.0.10",
 		"micromark-util-types": "^1.0.2",
-		"vite": "3.0.0-alpha.11",
-		"vitest": "^0.15.1"
+		"vite": "3.0.2",
+		"vitest": "^0.18.1"
 	},
 	"type": "module"
 }
