@@ -3,6 +3,7 @@ import { Option, program } from 'commander';
 import { get_user_config, resolve_config, resolve_path } from './utilities/index.js';
 import { create_format_handler } from './commands/format.js';
 import { create_translate_handler } from './commands/translate.js';
+import type { TranslateOptions } from './features/translate.js';
 
 async function main() {
 	const deepmark_dir = resolve_path('deepmark');
@@ -28,9 +29,10 @@ async function main() {
 		.command('translate')
 		.description('Translate strings with Deepl. Skip strings that have been translated previously.')
 		.addOption(
-			new Option('--hybrid', 'Use both Translation Memory and Deepl API.')
-				.conflicts(['online', 'ofline'])
-				.default(true)
+			new Option('--hybrid', 'Use both Translation Memory and Deepl API.').conflicts([
+				'online',
+				'ofline'
+			])
 		)
 		.addOption(
 			new Option('--online', 'Only use Deepl API to translate.').conflicts(['hybrid', 'ofline'])
@@ -41,7 +43,14 @@ async function main() {
 				'Only use Translation Memory to translate. Fallback to source string if not exists.'
 			).conflicts(['hybrid', 'online'])
 		)
-		.action(create_translate_handler(config));
+		.action(async (options: { hybrid: boolean; offline: boolean; online: boolean }) => {
+			const resolved_options: TranslateOptions = {
+				mode: options.online ? 'online' : options.offline ? 'offline' : 'hybrid',
+				memorize: true
+			};
+
+			await create_translate_handler(config)(resolved_options);
+		});
 
 	program.parse();
 }

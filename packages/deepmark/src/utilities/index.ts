@@ -16,13 +16,13 @@ export * from './memory.js';
 export * from './unist.js';
 export * from './unwalk.js';
 
-export function create_context(options: TranslateOptions): Context {
+export function create_context(options: TranslateOptions, deepl_auth_key?: string): Context {
 	const context: Context = {
 		memory: new TranslationMemory('./deepmark/memory.json')
 	};
 
-	if (!options.offline) {
-		const deepl_key = process.env.DEEPL_AUTH_KEY;
+	if (options.mode !== 'offline') {
+		const deepl_key = deepl_auth_key ?? process.env.DEEPL_AUTH_KEY;
 		if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
 
 		context.deepl = new Translator(deepl_key);

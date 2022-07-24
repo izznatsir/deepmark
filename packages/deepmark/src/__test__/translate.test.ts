@@ -1,6 +1,7 @@
 import type { TranslateOptions } from '../features/index.js';
 import type { Config, Context } from '../types/index.js';
 
+import nock from 'nock';
 import { test } from 'vitest';
 import { create_context } from '../utilities/index.js';
 import { translate } from '../features/index.js';
@@ -20,28 +21,49 @@ const config: Config = {
 };
 
 const options: TranslateOptions = {
-	hybrid: false,
-	online: false,
-	offline: true
+	mode: 'online',
+	memorize: false
 };
 
-const context: Context = create_context(options);
+const context: Context = create_context(options, 'asecret_authkey');
 
-test.skip('HTML in between sentence.', async ({ expect }) => {
-	const strings: string[] = [
-		'<p><b>Frontend web applications</b> that read and write IFC files and display 3D without relying on server communication can be created using <b>vanilla JavaScript</b>.</p>',
-		'<p>Frontend web applications that read and write IFC files and display 3D without relying on server communication can be created using vanilla JavaScript.</p>'
-	];
+const URL = 'https://api.deepl.com/v2/translate';
+
+test('translate in online mode', async ({ expect }) => {
+	console.log(process.env.NODE_ENV);
+	nock(URL)
+		.post(/\/?/)
+		.reply(200, {
+			translations: [
+				{
+					detected_source_language: 'EN',
+					text: '<p>translated text ja 1</p>'
+				},
+				{
+					detected_source_language: 'EN',
+					text: '<p>translated text ja 2</p>'
+				}
+			]
+		})
+		.post(/\/?/)
+		.reply(200, {
+			translations: [
+				{
+					detected_source_language: 'EN',
+					text: '<p>translated text zh 1</p>'
+				},
+				{
+					detected_source_language: 'EN',
+					text: '<p>translated text zh 2</p>'
+				}
+			]
+		});
+
+	const strings: string[] = ['<p>source text 1</p>', '<p>source text 2</p>'];
 	const translations = await translate(strings, options, config, context);
 	const expected: { [Language in TargetLanguageCode]?: string[] } = {
-		ja: [
-			'<p>サーバ通信に依存せずにIFCファイルを読み書きし、3D表示を行う<b>フロントエンドのWebアプリケーションを</b> <b>バニラJavaScriptで</b>作成することが可能です。</p>',
-			'<p>サーバ通信に依存せずにIFCファイルを読み書きし、3D表示を行うフロントエンドのWebアプリケーションをバニラJavaScriptで作成することが可能です。</p>'
-		],
-		zh: [
-			'<p>可以使用<b>vanilla JavaScript</b>创建<b>前端Web应用程序</b>，这些应用程序可以读写IFC文件并显示3D，而不依赖服务器通信。</p>',
-			'<p>可以使用vanilla JavaScript创建前端Web应用程序，这些应用程序可以读写IFC文件并显示3D，而不依赖服务器通信。</p>'
-		]
+		ja: ['<p>translated text ja 1</p>', '<p>translated text ja 2</p>'],
+		zh: ['<p>translated text zh 1</p>', '<p>translated text zh 2</p>']
 	};
 
 	expect(translations).toEqual(expected);

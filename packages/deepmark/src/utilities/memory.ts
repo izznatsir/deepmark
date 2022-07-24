@@ -12,7 +12,8 @@ export class TranslationMemory {
 			this.data = JSON.parse(fs.readFileSync(resolved_path, { encoding: 'utf-8' }));
 		} catch {
 			this.data = {};
-			fs.outputFileSync(resolved_path, JSON.stringify(this.data));
+			if (process.env.NODE_ENV !== 'test')
+				fs.outputFileSync(resolved_path, JSON.stringify(this.data));
 		}
 
 		this.path = resolved_path;

@@ -32,7 +32,7 @@ Docusaurus自动从<code>docs</code>文件夹<strong>创建一个侧边栏</stro
 
 ```md title="docs/hello.md" {1-4}
 ---
-sidebar_label: 'Hi!'
+sidebar_label: "Hi!"
 sidebar_position: 3
 ---
 
@@ -45,13 +45,13 @@ This is my **first Docusaurus document**!
 
 ```js title="sidebars.js"
 module.exports = {
-	tutorialSidebar: [
-		{
-			type: 'category',
-			label: 'Tutorial',
-			// highlight-next-line
-			items: ['hello']
-		}
-	]
+  tutorialSidebar: [
+    {
+      type: "category",
+      label: "Tutorial",
+      // highlight-next-line
+      items: ["hello"],
+    },
+  ],
 };
 ```

@@ -2,9 +2,8 @@ import type { TargetLanguageCode } from 'deepl-node';
 import type { Config, Context } from '../types/index.js';
 
 export interface TranslateOptions {
-	hybrid: boolean;
-	online: boolean;
-	offline: boolean;
+	mode: 'hybrid' | 'offline' | 'online';
+	memorize: boolean;
 }
 
 export async function translate(
@@ -22,20 +21,20 @@ export async function translate(
 		for (let i = 0; i < strings.length; i++) {
 			const string = strings[i];
 
-			if (options.offline) {
+			if (options.mode === 'offline') {
 				const translation = memory.get(string, target_language);
 
 				if (translation) {
 					_translations.push(translation);
 				} else {
 					_translations.push(string);
-					memory.set(string);
+					if (options.memorize) memory.set(string);
 				}
 
 				continue;
 			}
 
-			if (options.online) {
+			if (options.mode === 'online') {
 				container.push([i, string]);
 				_translations.push('');
 
@@ -53,7 +52,7 @@ export async function translate(
 						const translation = results[j].text;
 						const _string = _strings[j];
 
-						memory.set(_string, target_language, translation);
+						if (options.memorize) memory.set(_string, target_language, translation);
 
 						_translations[index] = translation;
 					}
@@ -64,7 +63,7 @@ export async function translate(
 				continue;
 			}
 
-			if (options.hybrid) {
+			if (options.mode === 'hybrid') {
 				const translation = memory.get(string, target_language);
 
 				if (translation) {
@@ -88,7 +87,7 @@ export async function translate(
 						const translation = results[j].text;
 						const _string = _strings[j];
 
-						memory.set(_string, target_language, translation);
+						if (options.memorize) memory.set(_string, target_language, translation);
 
 						_translations[index] = translation;
 					}
@@ -103,7 +102,7 @@ export async function translate(
 		translations[target_language] = _translations;
 	}
 
-	memory.serialize();
+	if (options.memorize) memory.serialize();
 
 	return translations;
 }

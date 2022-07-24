@@ -30,17 +30,17 @@ npm run docusaurus docs:version 1.0
 
 ```js title="docusaurus.config.js"
 module.exports = {
-	themeConfig: {
-		navbar: {
-			items: [
-				// highlight-start
-				{
-					type: 'docsVersionDropdown'
-				}
-				// highlight-end
-			]
-		}
-	}
+  themeConfig: {
+    navbar: {
+      items: [
+        // highlight-start
+        {
+          type: "docsVersionDropdown",
+        },
+        // highlight-end
+      ],
+    },
+  },
 };
 ```
 

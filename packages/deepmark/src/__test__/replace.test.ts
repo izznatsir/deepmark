@@ -30,9 +30,8 @@ const config: Config = {
 };
 
 const options: TranslateOptions = {
-	hybrid: false,
-	online: false,
-	offline: true
+	mode: 'offline',
+	memorize: false
 };
 
 const context: Context = create_context(options);

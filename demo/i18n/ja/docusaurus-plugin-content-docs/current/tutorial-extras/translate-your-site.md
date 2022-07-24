@@ -12,10 +12,10 @@ sidebar_position: 2
 
 ```js title="docusaurus.config.js"
 module.exports = {
-	i18n: {
-		defaultLocale: 'en',
-		locales: ['en', 'fr']
-	}
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "fr"],
+  },
 };
 ```
 
@@ -55,17 +55,17 @@ npm run start -- --locale fr
 
 ```js title="docusaurus.config.js"
 module.exports = {
-	themeConfig: {
-		navbar: {
-			items: [
-				// highlight-start
-				{
-					type: 'localeDropdown'
-				}
-				// highlight-end
-			]
-		}
-	}
+  themeConfig: {
+    navbar: {
+      items: [
+        // highlight-start
+        {
+          type: "localeDropdown",
+        },
+        // highlight-end
+      ],
+    },
+  },
 };
 ```
 
