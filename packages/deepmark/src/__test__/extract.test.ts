@@ -15,7 +15,7 @@ async function extract(path: string): Promise<string[]> {
 	return extract_mdast_strings(await prepare(value), config);
 }
 
-describe('frontmatter', () => {
+describe.skip('frontmatter', () => {
 	test('ignore empty frontmatter', async ({ expect }) => {
 		const strings = await extract('frontmatter/empty.md');
 		expect(strings.length).toBe(0);
@@ -28,5 +28,12 @@ describe('frontmatter', () => {
 });
 
 describe('jsx', () => {
-	test('recursively extract strings from nested jsx components', () => {});
+	test('recursively extract strings from nested jsx components', async ({ expect }) => {
+		const strings = await extract('jsx/nested.mdx');
+		expect(strings).toEqual([
+			'This is a paragraph.',
+			'This is a span.',
+			'This is a text inside a custom component.'
+		]);
+	});
 });

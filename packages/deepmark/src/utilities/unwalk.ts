@@ -5,7 +5,7 @@ import { is_unist_parent } from './unist.js';
 const NEXT = true;
 const STOP = false;
 
-export function unwalk(node: UnNode, visit: Visitor, inout: boolean = false) {
+export function unwalk(node: UnNode, visit: Visitor, inout: boolean = true) {
 	let next = true;
 
 	function step(node: UnNode, parent: UnParent | undefined, index: number | undefined) {

@@ -1,24 +1,15 @@
-import type { Config, DocusaurusTranslations, MdContent, MdRoot } from '../types/index.js';
+import type { Config, DocusaurusTranslations, MdRoot } from '../types/index.js';
 
-import { mdxToMarkdown } from 'mdast-util-mdx';
-import { toMarkdown } from 'mdast-util-to-markdown';
 import { parse as parse_yaml } from 'yaml';
 import {
 	eswalk,
-	generate,
-	GENERATOR,
-	JSX,
 	is_array,
 	is_empty_array,
 	is_empty_string,
 	is_estree_identifier,
 	is_mdast_jsx_attribute,
-	is_mdast_jsx_element,
 	is_mdast_jsx_flow_element,
-	is_mdast_jsx_text_element,
-	is_mdast_list,
-	is_mdast_paragraph,
-	is_mdast_root,
+	is_mdast_text,
 	is_mdast_yaml,
 	is_object,
 	is_string,
@@ -32,8 +23,52 @@ export function extract_mdast_strings(
 ): string[] {
 	const strings: string[] = [];
 
-	unwalk(mdast, (node, parent) => {
-		if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
+	unwalk(mdast, (node, __, _) => {
+		if (ignore_nodes.includes(node.type)) return;
+
+		if (is_mdast_text(node)) {
+			if (!/^\s*$/.test(node.value)) {
+				strings.push(node.value);
+			}
+
+			return;
+		}
+
+		if (is_mdast_jsx_flow_element(node)) {
+			const { attributes, name } = node;
+
+			if (!name || ignore_components.includes(name)) return;
+
+			if (attributes) {
+				for (const attribute of attributes) {
+					if (!is_mdast_jsx_attribute(attribute)) continue;
+
+					const { name, value } = attribute;
+
+					if (is_string(value)) {
+						if (!components_attributes[node.name!]?.includes(name)) continue;
+						strings.push(value);
+					} else if (value?.data?.estree) {
+						const estree = value.data.estree;
+
+						eswalk(estree, {
+							Literal(esnode) {
+								if (is_string(esnode.value)) strings.push(esnode.value);
+							},
+							Property(esnode, parents) {
+								if (!is_estree_identifier(esnode.key)) return false;
+
+								let property_path = resolve_estree_property_path(esnode, parents, name);
+								if (!property_path) return false;
+								if (!components_attributes[node.name!]?.includes(property_path)) return false;
+							}
+						});
+					}
+				}
+			}
+
+			return;
+		}
 
 		if (is_mdast_yaml(node)) {
 			if (is_empty_array(frontmatter)) return;
@@ -61,82 +96,6 @@ export function extract_mdast_strings(
 
 			return;
 		}
-
-		if (is_mdast_jsx_element(node)) {
-			const jsx_node =
-				is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)
-					? node
-					: node.children[0];
-
-			const { attributes, children, name } = jsx_node;
-
-			if (!name || ignore_components.includes(name)) return;
-
-			if (attributes) {
-				for (const attribute of attributes) {
-					if (!is_mdast_jsx_attribute(attribute)) continue;
-
-					const { name, value } = attribute;
-
-					if (is_string(value)) {
-						if (!components_attributes[jsx_node.name!]?.includes(name)) continue;
-						strings.push(value);
-					} else if (value?.data?.estree) {
-						const estree = value.data.estree;
-
-						eswalk(estree, {
-							Literal(node) {
-								if (is_string(node.value)) strings.push(node.value);
-							},
-							Property(node, parents) {
-								if (!is_estree_identifier(node.key)) return false;
-
-								let property_path = resolve_estree_property_path(node, parents, name);
-								if (!property_path) return false;
-								if (!components_attributes[jsx_node.name!]?.includes(property_path)) return false;
-							},
-							JSXElement(node) {
-								strings.push(generate(node, { generator: { ...GENERATOR, ...JSX } }));
-							}
-						});
-					}
-				}
-			}
-
-			if (
-				(!components_attributes[name] || components_attributes[name].includes('children')) &&
-				!is_empty_array(children)
-			) {
-				for (const child of children) {
-					if (
-						(is_mdast_jsx_flow_element(child) || is_mdast_jsx_text_element(child)) &&
-						child.name === 'code'
-					)
-						continue;
-
-					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
-					strings.push(string);
-				}
-			}
-
-			return;
-		}
-
-		if (is_mdast_list(node)) {
-			for (const item of node.children) {
-				for (const child of item.children) {
-					if (!is_mdast_paragraph(child)) continue;
-
-					const string = toMarkdown(child, { extensions: [mdxToMarkdown()] }).trimEnd();
-					strings.push(string);
-				}
-			}
-
-			return;
-		}
-
-		const string = toMarkdown(node as MdContent, { extensions: [mdxToMarkdown()] }).trimEnd();
-		strings.push(string);
 	});
 
 	return strings;
