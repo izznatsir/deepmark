@@ -9,7 +9,7 @@ const config = await resolve_config(user_config);
 const cwd = process.cwd();
 const dir = 'src/__test__/samples';
 
-async function job(path: string): Promise<string[]> {
+async function extract(path: string): Promise<string[]> {
 	const resolved = np.resolve(cwd, dir, path);
 	const value = await fs.readFile(resolved, { encoding: 'utf-8' });
 	return extract_mdast_strings(await prepare(value), config);
@@ -17,12 +17,12 @@ async function job(path: string): Promise<string[]> {
 
 describe('frontmatter', () => {
 	test('ignore empty frontmatter', async ({ expect }) => {
-		const strings = await job('frontmatter/empty.md');
+		const strings = await extract('frontmatter/empty.md');
 		expect(strings.length).toBe(0);
 	});
 
 	test('filter frontmatter fields based on configuration', async ({ expect }) => {
-		const strings = await job('frontmatter/ideal.md');
+		const strings = await extract('frontmatter/index.md');
 		expect(strings).toEqual(['Shocking Title', 'shocking', 'intriguing']);
 	});
 });
