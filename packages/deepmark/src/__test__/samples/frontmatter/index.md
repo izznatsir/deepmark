@@ -1,5 +1,5 @@
 ---
 author: Izzuddin Natsir
-title: Shocking Title
-tags: [shocking, intriguing]
+title: A Short Title
+tags: [tagone, tagtwo]
 ---

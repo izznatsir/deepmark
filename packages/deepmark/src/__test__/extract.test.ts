@@ -23,7 +23,7 @@ describe('frontmatter', () => {
 
 	test('filter frontmatter fields based on configuration', async ({ expect }) => {
 		const strings = await extract('frontmatter/index.md');
-		expect(strings).toEqual(['Shocking Title', 'shocking', 'intriguing']);
+		expect(strings).toEqual(['A Short Title', 'tagone', 'tagtwo']);
 	});
 });
 
