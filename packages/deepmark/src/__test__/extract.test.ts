@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import np from 'path';
-import { test } from 'vitest';
+import { describe, test } from 'vitest';
 import user_config from './deepmark.config.mjs';
 import { resolve_config } from '../utilities/index.js';
 import { extract_mdast_strings, prepare } from '../features/index.js';
@@ -15,12 +15,18 @@ async function job(path: string): Promise<string[]> {
 	return extract_mdast_strings(await prepare(value), config);
 }
 
-test('Handle empty YAML.', async ({ expect }) => {
-	const strings = await job('frontmatter/empty.md');
-	expect(strings.length).toBe(0);
+describe('frontmatter', () => {
+	test('ignore empty frontmatter', async ({ expect }) => {
+		const strings = await job('frontmatter/empty.md');
+		expect(strings.length).toBe(0);
+	});
+
+	test('filter frontmatter fields based on configuration', async ({ expect }) => {
+		const strings = await job('frontmatter/ideal.md');
+		expect(strings).toEqual(['Shocking Title', 'shocking', 'intriguing']);
+	});
 });
 
-test('Extract only fields that are stated in the configuration.', async ({ expect }) => {
-	const strings = await job('frontmatter/ideal.md');
-	expect(strings).toEqual(['Shocking Title', 'shocking', 'intriguing']);
+describe('jsx', () => {
+	test('recursively extract strings from nested jsx components', () => {});
 });
