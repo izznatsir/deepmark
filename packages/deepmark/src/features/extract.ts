@@ -52,13 +52,13 @@ export function extract_mdast_strings(
 						const estree = value.data.estree;
 
 						eswalk(estree, {
-							Literal(esnode) {
+							Literal(esnode, _) {
 								if (is_string(esnode.value)) strings.push(esnode.value);
 							},
 							Property(esnode, parents) {
 								if (!is_estree_identifier(esnode.key)) return false;
 
-								let property_path = resolve_estree_property_path(esnode, parents, name);
+								const property_path = resolve_estree_property_path(esnode, parents, name);
 								if (!property_path) return false;
 								if (!components_attributes[node.name!]?.includes(property_path)) return false;
 							}
