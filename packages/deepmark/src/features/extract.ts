@@ -45,7 +45,7 @@ export function extract_mdast_strings(
 
 						if (is_string(value)) {
 							if (!components_attributes[node.name!]?.includes(name)) continue;
-							strings.push(value);
+							strings.push(value.trim());
 						} else if (value?.data?.estree) {
 							const estree = value.data.estree;
 
