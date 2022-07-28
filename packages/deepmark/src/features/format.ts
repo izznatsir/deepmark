@@ -1,6 +1,7 @@
 import type { Options as PrettierOptions } from 'prettier';
-import prettier from 'prettier';
 import type { UnNode } from '../types/index.js';
+
+import prettier from 'prettier';
 import {
 	is_mdast_flow_expression,
 	is_mdast_root,
@@ -9,50 +10,38 @@ import {
 	unwalk
 } from '../utilities/index.js';
 
-export interface FormatOptions {
-	prettier: boolean;
-}
-
 export async function format_markdown(
 	markdown: string,
-	options: FormatOptions,
-	prettier_options?: PrettierOptions
+	prettier_options?: Omit<PrettierOptions, 'parser'>
 ) {
-	// Get mdast.
 	const mdast = get_mdast(markdown);
 
 	// Remove useless surface nodes.
-	unwalk(mdast, (node, parent, index) => {
-		if (!is_mdast_root(parent)) return;
+	unwalk(
+		mdast,
+		(node, parent, index) => {
+			if (is_mdast_empty_text_expression(node)) {
+				(parent!.children[index!] as unknown) = undefined;
+			}
+		},
+		(_, parent) => is_mdast_root(parent)
+	);
 
-		if (is_mdast_empty_text_expression(node)) {
-			(parent.children[index!] as unknown) = undefined;
-		}
+	const config_or_null = await prettier.resolveConfig(process.cwd());
+	const config = prettier_options
+		? prettier_options
+		: config_or_null
+		? config_or_null
+		: ({
+				printWidth: Infinity,
+				proseWrap: 'never',
+				useTabs: true
+		  } as PrettierOptions);
+
+	return prettier.format(get_markdown(mdast), {
+		parser: 'mdx',
+		...config
 	});
-
-	// Serialize. Inside JSX elements, there will be no blank line between blocks.
-	const _markdown = get_markdown(mdast);
-
-	if (options.prettier) {
-		// Format with Prettier.
-		const config_or_null = await prettier.resolveConfig(process.cwd());
-		const config = prettier_options
-			? prettier_options
-			: config_or_null
-			? config_or_null
-			: ({
-					printWidth: Infinity,
-					proseWrap: 'never'
-			  } as PrettierOptions);
-
-		// Format with prettier.
-		return prettier.format(_markdown, {
-			parser: 'mdx',
-			...config
-		});
-	}
-
-	return _markdown;
 }
 
 function is_mdast_empty_text_expression(node: UnNode): boolean {

@@ -23,80 +23,87 @@ export function extract_mdast_strings(
 ): string[] {
 	const strings: string[] = [];
 
-	unwalk(mdast, (node, __, _) => {
-		if (ignore_nodes.includes(node.type)) return;
+	unwalk(
+		mdast,
+		(node, __, _) => {
+			if (is_mdast_text(node)) {
+				if (!/^\s*$/.test(node.value)) {
+					strings.push(node.value);
+				}
 
-		if (is_mdast_text(node)) {
-			if (!/^\s*$/.test(node.value)) {
-				strings.push(node.value);
+				return;
 			}
 
-			return;
-		}
+			if (is_mdast_jsx_flow_element(node)) {
+				const { attributes, name } = node;
 
-		if (is_mdast_jsx_flow_element(node)) {
-			const { attributes, name } = node;
+				if (!name || ignore_components.includes(name)) return;
 
-			if (!name || ignore_components.includes(name)) return;
+				if (attributes) {
+					for (const attribute of attributes) {
+						if (!is_mdast_jsx_attribute(attribute)) continue;
 
-			if (attributes) {
-				for (const attribute of attributes) {
-					if (!is_mdast_jsx_attribute(attribute)) continue;
+						const { name, value } = attribute;
 
-					const { name, value } = attribute;
+						if (is_string(value)) {
+							if (!components_attributes[node.name!]?.includes(name)) continue;
+							strings.push(value);
+						} else if (value?.data?.estree) {
+							const estree = value.data.estree;
+
+							eswalk(estree, {
+								Literal(esnode, _) {
+									if (is_string(esnode.value)) strings.push(esnode.value);
+								},
+								JSXText(esnode, _) {
+									if (!/^\s*$/.test(esnode.value)) {
+										strings.push(esnode.value.replace(/(\n|\r|\t|\v)+\s*/, ''));
+									}
+								},
+								Property(esnode, parents) {
+									if (!is_estree_identifier(esnode.key)) return false;
+
+									const property_path = resolve_estree_property_path(esnode, parents, name);
+									if (!property_path) return false;
+									if (!components_attributes[node.name!]?.includes(property_path)) return false;
+								}
+							});
+						}
+					}
+				}
+
+				return;
+			}
+
+			if (is_mdast_yaml(node)) {
+				if (is_empty_array(frontmatter)) return;
+				if (is_empty_string(node.value)) return;
+
+				const object: Record<string, any> = parse_yaml(node.value);
+
+				for (const key in object) {
+					if (!frontmatter.includes(key)) continue;
+
+					const value = object[key];
 
 					if (is_string(value)) {
-						if (!components_attributes[node.name!]?.includes(name)) continue;
 						strings.push(value);
-					} else if (value?.data?.estree) {
-						const estree = value.data.estree;
+						continue;
+					}
 
-						eswalk(estree, {
-							Literal(esnode, _) {
-								if (is_string(esnode.value)) strings.push(esnode.value);
-							},
-							Property(esnode, parents) {
-								if (!is_estree_identifier(esnode.key)) return false;
-
-								const property_path = resolve_estree_property_path(esnode, parents, name);
-								if (!property_path) return false;
-								if (!components_attributes[node.name!]?.includes(property_path)) return false;
-							}
-						});
+					if (is_array(value)) {
+						for (const item of value) {
+							if (!is_string(item)) continue;
+							strings.push(item);
+						}
 					}
 				}
+
+				return;
 			}
-
-			return;
-		}
-
-		if (is_mdast_yaml(node)) {
-			if (is_empty_array(frontmatter)) return;
-			if (is_empty_string(node.value)) return;
-
-			const object: Record<string, any> = parse_yaml(node.value);
-
-			for (const key in object) {
-				if (!frontmatter.includes(key)) continue;
-
-				const value = object[key];
-
-				if (is_string(value)) {
-					strings.push(value);
-					continue;
-				}
-
-				if (is_array(value)) {
-					for (const item of value) {
-						if (!is_string(item)) continue;
-						strings.push(item);
-					}
-				}
-			}
-
-			return;
-		}
-	});
+		},
+		(type) => !ignore_nodes.includes(type)
+	);
 
 	return strings;
 }

@@ -32,6 +32,13 @@ export const DEFAULT_ESWALKERS: EsWalkers = {
 		process(node.key, parents);
 		process(node.value, parents);
 		parents.pop();
+	},
+	JSXElement(node, parents, process) {
+		parents.push(node);
+		for (const child of node.children) {
+			process(child, parents);
+		}
+		parents.pop();
 	}
 };
 
