@@ -8,13 +8,12 @@ import { resolve_config } from '../utilities/index.js';
 import { extract_mdast_strings, prepare } from '../features/index.js';
 
 const config = await resolve_config(user_config);
-const cwd = process.cwd();
-const dir = 'src/__test__/samples';
+const base = 'src/__test__/samples';
 
 async function extract(path: string, config: Required<UserConfig>): Promise<string[]> {
-	const resolved = np.resolve(cwd, dir, path);
-	const value = await fs.readFile(resolved, { encoding: 'utf-8' });
-	return extract_mdast_strings(await prepare(value), config);
+	const resolved = np.resolve(process.cwd(), base, path);
+	const markdown = await fs.readFile(resolved, { encoding: 'utf-8' });
+	return extract_mdast_strings(await prepare(markdown), config);
 }
 
 describe.skip('frontmatter', () => {

@@ -28,8 +28,6 @@ export interface UserConfig {
 	};
 	/**
 	 * JSX Components attributes that should be translated.
-	 * Only translate `children` by default. `children` need
-	 * to be listed if you customize the attribute list.
 	 *
 	 * You can provide an access path for object property.
 	 * The access path can also bypass a wrapper array.
