@@ -43,12 +43,8 @@ export function is_mdast_inline_code(node: UnNode): node is MdInlineCode {
 
 export function is_mdast_jsx_element(
 	node: UnNode | UnParent
-): node is MdxJsxFlowElement | MdxJsxTextElement | MdxJsxInParagraph {
-	return (
-		is_mdast_jsx_flow_element(node) ||
-		is_mdast_jsx_text_element(node) ||
-		is_mdast_paragraph_jsx_text_element(node)
-	);
+): node is MdxJsxFlowElement | MdxJsxTextElement {
+	return is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node);
 }
 
 export function is_mdast_jsx_flow_element(node: UnNode | UnParent): node is MdxJsxFlowElement {
@@ -57,12 +53,6 @@ export function is_mdast_jsx_flow_element(node: UnNode | UnParent): node is MdxJ
 
 export function is_mdast_jsx_text_element(node: UnNode | UnParent): node is MdxJsxTextElement {
 	return node.type === 'mdxJsxTextElement';
-}
-
-export function is_mdast_paragraph_jsx_text_element(
-	node: UnNode | UnParent
-): node is MdxJsxInParagraph {
-	return is_mdast_paragraph(node) && is_mdast_jsx_text_element(node.children[0]);
 }
 
 export function is_mdast_jsx_attribute(node: UnNode): node is MdxJsxAttribute {
@@ -126,7 +116,7 @@ export function get_markdown(mdast: MdRoot): string {
 		extensions: [frontmatterToMarkdown('yaml'), mdxToMarkdown(), htmlCommentToMarkdown()],
 		join: [
 			(__, _, parent) => {
-				if (is_mdast_jsx_flow_element(parent) || is_mdast_jsx_text_element(parent)) {
+				if (is_mdast_jsx_element(parent)) {
 					return 0;
 				}
 

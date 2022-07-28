@@ -8,8 +8,8 @@ import {
 	is_empty_string,
 	is_estree_identifier,
 	is_mdast_jsx_attribute,
+	is_mdast_jsx_element,
 	is_mdast_jsx_flow_element,
-	is_mdast_jsx_text_element,
 	is_mdast_text,
 	is_mdast_yaml,
 	is_object,
@@ -100,10 +100,7 @@ export function extract_mdast_strings(
 		},
 		(node) => {
 			if (ignore_nodes.includes(node.type)) return false;
-			if (
-				(is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)) &&
-				ignore_components.includes(node.name!)
-			)
+			if (is_mdast_jsx_element(node) && node.name && ignore_components.includes(node.name))
 				return false;
 
 			return true;
