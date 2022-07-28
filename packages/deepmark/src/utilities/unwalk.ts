@@ -1,6 +1,6 @@
 import type { UnNode, UnParent } from '../types/index.js';
 
-import { is_unist_parent } from './unist.js';
+import { isUnistParent } from './unist.js';
 
 const NEXT = true;
 const STOP = false;
@@ -15,7 +15,7 @@ export function unwalk(
 	function step(node: UnNode, parent: UnParent | undefined, index: number | undefined) {
 		if (filter && !filter(node, parent)) return;
 
-		if (is_unist_parent(node)) {
+		if (isUnistParent(node)) {
 			for (let i = 0; i < node.children.length; i++) {
 				if (!next) break;
 

@@ -1,19 +1,19 @@
-export function is_empty_array(array: any[]): boolean {
+export function isEmptyArray(array: any[]): boolean {
 	return array.length == 0;
 }
 
-export function is_empty_string(string: string): boolean {
+export function isEmptyString(string: string): boolean {
 	return string.length == 0;
 }
 
-export function is_array(value: unknown): value is any[] {
+export function isArray(value: unknown): value is any[] {
 	return Array.isArray(value);
 }
 
-export function is_object(value: unknown): value is Record<any, any> {
-	return is_array(value) ? false : typeof value == 'object' ? true : false;
+export function isObject(value: unknown): value is Record<any, any> {
+	return isArray(value) ? false : typeof value == 'object' ? true : false;
 }
 
-export function is_string(value: unknown): value is string {
+export function isString(value: unknown): value is string {
 	return typeof value === 'string';
 }

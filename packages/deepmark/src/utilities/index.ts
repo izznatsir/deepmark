@@ -1,9 +1,9 @@
 import type { TranslateOptions } from '../features/index.js';
-import type { Config, Context, UserConfig } from '../types/index.js';
+import type { Config, ConfigFilter, Context, UserConfig } from '../types/index.js';
 
 import { Translator } from 'deepl-node';
 import { pathToFileURL } from 'url';
-import { is_file_readable } from './fs.js';
+import { isFileReadable } from './fs.js';
 import { TranslationMemory } from './memory.js';
 
 export * from './astring-jsx.js';
@@ -16,23 +16,23 @@ export * from './memory.js';
 export * from './unist.js';
 export * from './unwalk.js';
 
-export function create_context(options: TranslateOptions, deepl_auth_key?: string): Context {
+export function createContext(options: TranslateOptions, deeplAuthKey?: string): Context {
 	const context: Context = {
 		memory: new TranslationMemory('./deepmark/memory.json')
 	};
 
 	if (options.mode !== 'offline') {
-		const deepl_key = deepl_auth_key ?? process.env.DEEPL_AUTH_KEY;
-		if (!deepl_key) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
+		const deeplKey = deeplAuthKey ?? process.env.DEEPL_AUTH_KEY;
+		if (!deeplKey) throw new Error('DEEPL_AUTH_KEY environment variable is not found.');
 
-		context.deepl = new Translator(deepl_key);
+		context.deepl = new Translator(deeplKey);
 	}
 
 	return context;
 }
 
-export async function get_user_config(path: string): Promise<UserConfig> {
-	if (!is_file_readable(path))
+export async function getUserConfig(path: string): Promise<UserConfig> {
+	if (!isFileReadable(path))
 		throw new Error('Configuration file either not exist or not readable.');
 
 	const url = pathToFileURL(path);
@@ -40,23 +40,54 @@ export async function get_user_config(path: string): Promise<UserConfig> {
 	return (await import(url.href)).default as UserConfig;
 }
 
-export async function resolve_config(user_config: UserConfig): Promise<Config> {
-	const default_ignore_nodes = ['code', 'htmlComment', 'mdxFlowExpression', 'mdxjsEsm'];
-	const default_ignore_components = ['code', 'pre'];
+export function resolveConfig(userConfig: UserConfig): Config {
+	const defaultInclude: ConfigFilter = {
+		sources: [],
+		frontmatterFields: [],
+		elements: {
+			jsx: [],
+			jsxAttributes: {},
+			markdown: []
+		}
+	};
+
+	const defaultExclude: ConfigFilter = {
+		sources: [],
+		frontmatterFields: [],
+		elements: {
+			jsx: ['code', 'pre'],
+			jsxAttributes: {},
+			markdown: ['code', 'htmlComment', 'mdxFlowExpression', 'mdxjsEsm']
+		}
+	};
 
 	return {
-		...user_config,
-		frontmatter: user_config.frontmatter ?? [],
-		ignore_nodes: user_config.ignore_nodes
-			? [...default_ignore_nodes, ...user_config.ignore_nodes]
-			: default_ignore_nodes,
-		ignore_components: user_config.ignore_components
-			? [...default_ignore_components, ...user_config.ignore_components]
-			: default_ignore_components,
-		components_attributes: user_config.components_attributes ?? {}
+		...userConfig,
+		include: {
+			sources: userConfig.include?.sources ?? defaultInclude.sources,
+			frontmatterFields: userConfig.include?.frontmatterFields ?? defaultInclude.frontmatterFields,
+			elements: {
+				...defaultInclude.elements,
+				...userConfig.include?.elements
+			}
+		},
+		exclude: {
+			sources: userConfig.exclude?.sources ?? defaultExclude.sources,
+			frontmatterFields: userConfig.exclude?.frontmatterFields ?? defaultExclude.frontmatterFields,
+			elements: {
+				jsx: userConfig.exclude?.elements?.jsx
+					? [...defaultExclude.elements.jsx, ...userConfig.exclude.elements.jsx]
+					: defaultExclude.elements.jsx,
+				jsxAttributes:
+					userConfig.exclude?.elements?.jsxAttributes ?? defaultExclude.elements.jsxAttributes,
+				markdown: userConfig.exclude?.elements?.markdown
+					? [...defaultExclude.elements.markdown, ...userConfig.exclude.elements.markdown]
+					: defaultExclude.elements.jsx
+			}
+		}
 	} as Config;
 }
 
-export function get_string_array(string_or_array: string | string[]): string[] {
-	return Array.isArray(string_or_array) ? string_or_array : [string_or_array];
+export function getStringArray(stringOrArray: string | string[]): string[] {
+	return Array.isArray(stringOrArray) ? stringOrArray : [stringOrArray];
 }

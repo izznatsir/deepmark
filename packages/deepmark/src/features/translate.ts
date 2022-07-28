@@ -9,20 +9,20 @@ export interface TranslateOptions {
 export async function translate(
 	strings: string[],
 	options: TranslateOptions,
-	{ source_language, output_languages }: Config,
+	{ sourceLanguage, outputLanguages }: Config,
 	{ deepl, memory }: Context
 ): Promise<{ [Language in TargetLanguageCode]?: string[] }> {
 	let container: [number, string][] = [];
 	const translations: { [Language in TargetLanguageCode]?: string[] } = {};
 
-	for (const target_language of output_languages) {
+	for (const targetLanguage of outputLanguages) {
 		const _translations: string[] = [];
 
 		for (let i = 0; i < strings.length; i++) {
 			const string = strings[i];
 
 			if (options.mode === 'offline') {
-				const translation = memory.get(string, target_language);
+				const translation = memory.get(string, targetLanguage);
 
 				if (translation) {
 					_translations.push(translation);
@@ -42,7 +42,7 @@ export async function translate(
 					const indexes = container.map(([index]) => index);
 					const _strings = container.map(([__, string]) => string);
 
-					const results = await deepl!.translateText(_strings, source_language, target_language, {
+					const results = await deepl!.translateText(_strings, sourceLanguage, targetLanguage, {
 						tagHandling: 'html',
 						splitSentences: 'nonewlines'
 					});
@@ -52,7 +52,7 @@ export async function translate(
 						const translation = results[j].text;
 						const _string = _strings[j];
 
-						if (options.memorize) memory.set(_string, target_language, translation);
+						if (options.memorize) memory.set(_string, targetLanguage, translation);
 
 						_translations[index] = translation;
 					}
@@ -64,7 +64,7 @@ export async function translate(
 			}
 
 			if (options.mode === 'hybrid') {
-				const translation = memory.get(string, target_language);
+				const translation = memory.get(string, targetLanguage);
 
 				if (translation) {
 					_translations.push(translation);
@@ -77,7 +77,7 @@ export async function translate(
 					const indexes = container.map(([index]) => index);
 					const _strings = container.map(([__, string]) => string);
 
-					const results = await deepl!.translateText(_strings, source_language, target_language, {
+					const results = await deepl!.translateText(_strings, sourceLanguage, targetLanguage, {
 						tagHandling: 'html',
 						splitSentences: 'nonewlines'
 					});
@@ -87,7 +87,7 @@ export async function translate(
 						const translation = results[j].text;
 						const _string = _strings[j];
 
-						if (options.memorize) memory.set(_string, target_language, translation);
+						if (options.memorize) memory.set(_string, targetLanguage, translation);
 
 						_translations[index] = translation;
 					}
@@ -99,7 +99,7 @@ export async function translate(
 			}
 		}
 
-		translations[target_language] = _translations;
+		translations[targetLanguage] = _translations;
 	}
 
 	if (options.memorize) memory.serialize();

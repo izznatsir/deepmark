@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { resolve_path } from './fs.js';
+import { resolvePath } from './fs.js';
 
 export class TranslationMemory {
 	data: TMData;
@@ -7,16 +7,16 @@ export class TranslationMemory {
 	updated: boolean = false;
 
 	constructor(path: string) {
-		const resolved_path = resolve_path(path);
+		const resolvedPath = resolvePath(path);
 		try {
-			this.data = JSON.parse(fs.readFileSync(resolved_path, { encoding: 'utf-8' }));
+			this.data = JSON.parse(fs.readFileSync(resolvedPath, { encoding: 'utf-8' }));
 		} catch {
 			this.data = {};
 			if (process.env.NODE_ENV !== 'test')
-				fs.outputFileSync(resolved_path, JSON.stringify(this.data));
+				fs.outputFileSync(resolvedPath, JSON.stringify(this.data));
 		}
 
-		this.path = resolved_path;
+		this.path = resolvedPath;
 	}
 
 	get(source: string, language: string): string | undefined {

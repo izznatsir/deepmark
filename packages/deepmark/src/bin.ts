@@ -22,7 +22,6 @@ async function main() {
 		.description(
 			'Format markdown files with Prettier and Remark. In some cases, it produces cleaner output than Prettier.'
 		)
-		.option('-p, --prettier', 'Format with Prettier.')
 		.action(create_format_handler(config));
 
 	program

@@ -1,17 +1,17 @@
 import fs from 'fs-extra';
 import np from 'path';
 
-export function get_path_tail(base: string, path: string): string {
-	const resolved_base = resolve_path(base);
-	const resolved_path = resolve_path(path);
+export function getPathTail(base: string, path: string): string {
+	const resolvedBase = resolvePath(base);
+	const resolvedPath = resolvePath(path);
 
-	return resolved_path.slice(resolved_base.length + 1);
+	return resolvedPath.slice(resolvedBase.length + 1);
 }
 
-export async function is_directory_exist(path: string): Promise<boolean> {
+export async function isDirectoryExist(path: string): Promise<boolean> {
 	try {
-		const resolved_path = resolve_path(path);
-		const stat = await fs.stat(resolved_path);
+		const resolvedPath = resolvePath(path);
+		const stat = await fs.stat(resolvedPath);
 		if (stat.isDirectory()) return true;
 		return false;
 	} catch {
@@ -19,7 +19,7 @@ export async function is_directory_exist(path: string): Promise<boolean> {
 	}
 }
 
-export async function is_file_readable(path: string): Promise<boolean> {
+export async function isFileReadable(path: string): Promise<boolean> {
 	try {
 		await fs.access(path, fs.constants.R_OK);
 		return true;
@@ -28,42 +28,42 @@ export async function is_file_readable(path: string): Promise<boolean> {
 	}
 }
 
-export function is_json(path: string): boolean {
-	return path.endsWith('.json') && !is_ast_json(path);
+export function isJson(path: string): boolean {
+	return path.endsWith('.json') && !isAstJson(path);
 }
 
-export function is_markdown(path: string): boolean {
-	return is_md(path) || is_mdx(path);
+export function isMarkdown(path: string): boolean {
+	return isMd(path) || isMdx(path);
 }
 
-export function is_md(path: string): boolean {
+export function isMd(path: string): boolean {
 	return path.endsWith('.md');
 }
 
-export function is_mdx(path: string): boolean {
+export function isMdx(path: string): boolean {
 	return path.endsWith('.mdx');
 }
 
-export function is_ast_json(path: string): boolean {
+export function isAstJson(path: string): boolean {
 	return path.endsWith('.ast.json');
 }
 
-export function is_md_json(path: string): boolean {
+export function isMdJson(path: string): boolean {
 	return path.endsWith('.md.json');
 }
 
-export function is_mdx_json(path: string): boolean {
+export function isMdxJson(path: string): boolean {
 	return path.endsWith('.mdx.json');
 }
 
-export function is_mjs(path: string): boolean {
+export function isMjs(path: string): boolean {
 	return path.endsWith('.mjs');
 }
 
-export function join_path(...paths: string[]): string {
+export function joinPath(...paths: string[]): string {
 	return np.join(process.cwd(), ...paths);
 }
 
-export function resolve_path(...paths: string[]): string {
+export function resolvePath(...paths: string[]): string {
 	return np.resolve(process.cwd(), ...paths);
 }

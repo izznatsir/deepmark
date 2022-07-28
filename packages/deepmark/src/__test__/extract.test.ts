@@ -1,19 +1,19 @@
-import type { UserConfig } from '../types/index.js';
+import type { Config } from '../types/index.js';
 
 import fs from 'fs-extra';
 import np from 'path';
 import { describe, test } from 'vitest';
-import user_config from './deepmark.config.mjs';
-import { resolve_config } from '../utilities/index.js';
-import { extract_mdast_strings, prepare } from '../features/index.js';
+import userConfig from './deepmark.config.mjs';
+import { resolveConfig } from '../utilities/index.js';
+import { extractMdastStrings, prepare } from '../features/index.js';
 
-const config = await resolve_config(user_config);
+const config = resolveConfig(userConfig);
 const base = 'src/__test__/samples';
 
-async function extract(path: string, config: Required<UserConfig>): Promise<string[]> {
+async function extract(path: string, config: Config): Promise<string[]> {
 	const resolved = np.resolve(process.cwd(), base, path);
 	const markdown = await fs.readFile(resolved, { encoding: 'utf-8' });
-	return extract_mdast_strings(await prepare(markdown), config);
+	return extractMdastStrings(await prepare(markdown), config);
 }
 
 describe('frontmatter', () => {
@@ -23,8 +23,12 @@ describe('frontmatter', () => {
 	});
 
 	test('filter frontmatter fields based on configuration', async ({ expect }) => {
+		config.include.frontmatterFields = ['title', 'tags'];
+
 		const strings = await extract('frontmatter/index.md', config);
 		expect(strings).toEqual(['A Short Title', 'tagone', 'tagtwo']);
+
+		config.include.frontmatterFields = [];
 	});
 });
 
@@ -38,12 +42,12 @@ describe('jsx', () => {
 		]);
 	});
 
-	config.components_attributes = {
-		Card: ['header'],
-		List: ['items']
-	};
-
 	test('recursively extract strings from jsx components inside attributes', async ({ expect }) => {
+		config.include.elements.jsxAttributes = {
+			Card: ['header'],
+			List: ['items']
+		};
+
 		const strings = await extract('jsx/jsx-in-prop.mdx', config);
 		expect(strings).toEqual([
 			'This is a text inside a custom component.',
@@ -52,9 +56,9 @@ describe('jsx', () => {
 			'This is the text of jsx item two. ',
 			'This the nested text of jsx item two.'
 		]);
-	});
 
-	config.components_attributes = {};
+		config.include.elements.jsxAttributes = {};
+	});
 
 	test('ignore <code> and <pre> components by default', async ({ expect }) => {
 		const strings = await extract('jsx/code-and-pre.mdx', config);

@@ -1,10 +1,9 @@
 /** @type { import('../index.js').UserConfig } */
 export default {
-	source_language: 'en',
-	output_languages: ['ja', 'zh'],
+	sourceLanguage: 'en',
+	outputLanguages: ['ja', 'zh'],
 	directories: {
 		sources: [],
 		outputs: []
-	},
-	frontmatter: ['title', 'tags']
+	}
 };

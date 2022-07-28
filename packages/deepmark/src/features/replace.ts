@@ -1,52 +1,51 @@
 import type { TargetLanguageCode } from 'deepl-node';
 import type { Config, DocusaurusTranslations, JSXElement, MdRoot } from '../types/index.js';
 
-import { parse as parse_yaml, stringify as stringify_yaml } from 'yaml';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import {
 	eswalk,
-	is_mdast_root,
-	is_mdast_yaml,
-	is_mdast_jsx_attribute,
-	is_mdast_jsx_element,
-	is_mdast_jsx_flow_element,
-	is_mdast_jsx_text_element,
-	is_mdast_paragraph_jsx_text_element,
-	is_estree_identifier,
-	is_estree_jsx_element,
-	get_estree,
-	get_js,
-	get_markdown,
-	get_mdast,
-	resolve_estree_property_path,
-	is_estree_expression_statement,
-	is_mdast_jsx_attribute_value_expression,
-	is_mdast_text,
-	is_mdast_paragraph,
+	isMdastRoot,
+	isMdastYaml,
+	isMdastJsxAttribute,
+	isMdastJsxElement,
+	isMdastJsxFlowElement,
+	isMdastJsxTextElement,
+	isEstreeIdentifier,
+	isEstreeJsxElement,
+	getEstree,
+	getJs,
+	getMarkdown,
+	getMdast,
+	resolveEstreePropertyPath,
+	isEstreeExpressionStatement,
+	isMdastJsxAttributeValueExpression,
+	isMdastText,
+	isMdastParagraph,
 	unwalk,
-	is_mdast_list
+	isMdastList
 } from '../utilities/index.js';
 
-export function replace_mdast_strings(
+export function replaceMdastStrings(
 	mdast: MdRoot,
 	strings: { [Language in TargetLanguageCode]?: string[] },
-	{ components_attributes, frontmatter, ignore_components, ignore_nodes }: Config
+	{ include, exclude }: Config
 ): { [Language in TargetLanguageCode]?: string } {
 	const markdowns: { [Language in TargetLanguageCode]?: string } = {};
 
 	for (const language in strings) {
-		const _strings = strings[language as TargetLanguageCode]?.reverse();
+		const Strings = strings[language as TargetLanguageCode]?.reverse();
 
-		if (!_strings) continue;
+		if (!Strings) continue;
 
 		unwalk(mdast, (node, parent) => {
 			if (node.position) delete node.position;
 
-			if (!is_mdast_root(parent) || ignore_nodes.includes(node.type)) return;
+			if (!isMdastRoot(parent) || ignore_nodes.includes(node.type)) return;
 
-			if (is_mdast_yaml(node)) {
+			if (isMdastYaml(node)) {
 				if (frontmatter.length === 0) return;
 
-				const object: Record<string, any> = parse_yaml(node.value);
+				const object: Record<string, any> = parseYaml(node.value);
 
 				for (const key in object) {
 					if (!frontmatter.includes(key)) continue;
@@ -54,28 +53,26 @@ export function replace_mdast_strings(
 					const value = object[key];
 
 					if (typeof value === 'string') {
-						object[key] = _strings.pop();
+						object[key] = Strings.pop();
 						continue;
 					}
 
 					if (Array.isArray(value)) {
 						object[key] = value.map((item) => {
 							if (typeof item !== 'string') return item;
-							return _strings.pop();
+							return Strings.pop();
 						});
 					}
 				}
 
-				node.value = stringify_yaml(object);
+				node.value = stringifyYaml(object);
 
 				return;
 			}
 
-			if (is_mdast_jsx_element(node)) {
+			if (isMdastJsxElement(node)) {
 				const jsx_node =
-					is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)
-						? node
-						: node.children[0];
+					isMdastJsxFlowElement(node) || isMdastJsxTextElement(node) ? node : node.children[0];
 
 				const { attributes, children, name } = jsx_node;
 
@@ -83,39 +80,39 @@ export function replace_mdast_strings(
 
 				if (attributes) {
 					for (const attribute of attributes) {
-						if (!is_mdast_jsx_attribute(attribute)) continue;
+						if (!isMdastJsxAttribute(attribute)) continue;
 
 						const { name, value } = attribute;
 
 						if (!attribute.value) continue;
 
 						if (typeof attribute.value === 'string') {
-							if (!components_attributes[jsx_node.name!]?.includes(name)) continue;
-							attribute.value = _strings.pop();
+							if (!componentsAttributes[jsx_node.name!]?.includes(name)) continue;
+							attribute.value = Strings.pop();
 						} else if (
-							is_mdast_jsx_attribute_value_expression(attribute.value) &&
+							isMdastJsxAttributeValueExpression(attribute.value) &&
 							attribute.value.data?.estree
 						) {
 							const estree = attribute.value.data.estree;
 
 							eswalk(estree, {
 								Literal(node) {
-									if (typeof node.value === 'string') node.value = _strings.pop()!;
+									if (typeof node.value === 'string') node.value = Strings.pop()!;
 								},
 								Property(node, parents) {
-									if (!is_estree_identifier(node.key)) return false;
+									if (!isEstreeIdentifier(node.key)) return false;
 
-									let property_path = resolve_estree_property_path(node, parents, name);
-									if (!property_path) return false;
-									if (!components_attributes[jsx_node.name!]?.includes(property_path)) return false;
+									let propertyPath = resolveEstreePropertyPath(node, parents, name);
+									if (!propertyPath) return false;
+									if (!componentsAttributes[jsx_node.name!]?.includes(propertyPath)) return false;
 								},
 								JSXElement(node) {
-									const _string = _strings.pop()!;
-									const estree = get_estree(_string);
+									const String = Strings.pop()!;
+									const estree = getEstree(String);
 
 									if (
-										!is_estree_expression_statement(estree.body[0]) ||
-										!is_estree_jsx_element(estree.body[0].expression)
+										!isEstreeExpressionStatement(estree.body[0]) ||
+										!isEstreeJsxElement(estree.body[0].expression)
 									)
 										return;
 
@@ -128,32 +125,32 @@ export function replace_mdast_strings(
 								}
 							});
 
-							const attribute_value = get_js(estree);
-							const attribute_estree = get_estree(attribute_value);
+							const attributeValue = getJs(estree);
+							const attributeEstree = getEstree(attributeValue);
 
-							attribute.value.value = attribute_value;
-							attribute.value.data.estree = attribute_estree;
+							attribute.value.value = attributeValue;
+							attribute.value.data.estree = attributeEstree;
 						}
 					}
 				}
 
 				if (
-					(!components_attributes[name] || components_attributes[name].includes('children')) &&
+					(!componentsAttributes[name] || componentsAttributes[name].includes('children')) &&
 					children.length > 0
 				) {
 					for (const child of children) {
 						if (
-							(is_mdast_jsx_flow_element(child) || is_mdast_jsx_text_element(child)) &&
+							(isMdastJsxFlowElement(child) || isMdastJsxTextElement(child)) &&
 							child.name === 'code'
 						)
 							continue;
 
-						const mdast = get_mdast(_strings.pop()!);
+						const mdast = getMdast(Strings.pop()!);
 						const translated_node = mdast.children[0];
 
 						if (
-							(is_mdast_jsx_flow_element(child) && is_mdast_jsx_flow_element(translated_node)) ||
-							(is_mdast_jsx_text_element(child) && is_mdast_jsx_text_element(translated_node))
+							(isMdastJsxFlowElement(child) && isMdastJsxFlowElement(translated_node)) ||
+							(isMdastJsxTextElement(child) && isMdastJsxTextElement(translated_node))
 						) {
 							for (const property in child) {
 								// @ts-ignore
@@ -163,10 +160,7 @@ export function replace_mdast_strings(
 							continue;
 						}
 
-						if (
-							is_mdast_jsx_text_element(child) &&
-							is_mdast_paragraph_jsx_text_element(translated_node)
-						) {
+						if (isMdastJsxTextElement(child) && isMdastParagraphJsxTextElement(translated_node)) {
 							for (const property in child) {
 								// @ts-ignore
 								child[property] = translated_node.children[0][property];
@@ -175,14 +169,14 @@ export function replace_mdast_strings(
 							continue;
 						}
 
-						if (is_mdast_paragraph(child) && is_mdast_paragraph(translated_node)) {
+						if (isMdastParagraph(child) && isMdastParagraph(translated_node)) {
 							child.children = translated_node.children;
 
 							continue;
 						}
 
-						if (is_mdast_text(child) && is_mdast_paragraph(translated_node)) {
-							if (is_mdast_text(translated_node.children[0]))
+						if (isMdastText(child) && isMdastParagraph(translated_node)) {
+							if (isMdastText(translated_node.children[0]))
 								child.value = translated_node.children[0].value;
 
 							continue;
@@ -193,15 +187,15 @@ export function replace_mdast_strings(
 				return;
 			}
 
-			if (is_mdast_list(node)) {
+			if (isMdastList(node)) {
 				for (const item of node.children) {
 					for (const child of item.children) {
-						if (!is_mdast_paragraph(child)) continue;
+						if (!isMdastParagraph(child)) continue;
 
-						const _string = _strings.pop()!;
-						const translated_node = get_mdast(_string).children[0];
+						const String = Strings.pop()!;
+						const translated_node = getMdast(String).children[0];
 
-						if (is_mdast_paragraph(translated_node)) {
+						if (isMdastParagraph(translated_node)) {
 							for (const property in child) {
 								// @ts-ignore
 								child[property] = translated_node[property];
@@ -213,8 +207,8 @@ export function replace_mdast_strings(
 				return;
 			}
 
-			const _string = _strings.pop()!;
-			const translated_node = get_mdast(_string).children[0];
+			const String = Strings.pop()!;
+			const translated_node = getMdast(String).children[0];
 
 			for (const property in node) {
 				// @ts-ignore
@@ -222,13 +216,13 @@ export function replace_mdast_strings(
 			}
 		});
 
-		markdowns[language as TargetLanguageCode] = get_markdown(mdast);
+		markdowns[language as TargetLanguageCode] = getMarkdown(mdast);
 	}
 
 	return markdowns;
 }
 
-export function replace_docusaurus_strings(
+export function replace_docusaurusStrings(
 	object: DocusaurusTranslations,
 	strings: { [Language in TargetLanguageCode]?: string[] }
 ): { [Language in TargetLanguageCode]?: string } {
@@ -236,25 +230,25 @@ export function replace_docusaurus_strings(
 	const jsons: { [Language in TargetLanguageCode]?: string } = {};
 
 	for (const language in strings) {
-		const _strings = strings[language as TargetLanguageCode]!.reverse();
+		const Strings = strings[language as TargetLanguageCode]!.reverse();
 		for (const key in object) {
 			const value = object[key];
 
 			if (typeof value === 'string') {
-				object[key] = _strings.pop()!;
+				object[key] = Strings.pop()!;
 				continue;
 			}
 
 			if (typeof value === 'object') {
 				if ('message' in value) {
-					value.message = _strings.pop()!;
-					if ('description' in value) value.description = _strings.pop()!;
+					value.message = Strings.pop()!;
+					if ('description' in value) value.description = Strings.pop()!;
 					continue;
 				}
 
 				if ('type' in value) {
-					if ('title' in value) value.title = _strings.pop();
-					if ('description' in value) value.description = _strings.pop();
+					if ('title' in value) value.title = Strings.pop();
+					if ('description' in value) value.description = Strings.pop();
 					continue;
 				}
 			}

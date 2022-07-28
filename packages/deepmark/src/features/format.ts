@@ -3,49 +3,49 @@ import type { UnNode } from '../types/index.js';
 
 import prettier from 'prettier';
 import {
-	is_mdast_flow_expression,
-	is_mdast_root,
-	get_markdown,
-	get_mdast,
+	isMdastFlowExpression,
+	isMdastRoot,
+	getMarkdown,
+	getMdast,
 	unwalk
 } from '../utilities/index.js';
 
-export async function format_markdown(
+export async function formatMarkdown(
 	markdown: string,
-	prettier_options?: Omit<PrettierOptions, 'parser'>
+	prettierOptions?: Omit<PrettierOptions, 'parser'>
 ) {
-	const mdast = get_mdast(markdown);
+	const mdast = getMdast(markdown);
 
 	// Remove useless surface nodes.
 	unwalk(
 		mdast,
 		(node, parent, index) => {
-			if (is_mdast_empty_text_expression(node)) {
+			if (isMdastEmptyTextExpression(node)) {
 				(parent!.children[index!] as unknown) = undefined;
 			}
 		},
-		(_, parent) => is_mdast_root(parent)
+		(_, parent) => isMdastRoot(parent)
 	);
 
-	const config_or_null = await prettier.resolveConfig(process.cwd());
-	const config = prettier_options
-		? prettier_options
-		: config_or_null
-		? config_or_null
+	const configOrNull = await prettier.resolveConfig(process.cwd());
+	const config = prettierOptions
+		? prettierOptions
+		: configOrNull
+		? configOrNull
 		: ({
 				printWidth: Infinity,
 				proseWrap: 'never',
 				useTabs: true
 		  } as PrettierOptions);
 
-	return prettier.format(get_markdown(mdast), {
+	return prettier.format(getMarkdown(mdast), {
 		parser: 'mdx',
 		...config
 	});
 }
 
-function is_mdast_empty_text_expression(node: UnNode): boolean {
-	if (!is_mdast_flow_expression(node)) return false;
+function isMdastEmptyTextExpression(node: UnNode): boolean {
+	if (!isMdastFlowExpression(node)) return false;
 
 	const regex = /^('|")\s*('|")$/;
 	return regex.test(node.value);
