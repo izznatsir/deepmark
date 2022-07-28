@@ -9,6 +9,7 @@ import {
 	is_estree_identifier,
 	is_mdast_jsx_attribute,
 	is_mdast_jsx_flow_element,
+	is_mdast_jsx_text_element,
 	is_mdast_text,
 	is_mdast_yaml,
 	is_object,
@@ -27,10 +28,7 @@ export function extract_mdast_strings(
 		mdast,
 		(node, __, _) => {
 			if (is_mdast_text(node)) {
-				if (!/^\s*$/.test(node.value)) {
-					strings.push(node.value);
-				}
-
+				push_tidy_string(strings, node.value);
 				return;
 			}
 
@@ -53,12 +51,10 @@ export function extract_mdast_strings(
 
 							eswalk(estree, {
 								Literal(esnode, _) {
-									if (is_string(esnode.value)) strings.push(esnode.value);
+									if (is_string(esnode.value)) push_tidy_string(strings, esnode.value);
 								},
 								JSXText(esnode, _) {
-									if (!/^\s*$/.test(esnode.value)) {
-										strings.push(esnode.value.replace(/(\n|\r|\t|\v)+\s*/, ''));
-									}
+									push_tidy_string(strings, esnode.value);
 								},
 								Property(esnode, parents) {
 									if (!is_estree_identifier(esnode.key)) return false;
@@ -102,7 +98,16 @@ export function extract_mdast_strings(
 				return;
 			}
 		},
-		(type) => !ignore_nodes.includes(type)
+		(node) => {
+			if (ignore_nodes.includes(node.type)) return false;
+			if (
+				(is_mdast_jsx_flow_element(node) || is_mdast_jsx_text_element(node)) &&
+				ignore_components.includes(node.name!)
+			)
+				return false;
+
+			return true;
+		}
 	);
 
 	return strings;
@@ -135,4 +140,10 @@ export function extract_docusaurus_strings(object: DocusaurusTranslations): stri
 	}
 
 	return strings;
+}
+
+function push_tidy_string(strings: string[], string: string) {
+	if (!/^\s*$/.test(string)) {
+		strings.push(string.replace(/(^\n|\r|\t|\v)+\s*/, '').replace(/\s+$/, ' '));
+	}
 }

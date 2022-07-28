@@ -8,12 +8,12 @@ const STOP = false;
 export function unwalk(
 	node: UnNode,
 	visit: Visitor,
-	filter?: (type: string, parent: UnParent | undefined) => boolean
+	filter?: (node: UnNode, parent: UnParent | undefined) => boolean
 ) {
 	let next = true;
 
 	function step(node: UnNode, parent: UnParent | undefined, index: number | undefined) {
-		if (filter && !filter(node.type, parent)) return;
+		if (filter && !filter(node, parent)) return;
 
 		if (is_unist_parent(node)) {
 			for (let i = 0; i < node.children.length; i++) {

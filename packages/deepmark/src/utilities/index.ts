@@ -41,16 +41,18 @@ export async function get_user_config(path: string): Promise<UserConfig> {
 }
 
 export async function resolve_config(user_config: UserConfig): Promise<Config> {
+	const default_ignore_nodes = ['code', 'htmlComment', 'mdxFlowExpression', 'mdxjsEsm'];
+	const default_ignore_components = ['code', 'pre'];
+
 	return {
 		...user_config,
 		frontmatter: user_config.frontmatter ?? [],
-		ignore_nodes: user_config.ignore_nodes ?? [
-			'code',
-			'htmlComment',
-			'mdxFlowExpression',
-			'mdxjsEsm'
-		],
-		ignore_components: user_config.ignore_components ?? [],
+		ignore_nodes: user_config.ignore_nodes
+			? [...default_ignore_nodes, ...user_config.ignore_nodes]
+			: default_ignore_nodes,
+		ignore_components: user_config.ignore_components
+			? [...default_ignore_components, ...user_config.ignore_components]
+			: default_ignore_components,
 		components_attributes: user_config.components_attributes ?? {}
 	} as Config;
 }

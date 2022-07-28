@@ -16,7 +16,7 @@ async function extract(path: string, config: Required<UserConfig>): Promise<stri
 	return extract_mdast_strings(await prepare(markdown), config);
 }
 
-describe.skip('frontmatter', () => {
+describe('frontmatter', () => {
 	test('ignore empty frontmatter', async ({ expect }) => {
 		const strings = await extract('frontmatter/empty.md', config);
 		expect(strings.length).toBe(0);
@@ -45,7 +45,6 @@ describe('jsx', () => {
 
 	test('recursively extract strings from jsx components inside attributes', async ({ expect }) => {
 		const strings = await extract('jsx/jsx-in-prop.mdx', config);
-		console.log(strings);
 		expect(strings).toEqual([
 			'This is a text inside a custom component.',
 			'This is the text of jsx item one. ',
@@ -56,4 +55,9 @@ describe('jsx', () => {
 	});
 
 	config.components_attributes = {};
+
+	test('ignore <code> and <pre> components by default', async ({ expect }) => {
+		const strings = await extract('jsx/code-and-pre.mdx', config);
+		expect(strings).toEqual(['This is a text. ']);
+	});
 });
