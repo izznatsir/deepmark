@@ -8,3 +8,4 @@ tasks:
 vscode:
   extensions:
     - esbenp.prettier-vscode
+    - silvenon.mdx
