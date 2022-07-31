@@ -3,6 +3,7 @@ import type { TranslationMemory } from '../utilities/index.js';
 
 export * from './docusaurus.js';
 export * from './estree.js';
+export * from './html.js';
 export * from './mdast.js';
 export * from './unist.js';
 
@@ -40,6 +41,8 @@ export interface ConfigFilter {
 	sources: string[];
 	frontmatterFields: string[];
 	elements: {
+		html: string[];
+		htmlAttributes: { [Element: string]: string[] };
 		jsx: string[];
 		jsxAttributes: { [Element: string]: string[] };
 		markdown: string[];
@@ -50,6 +53,8 @@ export interface UserConfigFilter {
 	sources?: string[];
 	frontmatterFields?: string[];
 	elements?: {
+		html?: string[];
+		htmlAttributes?: { [Element: string]: string[] };
 		jsx?: string[];
 		jsxAttributes?: { [Element: string]: string[] };
 		markdown?: string[];

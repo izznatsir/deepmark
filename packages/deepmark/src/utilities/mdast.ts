@@ -11,6 +11,7 @@ import type {
 	MdxJsxTextElement,
 	MdxJsxAttribute,
 	MdxJsxAttributeValueExpression,
+	MdxJsxExpressionAttribute,
 	MdxTextExpression,
 	UnNode,
 	UnParent,
@@ -62,6 +63,10 @@ export function isMdastJsxAttributeValueExpression(
 	node: UnNode
 ): node is MdxJsxAttributeValueExpression {
 	return node.type === 'mdxJsxAttributeValueExpression';
+}
+
+export function isMdastJsxExpressionAttribute(node: UnNode): node is MdxJsxExpressionAttribute {
+	return node.type === 'mdxJsxExpressionAttribute';
 }
 
 export function isMdastLink(node: UnNode): node is MdLink {

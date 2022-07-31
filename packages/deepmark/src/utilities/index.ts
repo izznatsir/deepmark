@@ -4,12 +4,14 @@ import type { Config, ConfigFilter, Context, UserConfig } from '../types/index.j
 import { Translator } from 'deepl-node';
 import { pathToFileURL } from 'url';
 import { isFileReadable } from './fs.js';
+import { DEFAULT_INCLUDE_HTML_ATTRIBUTES } from './html.js';
 import { TranslationMemory } from './memory.js';
 
 export * from './astring-jsx.js';
 export * from './estree.js';
 export * from './eswalk.js';
 export * from './fs.js';
+export * from './html.js';
 export * from './literal.js';
 export * from './mdast.js';
 export * from './memory.js';
@@ -45,6 +47,8 @@ export function resolveConfig(userConfig: UserConfig): Config {
 		sources: [],
 		frontmatterFields: [],
 		elements: {
+			html: [],
+			htmlAttributes: DEFAULT_INCLUDE_HTML_ATTRIBUTES,
 			jsx: [],
 			jsxAttributes: {},
 			markdown: []
@@ -55,7 +59,9 @@ export function resolveConfig(userConfig: UserConfig): Config {
 		sources: [],
 		frontmatterFields: [],
 		elements: {
-			jsx: ['code', 'pre'],
+			html: [],
+			htmlAttributes: {},
+			jsx: [],
 			jsxAttributes: {},
 			markdown: ['code', 'htmlComment', 'mdxFlowExpression', 'mdxjsEsm']
 		}
@@ -75,6 +81,11 @@ export function resolveConfig(userConfig: UserConfig): Config {
 			sources: userConfig.exclude?.sources ?? defaultExclude.sources,
 			frontmatterFields: userConfig.exclude?.frontmatterFields ?? defaultExclude.frontmatterFields,
 			elements: {
+				html: userConfig.exclude?.elements?.html
+					? [...defaultExclude.elements.html, ...userConfig.exclude.elements.html]
+					: defaultExclude.elements.html,
+				htmlAttributes:
+					userConfig.exclude?.elements?.htmlAttributes ?? defaultExclude.elements.htmlAttributes,
 				jsx: userConfig.exclude?.elements?.jsx
 					? [...defaultExclude.elements.jsx, ...userConfig.exclude.elements.jsx]
 					: defaultExclude.elements.jsx,

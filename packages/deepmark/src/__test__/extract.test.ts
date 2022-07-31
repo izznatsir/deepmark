@@ -44,13 +44,14 @@ describe('jsx', () => {
 
 	test('recursively extract strings from jsx components inside attributes', async ({ expect }) => {
 		config.include.elements.jsxAttributes = {
-			Card: ['header'],
+			Card: ['children', 'header'],
 			List: ['items']
 		};
 
 		const strings = await extract('jsx/jsx-in-prop.mdx', config);
 		expect(strings).toEqual([
 			'This is a text inside a custom component.',
+			'This is a text inside a jsx prop.',
 			'This is the text of jsx item one. ',
 			'This the nested text of jsx item one.',
 			'This is the text of jsx item two. ',
@@ -60,8 +61,39 @@ describe('jsx', () => {
 		config.include.elements.jsxAttributes = {};
 	});
 
-	test('ignore <code> and <pre> components by default', async ({ expect }) => {
+	test('ignore <code> and <pre> elements by default', async ({ expect }) => {
 		const strings = await extract('jsx/code-and-pre.mdx', config);
 		expect(strings).toEqual(['This is a text. ']);
+	});
+
+	test('ignore some components via exclude.elements.jsx config', async ({ expect }) => {
+		config.exclude.elements.jsx = [];
+
+		const strings = await extract('jsx/exclude.mdx', config);
+		expect(strings).toEqual([]);
+
+		config.exclude.elements.jsx = [];
+	});
+
+	test('only extract some components via include.elements.jsx config', async ({ expect }) => {
+		config.include.elements.jsx = ['Card'];
+
+		const strings = await extract('jsx/include.mdx', config);
+		expect(strings).toEqual(["This is the card's content."]);
+
+		config.include.elements.jsx = [];
+	});
+
+	test('decide what components to extract if both include and exclude config are set', async ({
+		expect
+	}) => {
+		config.exclude.elements.jsx = [];
+		config.include.elements.jsx = [];
+
+		const strings = await extract('jsx/exclude-and-include.mdx', config);
+		expect(strings).toEqual([]);
+
+		config.exclude.elements.jsx = [];
+		config.include.elements.jsx = [];
 	});
 });

@@ -1,15 +1,16 @@
-import type { Config, DocusaurusTranslations, MdRoot } from '../types/index.js';
+import type { Config, DocusaurusTranslations, MdRoot, MdxJsxFlowElement } from '../types/index.js';
 
 import { parse as parseYaml } from 'yaml';
 import {
+	HTML_TAGS,
 	eswalk,
 	isArray,
 	isEmptyArray,
 	isEmptyString,
 	isEstreeIdentifier,
 	isMdastJsxAttribute,
+	isMdastJsxExpressionAttribute,
 	isMdastJsxElement,
-	isMdastJsxFlowElement,
 	isMdastText,
 	isMdastYaml,
 	isObject,
@@ -29,46 +30,41 @@ export function extractMdastStrings(mdast: MdRoot, { include, exclude }: Config)
 				return;
 			}
 
-			if (isMdastJsxFlowElement(node)) {
-				const { attributes, name } = node;
+			if (isMdastJsxElement(node) && node.name) {
+				for (const attribute of node.attributes) {
+					if (!isMdastJsxAttribute(attribute)) continue;
 
-				if (!name || exclude.elements.jsx.includes(name)) return;
+					const elementName = node.name;
 
-				if (attributes) {
-					for (const attribute of attributes) {
-						if (!isMdastJsxAttribute(attribute)) continue;
+					if (isString(attribute.value)) {
+						if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
+						strings.push(attribute.value.trim());
+					} else if (attribute.value?.data?.estree) {
+						const estree = attribute.value.data.estree;
 
-						const { name, value } = attribute;
+						eswalk(estree, {
+							Literal(esnode, _) {
+								if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
+								if (isString(esnode.value)) pushTidyString(strings, esnode.value);
+							},
+							JSXText(esnode, _) {
+								if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
+								pushTidyString(strings, esnode.value);
+							},
+							Property(esnode, parents) {
+								if (!isEstreeIdentifier(esnode.key)) return false;
 
-						if (isString(value)) {
-							if (!include.elements.jsxAttributes[node.name!]?.includes(name)) continue;
-							strings.push(value.trim());
-						} else if (value?.data?.estree) {
-							const estree = value.data.estree;
+								const propertyPath = resolveEstreePropertyPath(esnode, parents, attribute.name);
 
-							eswalk(estree, {
-								Literal(esnode, _) {
-									if (!include.elements.jsxAttributes[node.name!]?.includes(name)) return;
-									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
-								},
-								JSXText(esnode, _) {
-									if (!include.elements.jsxAttributes[node.name!]?.includes(name)) return;
-									pushTidyString(strings, esnode.value);
-								},
-								Property(esnode, parents) {
-									if (!isEstreeIdentifier(esnode.key)) return false;
-
-									const propertyPath = resolveEstreePropertyPath(esnode, parents, name);
-									if (!propertyPath) return false;
-									if (!include.elements.jsxAttributes[node.name!]?.includes(propertyPath))
-										return false;
-								}
-							});
-						}
+								if (
+									!propertyPath ||
+									!include.elements.jsxAttributes[elementName]?.includes(propertyPath)
+								)
+									return false;
+							}
+						});
 					}
 				}
-
-				return;
 			}
 
 			if (isMdastYaml(node)) {
@@ -98,10 +94,55 @@ export function extractMdastStrings(mdast: MdRoot, { include, exclude }: Config)
 				return;
 			}
 		},
-		(node) => {
-			if (exclude.elements.markdown.includes(node.type)) return false;
-			if (isMdastJsxElement(node) && node.name && exclude.elements.jsx.includes(node.name))
+		(node, parent) => {
+			if (
+				(include.elements.markdown.length > 0 && !include.elements.markdown.includes(node.type)) ||
+				(exclude.elements.markdown.length > 0 && exclude.elements.markdown.includes(node.type))
+			)
 				return false;
+
+			if (parent && isMdastText(node) && isMdastJsxElement(parent)) {
+				if (parent.name) {
+					if (HTML_TAGS.includes(parent.name)) {
+						if (
+							(include.elements.htmlAttributes[parent.name] &&
+								!include.elements.htmlAttributes[parent.name].includes('children')) ||
+							(exclude.elements.htmlAttributes[parent.name] &&
+								exclude.elements.htmlAttributes[parent.name].includes('children'))
+						)
+							return false;
+					} else {
+						if (
+							(include.elements.jsxAttributes[parent.name] &&
+								!include.elements.jsxAttributes[parent.name].includes('children')) ||
+							(exclude.elements.jsxAttributes[parent.name] &&
+								exclude.elements.jsxAttributes[parent.name].includes('children'))
+						)
+							return false;
+					}
+				}
+
+				return true;
+			}
+
+			if (isMdastJsxElement(node) && node.name) {
+				if (HTML_TAGS.includes(node.name)) {
+					if (
+						(include.elements.html.length > 0 && !include.elements.html.includes(node.name)) ||
+						(exclude.elements.html.length > 0 && exclude.elements.html.includes(node.name))
+					)
+						return false;
+				} else {
+					if (
+						(include.elements.jsx.length > 0 && !include.elements.jsx.includes(node.name)) ||
+						(exclude.elements.jsx.length > 0 && exclude.elements.jsx.includes(node.name))
+					) {
+						return false;
+					}
+				}
+
+				return true;
+			}
 
 			return true;
 		}
