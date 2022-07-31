@@ -1,4 +1,4 @@
-import type { Config, DocusaurusTranslations, MdRoot, MdxJsxFlowElement } from '../types/index.js';
+import type { Config, DocusaurusTranslations, MdRoot } from '../types/index.js';
 
 import { parse as parseYaml } from 'yaml';
 import {
@@ -9,7 +9,6 @@ import {
 	isEmptyString,
 	isEstreeIdentifier,
 	isMdastJsxAttribute,
-	isMdastJsxExpressionAttribute,
 	isMdastJsxElement,
 	isMdastText,
 	isMdastYaml,
@@ -31,38 +30,75 @@ export function extractMdastStrings(mdast: MdRoot, { include, exclude }: Config)
 			}
 
 			if (isMdastJsxElement(node) && node.name) {
-				for (const attribute of node.attributes) {
-					if (!isMdastJsxAttribute(attribute)) continue;
+				if (HTML_TAGS.includes(node.name)) {
+					for (const attribute of node.attributes) {
+						if (!isMdastJsxAttribute(attribute)) continue;
 
-					const elementName = node.name;
+						const elementName = node.name;
 
-					if (isString(attribute.value)) {
-						if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
-						strings.push(attribute.value.trim());
-					} else if (attribute.value?.data?.estree) {
-						const estree = attribute.value.data.estree;
+						const isIncludedShalowly =
+							include.elements.htmlAttributes[elementName].includes(attribute.name) &&
+							(!exclude.elements.htmlAttributes[elementName] ||
+								!exclude.elements.htmlAttributes[elementName].includes(attribute.name));
 
-						eswalk(estree, {
-							Literal(esnode, _) {
-								if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
-								if (isString(esnode.value)) pushTidyString(strings, esnode.value);
-							},
-							JSXText(esnode, _) {
-								if (!include.elements.jsxAttributes[elementName]?.includes(attribute.name)) return;
-								pushTidyString(strings, esnode.value);
-							},
-							Property(esnode, parents) {
-								if (!isEstreeIdentifier(esnode.key)) return false;
+						if (!isIncludedShalowly) continue;
 
-								const propertyPath = resolveEstreePropertyPath(esnode, parents, attribute.name);
+						if (isString(attribute.value)) {
+							strings.push(attribute.value.trim());
+						} else if (attribute.value?.data?.estree) {
+							const estree = attribute.value.data.estree;
 
-								if (
-									!propertyPath ||
-									!include.elements.jsxAttributes[elementName]?.includes(propertyPath)
-								)
-									return false;
-							}
-						});
+							eswalk(estree, {
+								Literal(esnode, _) {
+									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
+								}
+							});
+						}
+					}
+				} else {
+					for (const attribute of node.attributes) {
+						if (!isMdastJsxAttribute(attribute)) continue;
+
+						const elementName = node.name;
+
+						if (!include.elements.jsxAttributes[elementName]) continue;
+
+						const isIncludedShalowly =
+							include.elements.jsxAttributes[elementName].includes(attribute.name) &&
+							(!exclude.elements.jsxAttributes[elementName] ||
+								!exclude.elements.jsxAttributes[elementName].includes(attribute.name));
+
+						if (isString(attribute.value)) {
+							if (!isIncludedShalowly) continue;
+
+							strings.push(attribute.value.trim());
+						} else if (attribute.value?.data?.estree) {
+							const estree = attribute.value.data.estree;
+
+							eswalk(estree, {
+								Literal(esnode, _) {
+									if (!isIncludedShalowly) return;
+									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
+								},
+								JSXText(esnode, _) {
+									if (!isIncludedShalowly) return;
+									pushTidyString(strings, esnode.value);
+								},
+								Property(esnode, parents) {
+									if (!isEstreeIdentifier(esnode.key)) return false;
+
+									const propertyPath = resolveEstreePropertyPath(esnode, parents, attribute.name);
+
+									if (
+										!propertyPath ||
+										!include.elements.jsxAttributes[elementName].includes(propertyPath) ||
+										(exclude.elements.jsxAttributes[elementName] &&
+											exclude.elements.jsxAttributes[elementName].includes(propertyPath))
+									)
+										return false;
+								}
+							});
+						}
 					}
 				}
 			}
@@ -101,25 +137,23 @@ export function extractMdastStrings(mdast: MdRoot, { include, exclude }: Config)
 			)
 				return false;
 
-			if (parent && isMdastText(node) && isMdastJsxElement(parent)) {
-				if (parent.name) {
-					if (HTML_TAGS.includes(parent.name)) {
-						if (
-							(include.elements.htmlAttributes[parent.name] &&
-								!include.elements.htmlAttributes[parent.name].includes('children')) ||
-							(exclude.elements.htmlAttributes[parent.name] &&
-								exclude.elements.htmlAttributes[parent.name].includes('children'))
-						)
-							return false;
-					} else {
-						if (
-							(include.elements.jsxAttributes[parent.name] &&
-								!include.elements.jsxAttributes[parent.name].includes('children')) ||
-							(exclude.elements.jsxAttributes[parent.name] &&
-								exclude.elements.jsxAttributes[parent.name].includes('children'))
-						)
-							return false;
-					}
+			if (parent && isMdastText(node) && isMdastJsxElement(parent) && parent.name) {
+				if (HTML_TAGS.includes(parent.name)) {
+					if (
+						(include.elements.htmlAttributes[parent.name] &&
+							!include.elements.htmlAttributes[parent.name].includes('children')) ||
+						(exclude.elements.htmlAttributes[parent.name] &&
+							exclude.elements.htmlAttributes[parent.name].includes('children'))
+					)
+						return false;
+				} else {
+					if (
+						(include.elements.jsxAttributes[parent.name] &&
+							!include.elements.jsxAttributes[parent.name].includes('children')) ||
+						(exclude.elements.jsxAttributes[parent.name] &&
+							exclude.elements.jsxAttributes[parent.name].includes('children'))
+					)
+						return false;
 				}
 
 				return true;
