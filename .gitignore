@@ -5,6 +5,8 @@
 !.yarn/versions
 **/build
 **/dist
+**/i18n/*
+!**/i18n/en
 **/IGNORE.md*
 **/node_modules
 **/out
