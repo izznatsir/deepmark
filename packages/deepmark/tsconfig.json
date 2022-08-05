@@ -7,7 +7,7 @@
 		"lib": ["ESNext"],
 		"noEmit": false,
 		"outDir": "./dist/@types",
-		"rootDir": "./src"
+		"rootDir": "src"
 	},
 	"include": ["src/**/*.*js", "src/**/*.ts"]
 }

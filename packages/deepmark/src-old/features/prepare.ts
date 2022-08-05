@@ -1,6 +1,6 @@
 import type { MdRoot, MdxJsxTextElement } from '../types/index.js';
 
-import { formatMarkdown } from '../features/index.js';
+import { formatMarkdown } from './index.js';
 import {
 	getMdast,
 	isMdastEmphasis,
