@@ -13,6 +13,8 @@ export class Database {
 		setTranslation: SqliteStatement<[string, string, string]>;
 	};
 
+	isChanged = false;
+
 	constructor(path: string) {
 		this.database = sqlite(path);
 
@@ -44,9 +46,17 @@ export class Database {
 
 	setTranslation(source: string, language: TargetLanguageCode, translation: string) {
 		this.statements.setTranslation.run(source, language, translation);
+		this.isChanged = true;
 	}
 
 	serialize() {
+		if (!this.isChanged) return;
+
 		this.database.serialize();
+		this.isChanged = false;
+	}
+
+	resetTranslation() {
+		this.database.exec('DROP TABLE IF EXISTS translations');
 	}
 }
