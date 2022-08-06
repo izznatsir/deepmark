@@ -29,9 +29,9 @@ export class Database {
 
 		this.statements = {
 			getTranslation: this.database.prepare(
-				'SELECT translation FROM translations WHERE source = "?" AND language = "?"'
+				'SELECT translation FROM translations WHERE source = ? AND language = ?'
 			),
-			setTranslation: this.database.prepare('INSERT INTO translations VALUES ("?", "?", "?")')
+			setTranslation: this.database.prepare('INSERT INTO translations VALUES (?, ?, ?)')
 		};
 	}
 
