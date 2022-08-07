@@ -58,27 +58,23 @@ export class Database {
 		return this.database.prepare(source);
 	}
 
-	getTranslation(parameters: { source: string; language: TargetLanguageCode }): string | undefined {
-		const row: { translation: string } | undefined = this.statements.getTranslation.get(parameters);
+	getTranslation(params: { source: string; language: TargetLanguageCode }): string | undefined {
+		const row: { translation: string } | undefined = this.statements.getTranslation.get(params);
 
 		return row ? row.translation : undefined;
 	}
 
-	setTranslation(parameters: {
-		source: string;
-		language: TargetLanguageCode;
-		translation: string;
-	}) {
-		this.statements.setTranslation.run(parameters);
+	setTranslation(params: { source: string; language: TargetLanguageCode; translation: string }) {
+		this.statements.setTranslation.run(params);
 	}
 
-	deleteTranslation(parameters: { source: string; language: TargetLanguageCode }) {
-		this.statements.deleteTranslation.run(parameters);
+	deleteTranslation(params: { source: string; language: TargetLanguageCode }) {
+		this.statements.deleteTranslation.run(params);
 	}
 
-	resetTranslations(parameters?: { language: TargetLanguageCode }) {
-		if (parameters) {
-			this.statements.resetLanguageTranslations.run(parameters);
+	resetTranslations(params?: { language: TargetLanguageCode }) {
+		if (params) {
+			this.statements.resetLanguageTranslations.run(params);
 		} else {
 			this.statements.resetTranslations.run();
 		}
