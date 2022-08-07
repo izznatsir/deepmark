@@ -14,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@types/mdast": "^3.0.10",
+		"del-cli": "^5.0.0",
 		"mdast-util-from-markdown": "^1.2.0",
 		"mdast-util-mdx": "^2.0.0",
 		"mdast-util-to-markdown": "^1.3.0",

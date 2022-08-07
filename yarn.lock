@@ -9287,6 +9287,7 @@ __metadata:
   resolution: "mdast-util-html-comment@workspace:packages/mdast-util-html-comment"
   dependencies:
     "@types/mdast": ^3.0.10
+    del-cli: ^5.0.0
     mdast-util-from-markdown: ^1.2.0
     mdast-util-mdx: ^2.0.0
     mdast-util-to-markdown: ^1.3.0
@@ -9514,6 +9515,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "micromark-extension-html-comment@workspace:packages/micromark-extension-html-comment"
   dependencies:
+    del-cli: ^5.0.0
     micromark: ^3.0.10
     micromark-factory-space: ^1.0.0
     micromark-util-character: ^1.1.0
@@ -12147,7 +12149,7 @@ __metadata:
     fast-glob: ^3.2.11
     fs-extra: ^10.1.0
     prettier: ^2.7.1
-    typescript: ~4.7.4
+    typescript: 4.8.0-beta
   languageName: unknown
   linkType: soft
 
@@ -13247,23 +13249,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:~4.7.4":
-  version: 4.7.4
-  resolution: "typescript@npm:4.7.4"
+"typescript@npm:4.8.0-beta":
+  version: 4.8.0-beta
+  resolution: "typescript@npm:4.8.0-beta"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 5750181b1cd7e6482c4195825547e70f944114fb47e58e4aa7553e62f11b3f3173766aef9c281783edfd881f7b8299cf35e3ca8caebe73d8464528c907a164df
+  checksum: a96bd6f92aafecc1286e0fc16d4680fda557ef259be60878bd7a17df48ad3af8b049e81f80f4483c4da6cd180377d2eba0287c71de74f8de2195f08de98cbb09
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@~4.7.4#~builtin<compat/typescript>":
-  version: 4.7.4
-  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"
+"typescript@patch:typescript@4.8.0-beta#~builtin<compat/typescript>":
+  version: 4.8.0-beta
+  resolution: "typescript@patch:typescript@npm%3A4.8.0-beta#~builtin<compat/typescript>::version=4.8.0-beta&hash=f456af"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 9096d8f6c16cb80ef3bf96fcbbd055bf1c4a43bd14f3b7be45a9fbe7ada46ec977f604d5feed3263b4f2aa7d4c7477ce5f9cd87de0d6feedec69a983f3a4f93e
+  checksum: ebd2e08f6b72da7be89ee82ff4d587ca247866a571e05573f7da5a3437ae774f9ae7bdf0074ecc84bdd7095e07d6b021437128ec9541cafa9885ad5c5f3f06ff
   languageName: node
   linkType: hard
 
