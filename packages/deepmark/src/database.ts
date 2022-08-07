@@ -54,23 +54,27 @@ export class Database {
 		};
 	}
 
-	getTranslation(variables: { source: string; language: TargetLanguageCode }): string | undefined {
-		const row: { translation: string } | undefined = this.statements.getTranslation.get(variables);
+	getTranslation(parameters: { source: string; language: TargetLanguageCode }): string | undefined {
+		const row: { translation: string } | undefined = this.statements.getTranslation.get(parameters);
 
 		return row ? row.translation : undefined;
 	}
 
-	setTranslation(variables: { source: string; language: TargetLanguageCode; translation: string }) {
-		this.statements.setTranslation.run(variables);
+	setTranslation(parameters: {
+		source: string;
+		language: TargetLanguageCode;
+		translation: string;
+	}) {
+		this.statements.setTranslation.run(parameters);
 	}
 
-	deleteTranslation(variables: { source: string; language: TargetLanguageCode }) {
-		this.statements.deleteTranslation.run(variables);
+	deleteTranslation(parameters: { source: string; language: TargetLanguageCode }) {
+		this.statements.deleteTranslation.run(parameters);
 	}
 
-	resetTranslations(variables?: { language: TargetLanguageCode }) {
-		if (variables) {
-			this.statements.resetLanguageTranslations.run(variables);
+	resetTranslations(parameters?: { language: TargetLanguageCode }) {
+		if (parameters) {
+			this.statements.resetLanguageTranslations.run(parameters);
 		} else {
 			this.statements.resetTranslations.run();
 		}
