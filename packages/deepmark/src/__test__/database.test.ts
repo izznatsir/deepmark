@@ -21,23 +21,77 @@ describe('translation memory', () => {
 
 		expect(table.name).toBe('translations');
 
-		const columns = db.database
+		const rows = db.database
 			.prepare(`SELECT name FROM pragma_table_info('translations') ORDER BY name`)
 			.all()
 			.map((column) => column.name);
 
-		expect(columns).toEqual(['language', 'source', 'translation']);
+		expect(rows).toEqual(['language', 'source', 'translation']);
 
 		const dbb = new Database(storage);
 	});
 
-	test('add translation');
+	test('add translation', ({ expect }) => {
+		db.setTranslation('kamu', 'en-US', 'you');
 
-	test('only create translations tabe if not exists', () => {});
+		const translation = db.getTranslation('kamu', 'en-US');
 
-	test('update translation');
+		expect(translation).toBe('you');
+	});
 
-	test('delete translation');
+	test('only create translations tabe if not exists', ({ expect }) => {
+		const db2 = new Database(storage);
 
-	test('reset translations');
+		const translation = db2.getTranslation('kamu', 'en-US');
+
+		expect(translation).toBe('you');
+	});
+
+	test('update translation', ({ expect }) => {
+		db.setTranslation('kamu', 'en-US', 'ya');
+
+		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+		const translation = db.getTranslation('kamu', 'en-US');
+
+		expect(count).toBe(1);
+		expect(translation).toBe('ya');
+	});
+
+	test('delete translation', ({ expect }) => {
+		db.setTranslation('dia', 'en-US', 'they');
+
+		const translation = db.getTranslation('dia', 'en-US');
+
+		expect(translation).toBe('they');
+
+		db.deleteTranslation('dia', 'en-US');
+
+		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+
+		expect(count).toBe(1);
+	});
+
+	test('reset translations of a particular target language', ({ expect }) => {
+		db.setTranslation('dia', 'de', 'sie');
+
+		const translation = db.getTranslation('dia', 'de');
+
+		expect(translation).toBe('sie');
+
+		db.resetTranslations('de');
+
+		const count = db.database
+			.prepare(`SELECT count() AS count FROM translations WHERE language = 'de'`)
+			.get().count;
+
+		expect(count).toBe(0);
+	});
+
+	test('reset translations', ({ expect }) => {
+		db.resetTranslations();
+
+		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+
+		expect(count).toBe(0);
+	});
 });
