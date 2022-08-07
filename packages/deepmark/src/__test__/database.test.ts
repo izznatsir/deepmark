@@ -15,13 +15,13 @@ describe('translation memory', () => {
 	const db = new Database(storage);
 
 	test('successfully migrate the schema', ({ expect }) => {
-		const table = db.database
+		const table = db
 			.prepare(`SELECT name FROM sqlite_schema WHERE type = 'table' ORDER BY name`)
 			.get();
 
 		expect(table.name).toBe('translations');
 
-		const rows = db.database
+		const rows = db
 			.prepare(`SELECT name FROM pragma_table_info('translations') ORDER BY name`)
 			.all()
 			.map((column) => column.name);
@@ -58,7 +58,7 @@ describe('translation memory', () => {
 			translation: 'ya'
 		});
 
-		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+		const count = db.prepare('SELECT count() AS count FROM translations').get().count;
 		const translation = db.getTranslation({ language: 'en-US', source: 'kamu' });
 
 		expect(count).toBe(1);
@@ -84,7 +84,7 @@ describe('translation memory', () => {
 			source: 'dia'
 		});
 
-		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+		const count = db.prepare('SELECT count() AS count FROM translations').get().count;
 
 		expect(count).toBe(1);
 	});
@@ -105,7 +105,7 @@ describe('translation memory', () => {
 
 		db.resetTranslations({ language: 'de' });
 
-		const count = db.database
+		const count = db
 			.prepare(`SELECT count() AS count FROM translations WHERE language = 'de'`)
 			.get().count;
 
@@ -115,7 +115,7 @@ describe('translation memory', () => {
 	test('reset translations', ({ expect }) => {
 		db.resetTranslations();
 
-		const count = db.database.prepare('SELECT count() AS count FROM translations').get().count;
+		const count = db.prepare('SELECT count() AS count FROM translations').get().count;
 
 		expect(count).toBe(0);
 	});

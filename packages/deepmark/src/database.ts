@@ -8,9 +8,9 @@ import fs from 'fs-extra';
 import np from 'path';
 
 export class Database {
-	database: SqliteDatabase;
+	private database: SqliteDatabase;
 
-	statements: {
+	private statements: {
 		getTranslation: SqliteStatement<{ source: string; language: TargetLanguageCode }>;
 		setTranslation: SqliteStatement<{
 			source: string;
@@ -52,6 +52,10 @@ export class Database {
 				`DELETE FROM translations WHERE language = $language`
 			)
 		};
+	}
+
+	prepare(source: string): SqliteStatement {
+		return this.database.prepare(source);
 	}
 
 	getTranslation(parameters: { source: string; language: TargetLanguageCode }): string | undefined {
