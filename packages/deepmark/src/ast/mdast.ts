@@ -167,7 +167,7 @@ export function getMarkdown(mdast: MdRoot): string {
  * ============================================================
  */
 
-type MdNodeType =
+export type MdNodeType =
 	| MdRoot['type']
 	| MdBlockquote['type']
 	| MdBreak['type']
