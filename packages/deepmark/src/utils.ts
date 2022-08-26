@@ -1,7 +1,9 @@
-import { type HtmlTag, HTML_TAGS } from './config';
-
 export function isArray(value: unknown): value is any[] {
 	return Array.isArray(value);
+}
+
+export function isBoolean(value: unknown): value is boolean {
+	return typeof value === 'boolean';
 }
 
 export function isEmptyArray(array: any[]): boolean {
