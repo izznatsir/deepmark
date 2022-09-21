@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import np from 'path';
+import np from 'node:path';
 import { afterAll, describe, test } from 'vitest';
 import { Database } from '../database.js';
 
@@ -27,8 +27,6 @@ describe('translation memory', () => {
 			.map((column) => column.name);
 
 		expect(rows).toEqual(['language', 'source', 'translation']);
-
-		const dbb = new Database(storage);
 	});
 
 	test('add translation', ({ expect }) => {

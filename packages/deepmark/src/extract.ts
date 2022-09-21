@@ -1,17 +1,26 @@
-import type { UnNode } from './ast/unist.js';
-
 import { parse as parseYaml } from 'yaml';
 import { esNodeIs, resolveEstreePropertyPath } from './ast/estree.js';
 import { eswalk } from './ast/eswalk.js';
 import { mdNodeIs, mdNodeIsJsxElement, MdNodeType } from './ast/mdast.js';
+import type { UnNode } from './ast/unist.js';
 import { unwalk } from './ast/unwalk.js';
-import { type Config, isDefault, isHtmlTag } from './config.js';
+import {
+	type Config,
+	isHtmlTag,
+	isFrontmatterFieldIncluded,
+	isHtmlElementIncluded,
+	isHtmlElementAttributeIncluded,
+	isJsonPropertyIncluded,
+	isJsxComponentIncluded,
+	isJsxComponentAttributeIncluded,
+	isMarkdownNodeIncluded,
+	isHtmlElementChildrenIncluded,
+	isJsxComponentChildrenIncluded
+} from './config.js';
 import { isArray, isEmptyArray, isEmptyString, isObject, isString } from './utils.js';
 
-export function extractMdastStrings(
-	mdast: UnNode,
-	{ markdownNodes, frontmatterFields, htmlElements, jsxComponents }: Config
-): string[] {
+export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
+	const { markdownNodes, frontmatterFields, htmlElements, jsxComponents } = config;
 	const strings: string[] = [];
 
 	unwalk(
@@ -27,11 +36,7 @@ export function extractMdastStrings(
 					for (const attribute of node.attributes) {
 						if (!mdNodeIs(attribute, 'mdxJsxAttribute')) continue;
 
-						const isIncludedShalowly =
-							htmlElements.include[node.name].attributes.includes(attribute.name) &&
-							!htmlElements.exclude.includes(node.name);
-
-						if (!isIncludedShalowly) continue;
+						if (!isHtmlElementAttributeIncluded(config, node.name, attribute.name)) continue;
 
 						if (isString(attribute.value)) {
 							strings.push(attribute.value.trim());
@@ -49,16 +54,16 @@ export function extractMdastStrings(
 					for (const attribute of node.attributes) {
 						if (!mdNodeIs(attribute, 'mdxJsxAttribute')) continue;
 
-						const elementName: string = node.name;
+						const componentName: string = node.name;
 
-						if (isDefault(jsxComponents.include) || !jsxComponents.include[elementName]) continue;
-
-						const isIncludedShalowly =
-							jsxComponents.include[elementName].attributes.includes(attribute.name) &&
-							!jsxComponents.exclude.includes(elementName);
+						const isAttributeIncluded = isJsxComponentAttributeIncluded(
+							config,
+							componentName,
+							attribute.name
+						);
 
 						if (isString(attribute.value)) {
-							if (!isIncludedShalowly) continue;
+							if (!isAttributeIncluded) continue;
 
 							strings.push(attribute.value.trim());
 						} else if (attribute.value?.data?.estree) {
@@ -66,17 +71,16 @@ export function extractMdastStrings(
 
 							eswalk(estree, {
 								SimpleLiteral(esnode, _) {
-									if (!isIncludedShalowly) return;
+									if (!isAttributeIncluded) return;
 									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
 								},
 								JSXText(esnode, _) {
-									if (!isIncludedShalowly) return;
+									if (!isAttributeIncluded) return;
 									pushTidyString(strings, esnode.value);
 								},
 								Property(esnode, parents) {
 									if (
-										isDefault(jsxComponents.include) ||
-										jsxComponents.exclude.includes(elementName) ||
+										!isJsxComponentIncluded(config, componentName) ||
 										!esNodeIs(esnode, 'Identifier')
 									)
 										return false;
@@ -85,7 +89,7 @@ export function extractMdastStrings(
 
 									if (
 										!propertyPath ||
-										!jsxComponents.include[elementName].attributes.includes(propertyPath)
+										!isJsxComponentAttributeIncluded(config, componentName, propertyPath)
 									)
 										return false;
 								}
@@ -131,19 +135,9 @@ export function extractMdastStrings(
 
 			if (parent && mdNodeIs(node, 'text') && mdNodeIsJsxElement(parent) && parent.name) {
 				if (isHtmlTag(parent.name)) {
-					if (
-						(htmlElements.include[parent.name] && !htmlElements.include[parent.name].children) ||
-						htmlElements.exclude.includes(parent.name)
-					)
-						return false;
+					if (!isHtmlElementChildrenIncluded(config, parent.name)) return false;
 				} else {
-					if (
-						(!isDefault(jsxComponents.include) &&
-							!jsxComponents.include[parent.name] &&
-							!jsxComponents.include[parent.name].children) ||
-						jsxComponents.exclude.includes(parent.name)
-					)
-						return false;
+					if (!isJsxComponentChildrenIncluded(config, parent.name)) return false;
 				}
 
 				return true;
@@ -151,15 +145,9 @@ export function extractMdastStrings(
 
 			if (mdNodeIsJsxElement(node) && node.name) {
 				if (isHtmlTag(node.name)) {
-					if (!htmlElements.include[node.name] || htmlElements.exclude.includes(node.name))
-						return false;
+					if (!isHtmlElementIncluded(config, node.name)) return false;
 				} else {
-					if (
-						(!isDefault(jsxComponents.include) && !jsxComponents.include[node.name]) ||
-						jsxComponents.exclude.includes(node.name)
-					) {
-						return false;
-					}
+					if (!isJsxComponentIncluded(config, node.name)) return false;
 				}
 
 				return true;
