@@ -1,16 +1,16 @@
 import fs from 'fs-extra';
 import np from 'node:path';
-import { afterAll, describe, test } from 'vitest';
+import { afterAll, describe } from 'vitest';
 import { Database } from '../database.js';
 
 afterAll(() => {
-	const tmpDir = np.resolve(process.cwd(), 'src/__test__/tmp');
+	const tmpDir = np.resolve(process.cwd(), 'src/__test__/__tmp__');
 	fs.rmSync(tmpDir, { force: true, recursive: true });
 	fs.mkdirSync(tmpDir);
 });
 
-describe('translation memory', () => {
-	const storage = np.resolve(process.cwd(), 'src/__test__/tmp/tm.sqlite');
+describe('translation memory', (test) => {
+	const storage = np.resolve(process.cwd(), 'src/__test__/__tmp__/tm.sqlite');
 
 	const db = new Database(storage);
 

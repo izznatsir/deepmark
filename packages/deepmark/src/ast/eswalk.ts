@@ -1,4 +1,5 @@
-import type { EsNode, EsNodeMap, EsProgram } from './estree.js';
+import { isRegExp } from 'node:util/types';
+import { EsNode, esNodeIs, EsNodeMap, EsProgram } from './estree.js';
 
 export const DEFAULT_ESWALKERS: EsWalkers = {
 	Program(node, parents, process) {
@@ -38,6 +39,16 @@ export const DEFAULT_ESWALKERS: EsWalkers = {
 		for (const child of node.children) {
 			process(child, parents);
 		}
+		for (const attribute of node.openingElement.attributes) {
+			process(attribute, parents);
+		}
+		parents.pop();
+	},
+	JSXAttribute(node, parents, process) {
+		parents.push(node);
+		if (node.value) {
+			process(node.value, parents);
+		}
 		parents.pop();
 	}
 };
@@ -50,7 +61,16 @@ export function eswalk(
 	const process: EsProcessor = (node, parents) => {
 		if (!node) return;
 
-		const type = node.type as keyof EsNodeMap;
+		let type = node.type as keyof EsNodeMap;
+
+		if (esNodeIs(node, 'Literal')) {
+			type =
+				typeof node.value === 'bigint'
+					? 'BigIntLiteral'
+					: isRegExp(node.value)
+					? 'RegExpLiteral'
+					: 'SimpleLiteral';
+		}
 
 		const visit = visitors[type] as EsVisitor<typeof type>;
 		const walk = walkers[type] as EsWalker<typeof type>;
@@ -59,7 +79,7 @@ export function eswalk(
 
 		if (visit !== undefined) {
 			const signal = visit(node, parents);
-			keepWalking = signal === undefined || signal === true ? true : false;
+			keepWalking = signal === false ? false : true;
 		}
 
 		if (keepWalking && walk) walk(node, parents, process);

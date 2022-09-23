@@ -8,7 +8,7 @@ import {
 	isFrontmatterFieldIncluded,
 	isHtmlElementIncluded,
 	isHtmlElementAttributeIncluded,
-	isJsonPropertyIncluded,
+	isJsonOrYamlPropertyIncluded,
 	isJsxComponentIncluded,
 	isJsxComponentAttributeIncluded,
 	isMarkdownNodeIncluded,
@@ -63,67 +63,42 @@ describe('default configurations', (test) => {
 	const config: Config = resolveConfig(baseConfig);
 
 	test('frontmatter fields', ({ expect }) => {
-		expect(isFrontmatterFieldIncluded(config, 'title')).toBe(false);
-		expect(isFrontmatterFieldIncluded(config, 'description')).toBe(false);
+		expect(isFrontmatterFieldIncluded({ field: 'title', config })).toBe(false);
+		expect(isFrontmatterFieldIncluded({ field: 'description', config })).toBe(false);
 	});
 
 	test('markdown nodes', ({ expect }) => {
-		expect(isMarkdownNodeIncluded(config, 'code')).toBe(false);
-		expect(isMarkdownNodeIncluded(config, 'blockquote')).toBe(true);
-		expect(isMarkdownNodeIncluded(config, 'heading')).toBe(true);
+		expect(isMarkdownNodeIncluded({ type: 'code', config })).toBe(false);
+		expect(isMarkdownNodeIncluded({ type: 'blockquote', config })).toBe(true);
+		expect(isMarkdownNodeIncluded({ type: 'heading', config })).toBe(true);
 	});
 
 	test('html elements', ({ expect }) => {
-		expect(isHtmlElementIncluded(config, 'a')).toBe(true);
-		expect(isHtmlElementIncluded(config, 'div')).toBe(true);
+		expect(isHtmlElementIncluded({ tag: 'a', config })).toBe(true);
+		expect(isHtmlElementIncluded({ tag: 'div', config })).toBe(true);
 	});
 
 	test('html element attributes', ({ expect }) => {
-		expect(isHtmlElementAttributeIncluded(config, 'div', 'title')).toBe(true);
-		expect(isHtmlElementAttributeIncluded(config, 'div', 'id')).toBe(false);
+		expect(isHtmlElementAttributeIncluded({ tag: 'div', attribute: 'title', config })).toBe(true);
+		expect(isHtmlElementAttributeIncluded({ tag: 'div', attribute: 'id', config })).toBe(false);
 	});
 
 	test('jsx components', ({ expect }) => {
-		expect(isJsxComponentIncluded(config, 'Card')).toBe(true);
-		expect(isJsxComponentIncluded(config, 'Warning')).toBe(true);
+		expect(isJsxComponentIncluded({ name: 'Card', config })).toBe(true);
+		expect(isJsxComponentIncluded({ name: 'Warning', config })).toBe(true);
 	});
 
 	test('jsx component attributes', ({ expect }) => {
-		expect(isJsxComponentAttributeIncluded(config, 'Card', 'icon')).toBe(false);
-		expect(isJsxComponentAttributeIncluded(config, 'Warning', 'title')).toBe(false);
+		expect(isJsxComponentAttributeIncluded({ name: 'Card', attribute: 'icon', config })).toBe(
+			false
+		);
+		expect(isJsxComponentAttributeIncluded({ name: 'Warning', attribute: 'title', config })).toBe(
+			false
+		);
 	});
 
-	test('json properties', ({ expect }) => {
-		expect(isJsonPropertyIncluded(config, 'author')).toBe(false);
-		expect(isJsonPropertyIncluded(config, 'title')).toBe(false);
+	test('json or yaml properties', ({ expect }) => {
+		expect(isJsonOrYamlPropertyIncluded({ property: 'author', config })).toBe(false);
+		expect(isJsonOrYamlPropertyIncluded({ property: 'title', config })).toBe(false);
 	});
-});
-
-describe.skip('custom configurations', (test) => {
-	const config: Config = resolveConfig({
-		...baseConfig,
-		frontmatterFields: { include: [], exclude: [] },
-		markdownNodes: {
-			include: [],
-			exclude: []
-		},
-		htmlElements: {
-			include: {},
-			exclude: []
-		},
-		jsxComponents: {
-			include: {},
-			exclude: []
-		},
-		jsonProperties: {
-			include: [],
-			exclude: []
-		}
-	});
-
-	test('frontmatter fields', () => {});
-	test('markdown nodes', () => {});
-	test('html elements', () => {});
-	test('jsx components', () => {});
-	test('json properties', () => {});
 });

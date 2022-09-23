@@ -1,5 +1,10 @@
 import { parse as parseYaml } from 'yaml';
-import { esNodeIs, resolveEstreePropertyPath } from './ast/estree.js';
+import {
+	EsJsxElement,
+	EsJsxIdentifier,
+	esNodeIs,
+	resolveEstreePropertyPath
+} from './ast/estree.js';
 import { eswalk } from './ast/eswalk.js';
 import { mdNodeIs, mdNodeIsJsxElement, MdNodeType } from './ast/mdast.js';
 import type { UnNode } from './ast/unist.js';
@@ -10,7 +15,7 @@ import {
 	isFrontmatterFieldIncluded,
 	isHtmlElementIncluded,
 	isHtmlElementAttributeIncluded,
-	isJsonPropertyIncluded,
+	isJsonOrYamlPropertyIncluded,
 	isJsxComponentIncluded,
 	isJsxComponentAttributeIncluded,
 	isMarkdownNodeIncluded,
@@ -19,15 +24,20 @@ import {
 } from './config.js';
 import { isArray, isEmptyArray, isEmptyString, isObject, isString } from './utils.js';
 
-export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
-	const { markdownNodes, frontmatterFields, htmlElements, jsxComponents } = config;
+export function extractMdastStrings({
+	mdast,
+	config
+}: {
+	mdast: UnNode;
+	config: Config;
+}): string[] {
 	const strings: string[] = [];
 
 	unwalk(
 		mdast,
 		(node, __, _) => {
 			if (mdNodeIs(node, 'text')) {
-				pushTidyString(strings, node.value);
+				pushTidyString({ array: strings, string: node.value });
 				return;
 			}
 
@@ -36,7 +46,10 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 					for (const attribute of node.attributes) {
 						if (!mdNodeIs(attribute, 'mdxJsxAttribute')) continue;
 
-						if (!isHtmlElementAttributeIncluded(config, node.name, attribute.name)) continue;
+						if (
+							!isHtmlElementAttributeIncluded({ tag: node.name, attribute: attribute.name, config })
+						)
+							continue;
 
 						if (isString(attribute.value)) {
 							strings.push(attribute.value.trim());
@@ -45,7 +58,8 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 
 							eswalk(estree, {
 								SimpleLiteral(esnode, _) {
-									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
+									if (isString(esnode.value))
+										pushTidyString({ array: strings, string: esnode.value });
 								}
 							});
 						}
@@ -56,40 +70,88 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 
 						const componentName: string = node.name;
 
-						const isAttributeIncluded = isJsxComponentAttributeIncluded(
-							config,
-							componentName,
-							attribute.name
-						);
+						const isAttributeIncluded = isJsxComponentAttributeIncluded({
+							name: componentName,
+							attribute: attribute.name,
+							config
+						});
 
 						if (isString(attribute.value)) {
 							if (!isAttributeIncluded) continue;
 
 							strings.push(attribute.value.trim());
 						} else if (attribute.value?.data?.estree) {
+							if (
+								!config.jsxComponents.include[componentName] ||
+								!config.jsxComponents.include[componentName].attributes.some(
+									(attrName) =>
+										attrName === attribute.name || attrName.startsWith(`${attribute.name}.`)
+								)
+							)
+								continue;
+
 							const estree = attribute.value.data.estree;
 
 							eswalk(estree, {
 								SimpleLiteral(esnode, _) {
-									if (!isAttributeIncluded) return;
-									if (isString(esnode.value)) pushTidyString(strings, esnode.value);
+									if (isString(esnode.value))
+										pushTidyString({ array: strings, string: esnode.value });
+
+									if (esnode.value === 'aye') console.log('passed');
 								},
-								JSXText(esnode, _) {
-									if (!isAttributeIncluded) return;
-									pushTidyString(strings, esnode.value);
-								},
-								Property(esnode, parents) {
-									if (
-										!isJsxComponentIncluded(config, componentName) ||
-										!esNodeIs(esnode, 'Identifier')
+								JSXElement(esnode, _) {
+									const name = (esnode.openingElement.name as EsJsxIdentifier).name;
+
+									if (isHtmlTag(name)) {
+										if (
+											!isHtmlElementIncluded({ tag: name, config }) ||
+											!isHtmlElementChildrenIncluded({ tag: name, config })
+										)
+											return false;
+									} else if (
+										!isJsxComponentIncluded({ name: name, config }) ||
+										!isJsxComponentChildrenIncluded({ name: name, config })
 									)
 										return false;
+								},
+								JSXAttribute(esnode, parents) {
+									const name =
+										typeof esnode.name.name === 'string' ? esnode.name.name : esnode.name.name.name;
+									const parentName = (
+										(parents[parents.length - 1] as EsJsxElement).openingElement
+											.name as EsJsxIdentifier
+									).name;
+
+									if (isHtmlTag(parentName)) {
+										if (
+											!isHtmlElementAttributeIncluded({ tag: parentName, attribute: name, config })
+										)
+											return false;
+									} else if (
+										!config.jsxComponents.include[name] ||
+										!config.jsxComponents.include[name].attributes.some(
+											(attrName) =>
+												attrName === attribute.name || attrName.startsWith(`${attribute.name}.`)
+										)
+									) {
+										return false;
+									}
+								},
+								JSXText(esnode, _) {
+									pushTidyString({ array: strings, string: esnode.value });
+								},
+								Property(esnode, parents) {
+									if (!esNodeIs(esnode, 'Identifier')) return false;
 
 									const propertyPath = resolveEstreePropertyPath(esnode, parents, attribute.name);
 
 									if (
 										!propertyPath ||
-										!isJsxComponentAttributeIncluded(config, componentName, propertyPath)
+										!isJsxComponentAttributeIncluded({
+											name: componentName,
+											attribute: propertyPath,
+											config
+										})
 									)
 										return false;
 								}
@@ -100,15 +162,15 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 			}
 
 			if (mdNodeIs(node, 'yaml')) {
-				if (isEmptyArray(frontmatterFields.include)) return;
+				if (isEmptyArray(config.frontmatterFields.include)) return;
 				if (isEmptyString(node.value)) return;
 
 				const object: Record<string, any> = parseYaml(node.value);
 
-				for (const key in object) {
-					if (!frontmatterFields.include.includes(key)) continue;
+				for (const field in object) {
+					if (!isFrontmatterFieldIncluded({ field, config })) continue;
 
-					const value = object[key];
+					const value = object[field];
 
 					if (isString(value)) {
 						strings.push(value);
@@ -127,17 +189,13 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 			}
 		},
 		(node, parent) => {
-			if (
-				!markdownNodes.include.includes(node.type as MdNodeType) ||
-				markdownNodes.exclude.includes(node.type as MdNodeType)
-			)
-				return false;
+			if (!isMarkdownNodeIncluded({ type: node.type as MdNodeType, config })) return false;
 
-			if (parent && mdNodeIs(node, 'text') && mdNodeIsJsxElement(parent) && parent.name) {
+			if (parent && mdNodeIsJsxElement(parent) && parent.name) {
 				if (isHtmlTag(parent.name)) {
-					if (!isHtmlElementChildrenIncluded(config, parent.name)) return false;
+					if (!isHtmlElementChildrenIncluded({ tag: parent.name, config })) return false;
 				} else {
-					if (!isJsxComponentChildrenIncluded(config, parent.name)) return false;
+					if (!isJsxComponentChildrenIncluded({ name: parent.name, config })) return false;
 				}
 
 				return true;
@@ -145,9 +203,9 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 
 			if (mdNodeIsJsxElement(node) && node.name) {
 				if (isHtmlTag(node.name)) {
-					if (!isHtmlElementIncluded(config, node.name)) return false;
+					if (!isHtmlElementIncluded({ tag: node.name, config })) return false;
 				} else {
-					if (!isJsxComponentIncluded(config, node.name)) return false;
+					if (!isJsxComponentIncluded({ name: node.name, config })) return false;
 				}
 
 				return true;
@@ -160,37 +218,50 @@ export function extractMdastStrings(mdast: UnNode, config: Config): string[] {
 	return strings;
 }
 
-export function extractDocusaurusStrings(object: Record<string, any>): string[] {
+export function extractJsonOrYamlStrings({
+	source,
+	type = 'json',
+	config
+}: {
+	source: string;
+	type?: 'json' | 'yaml';
+	config: Config;
+}): string[] {
 	const strings: string[] = [];
 
-	for (const key in object) {
-		const value = object[key];
+	if (isEmptyArray(config.jsonOrYamlProperties.include)) return strings;
 
-		if (isString(value)) {
-			strings.push(value);
-			continue;
+	const parsed = type === 'json' ? JSON.parse(source) : parseYaml(source);
+
+	process(parsed);
+
+	function process(value: unknown, property?: string) {
+		if (typeof value === 'string') {
+			if (property && isJsonOrYamlPropertyIncluded({ property, config })) strings.push(value);
+			return;
+		}
+
+		if (isArray(value)) {
+			for (const item of value) {
+				process(item);
+			}
+			return;
 		}
 
 		if (isObject(value)) {
-			if ('message' in value) {
-				strings.push(value.message);
-				if ('description' in value) strings.push(value.description);
-				continue;
+			for (const property in value) {
+				const item = (value as Record<string | number | symbol, unknown>)[property];
+				process(item, property);
 			}
-
-			if ('type' in value) {
-				if ('title' in value) strings.push(value.title!);
-				if ('description' in value) strings.push(value.description!);
-				continue;
-			}
+			return;
 		}
 	}
 
 	return strings;
 }
 
-function pushTidyString(strings: string[], string: string) {
+function pushTidyString({ array, string }: { array: string[]; string: string }) {
 	if (!/^\s*$/.test(string)) {
-		strings.push(string.replace(/(^\n|\r|\t|\v)+\s*/, '').replace(/\s+$/, ' '));
+		array.push(string.replace(/(^\n|\r|\t|\v)+\s*/, '').replace(/\s+$/, ' '));
 	}
 }

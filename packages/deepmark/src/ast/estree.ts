@@ -284,6 +284,7 @@ export type EsExpressionMap = EsLiteralMap & {
 };
 
 export interface EsLiteralMap {
+	Literal: EsSimpleLiteral | EsRegExpLiteral | EsBigIntLiteral;
 	SimpleLiteral: EsSimpleLiteral;
 	RegExpLiteral: EsRegExpLiteral;
 	BigIntLiteral: EsBigIntLiteral;

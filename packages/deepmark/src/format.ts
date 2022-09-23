@@ -2,7 +2,7 @@ import prettier from 'prettier';
 import { getMarkdown, getMdast, mdNodeIs } from './ast/mdast.js';
 import { unwalk } from './ast/unwalk.js';
 
-async function format(markdown: string) {
+export async function format(markdown: string) {
 	/**
 	 * `printWidth` is set to Infinity and `proseWrap` is set to never
 	 * to avoid unnecessary linebreaks that break translation result

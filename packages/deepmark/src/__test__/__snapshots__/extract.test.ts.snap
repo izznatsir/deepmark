@@ -1,0 +1,52 @@
+// Vitest Snapshot v1
+
+exports[`extract frontmatter field string values > filter frontmatter fields based on configuration 1`] = `
+[
+  "A Short Title",
+  "tagone",
+  "tagtwo",
+]
+`;
+
+exports[`extract jsx children and attribute string values > ignore some HTML elements by default 1`] = `
+[
+  "This is a text. ",
+]
+`;
+
+exports[`extract jsx children and attribute string values > recursively extract strings from html elements and jsx components inside attributes 1`] = `
+[
+  "This is a text inside a custom component.",
+  "This is a text inside a jsx prop.",
+  "This is the text of jsx item one. ",
+  "This the nested text of jsx item one.",
+  "A short title inside title attribute inside HTML element inside an attribute.",
+  "This is the text of jsx item two. ",
+  "This the nested text of jsx item two.",
+]
+`;
+
+exports[`extract jsx children and attribute string values > recursively extract strings from nested jsx components 1`] = `
+[
+  "This is a paragraph.",
+  "This is a span.",
+  "This is a text inside a custom component.",
+]
+`;
+
+exports[`extract strings from JSON based on configuration > filter properties based on the config 1`] = `
+[
+  "The title in the navbar",
+  "Navbar item with label Tutorial",
+  "Navbar item with label Blog",
+  "Navbar item with label GitHub",
+]
+`;
+
+exports[`extract strings from yaml based on configuration > filter properties based on the config 1`] = `
+[
+  "Maintainer of Docusaurus",
+  "Front End Engineer @ Facebook",
+  "Docusaurus maintainer",
+]
+`;

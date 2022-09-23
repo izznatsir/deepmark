@@ -74,10 +74,10 @@ export interface Config extends ConfigBase {
 		exclude: string[];
 	};
 	/**
-	 * JSON file properties to include and exclude.
-	 * Includes all properties with string values by default.
+	 * JSON or YAML file properties to include and exclude.
+	 * Exclude all properties by default.
 	 */
-	jsonProperties: {
+	jsonOrYamlProperties: {
 		include: string[];
 		exclude: string[];
 	};
@@ -135,10 +135,10 @@ export interface UserConfig extends ConfigBase {
 		exclude?: string[];
 	};
 	/**
-	 * JSON file properties to include and exclude.
-	 * Includes all properties with string values by default.
+	 * JSON or YAML file properties to include and exclude.
+	 * Exclude all properties by default.
 	 */
-	jsonProperties?: {
+	jsonOrYamlProperties?: {
 		include?: string[];
 		exclude?: string[];
 	};
@@ -309,7 +309,7 @@ export function resolveConfig({
 	frontmatterFields,
 	htmlElements,
 	jsxComponents,
-	jsonProperties
+	jsonOrYamlProperties
 }: UserConfig): Config {
 	return {
 		sourceLanguage,
@@ -356,8 +356,8 @@ export function resolveConfig({
 					exclude: jsxComponents.exclude ?? []
 			  }
 			: { default: true, include: {}, exclude: [] },
-		jsonProperties: jsonProperties
-			? { include: jsonProperties.include ?? [], exclude: jsonProperties.exclude ?? [] }
+		jsonOrYamlProperties: jsonOrYamlProperties
+			? { include: jsonOrYamlProperties.include ?? [], exclude: jsonOrYamlProperties.exclude ?? [] }
 			: { include: [], exclude: [] }
 	};
 }
@@ -457,54 +457,86 @@ export async function getSourceFilePaths(
 	return paths;
 }
 
-export function isFrontmatterFieldIncluded(config: Config, field: string): boolean {
+export function isFrontmatterFieldIncluded({
+	field,
+	config
+}: {
+	field: string;
+	config: Config;
+}): boolean {
 	return (
 		!config.frontmatterFields.exclude.includes(field) &&
 		config.frontmatterFields.include.includes(field)
 	);
 }
 
-export function isMarkdownNodeIncluded(config: Config, type: MdNodeType): boolean {
+export function isMarkdownNodeIncluded({
+	type,
+	config
+}: {
+	type: MdNodeType;
+	config: Config;
+}): boolean {
 	return (
 		!config.markdownNodes.exclude.includes(type) &&
 		(config.markdownNodes.default || config.markdownNodes.include.includes(type))
 	);
 }
 
-export function isHtmlElementIncluded(config: Config, tag: HtmlTag): boolean {
+export function isHtmlElementIncluded({ tag, config }: { tag: HtmlTag; config: Config }): boolean {
 	return (
 		!config.htmlElements.exclude.includes(tag) &&
 		Object.keys(config.htmlElements.include).includes(tag)
 	);
 }
 
-export function isHtmlElementAttributeIncluded(
-	config: Config,
-	tag: HtmlTag,
-	attribute: string
-): boolean {
+export function isHtmlElementAttributeIncluded({
+	tag,
+	attribute,
+	config
+}: {
+	tag: HtmlTag;
+	attribute: string;
+	config: Config;
+}): boolean {
 	return (
-		isHtmlElementIncluded(config, tag) &&
+		isHtmlElementIncluded({ tag, config }) &&
 		config.htmlElements.include[tag]!.attributes.includes(attribute)
 	);
 }
 
-export function isHtmlElementChildrenIncluded(config: Config, tag: HtmlTag): boolean {
-	return isHtmlElementIncluded(config, tag) && config.htmlElements.include[tag]!.children;
+export function isHtmlElementChildrenIncluded({
+	tag,
+	config
+}: {
+	tag: HtmlTag;
+	config: Config;
+}): boolean {
+	return isHtmlElementIncluded({ tag, config }) && config.htmlElements.include[tag]!.children;
 }
 
-export function isJsxComponentIncluded(config: Config, name: string): boolean {
+export function isJsxComponentIncluded({
+	name,
+	config
+}: {
+	name: string;
+	config: Config;
+}): boolean {
 	return (
 		!config.jsxComponents.exclude.includes(name) &&
 		(config.jsxComponents.default || Object.keys(config.jsxComponents.include).includes(name))
 	);
 }
 
-export function isJsxComponentAttributeIncluded(
-	config: Config,
-	name: string,
-	attribute: string
-): boolean {
+export function isJsxComponentAttributeIncluded({
+	name,
+	attribute,
+	config
+}: {
+	name: string;
+	attribute: string;
+	config: Config;
+}): boolean {
 	return (
 		!config.jsxComponents.exclude.includes(name) &&
 		Object.keys(config.jsxComponents.include).includes(name) &&
@@ -512,7 +544,13 @@ export function isJsxComponentAttributeIncluded(
 	);
 }
 
-export function isJsxComponentChildrenIncluded(config: Config, name: string): boolean {
+export function isJsxComponentChildrenIncluded({
+	name,
+	config
+}: {
+	name: string;
+	config: Config;
+}): boolean {
 	return (
 		!config.jsxComponents.exclude.includes(name) &&
 		Object.keys(config.jsxComponents.include).includes(name) &&
@@ -520,10 +558,16 @@ export function isJsxComponentChildrenIncluded(config: Config, name: string): bo
 	);
 }
 
-export function isJsonPropertyIncluded(config: Config, property: string): boolean {
+export function isJsonOrYamlPropertyIncluded({
+	property,
+	config
+}: {
+	config: Config;
+	property: string;
+}): boolean {
 	return (
-		!config.jsonProperties.exclude.includes(property) &&
-		config.jsonProperties.include.includes(property)
+		!config.jsonOrYamlProperties.exclude.includes(property) &&
+		config.jsonOrYamlProperties.include.includes(property)
 	);
 }
 
