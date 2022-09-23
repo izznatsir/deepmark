@@ -78,8 +78,8 @@ export interface Config extends ConfigBase {
 	 * Exclude all properties by default.
 	 */
 	jsonOrYamlProperties: {
-		include: string[];
-		exclude: string[];
+		include: (string | number | symbol)[];
+		exclude: (string | number | symbol)[];
 	};
 }
 
@@ -563,7 +563,7 @@ export function isJsonOrYamlPropertyIncluded({
 	config
 }: {
 	config: Config;
-	property: string;
+	property: string | number | symbol;
 }): boolean {
 	return (
 		!config.jsonOrYamlProperties.exclude.includes(property) &&

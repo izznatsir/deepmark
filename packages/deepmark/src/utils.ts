@@ -18,7 +18,7 @@ export function isEmptyString(string: string): boolean {
 	return string.length === 0;
 }
 
-export function isObject(value: unknown): value is Record<any, any> {
+export function isObject(value: unknown): value is Record<string | number | symbol, unknown> {
 	return isArray(value) ? false : typeof value == 'object' ? true : false;
 }
 
