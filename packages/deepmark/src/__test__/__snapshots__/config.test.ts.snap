@@ -2,6 +2,7 @@
 
 exports[`resolve paths > resolve source and output directories absolute paths 1`] = `
 [
+  "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$",
   "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs",
   "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog",
 ]
@@ -9,6 +10,7 @@ exports[`resolve paths > resolve source and output directories absolute paths 1`
 
 exports[`resolve paths > resolve source and output directories absolute paths 2`] = `
 [
+  "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$",
   "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs",
   "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog",
 ]
@@ -17,33 +19,108 @@ exports[`resolve paths > resolve source and output directories absolute paths 2`
 exports[`resolve paths > resolve source file absolute paths 1`] = `
 {
   "json": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/_category_.json",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/_category_.json",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/code.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/en/code.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docusaurus-plugin-content-blog/options.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/en/docusaurus-plugin-content-blog/options.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docusaurus-plugin-content-docs/current.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/en/docusaurus-plugin-content-docs/current.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docusaurus-theme-classic/footer.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/en/docusaurus-theme-classic/footer.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docusaurus-theme-classic/navbar.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/en/docusaurus-theme-classic/navbar.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/_category_.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/_category_.json",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-extras/_category_.json",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/_category_.json",
+    },
   ],
   "md": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/intro.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/congratulations.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-blog-post.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-document.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-page.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/deploy-your-site.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/manage-docs-versions.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/translate-your-site.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-28-first-blog-post.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-29-long-blog-post.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-26-welcome/index.md",
-  ],
-  "mdx": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/markdown-features.mdx",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-01-mdx-blog-post.mdx",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/intro.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/intro.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/congratulations.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/congratulations.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/create-a-blog-post.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-blog-post.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/create-a-document.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-document.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/create-a-page.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/create-a-page.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/deploy-your-site.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/deploy-your-site.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-basics/markdown-features.mdx",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-basics/markdown-features.mdx",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-extras/manage-docs-versions.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/manage-docs-versions.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-extras/translate-your-site.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/translate-your-site.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2019-05-28-first-blog-post.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-28-first-blog-post.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2019-05-29-long-blog-post.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-29-long-blog-post.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2021-08-01-mdx-blog-post.mdx",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-01-mdx-blog-post.mdx",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2021-08-26-welcome/index.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-26-welcome/index.md",
+    },
   ],
   "others": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/img/docsVersionDropdown.png",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/img/localeDropdown.png",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-extras/img/docsVersionDropdown.png",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/img/docsVersionDropdown.png",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/docs/tutorial-extras/img/localeDropdown.png",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/docs/tutorial-extras/img/localeDropdown.png",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg",
+    },
   ],
   "yaml": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/authors.yml",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/authors.yml",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/authors.yml",
+    },
   ],
 }
 `;
@@ -52,15 +129,25 @@ exports[`resolve paths with files include and exclude patterns > resolve source 
 {
   "json": [],
   "md": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-28-first-blog-post.md",
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-29-long-blog-post.md",
-  ],
-  "mdx": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-01-mdx-blog-post.mdx",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2019-05-28-first-blog-post.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-28-first-blog-post.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2019-05-29-long-blog-post.md",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2019-05-29-long-blog-post.md",
+    },
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/2021-08-01-mdx-blog-post.mdx",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/2021-08-01-mdx-blog-post.mdx",
+    },
   ],
   "others": [],
   "yaml": [
-    "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/authors.yml",
+    {
+      "outputFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/i18n/$langcode$/blog/authors.yml",
+      "sourceFilePath": "/home/izznatsir/Codes/github/izznatsir/deepmark/example/blog/authors.yml",
+    },
   ],
 }
 `;

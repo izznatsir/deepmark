@@ -368,7 +368,7 @@ export function getSourceDirPaths(config: Config): string[] {
 
 		if (path.startsWith('/')) return path;
 
-		return np.resolve(config.cwd, path);
+		return np.join(config.cwd, path);
 	});
 }
 
@@ -384,17 +384,23 @@ export function getOutputDirPaths(config: Config): string[] {
 
 export async function getSourceFilePaths(
 	config: Config
-): Promise<Record<'md' | 'mdx' | 'json' | 'yaml', string[]>> {
+): Promise<
+	Record<'md' | 'json' | 'yaml' | 'others', { sourceFilePath: string; outputFilePath: string }[]>
+> {
 	// file paths under source directories
-	const paths: Record<'md' | 'mdx' | 'json' | 'yaml' | 'others', string[]> = {
+	const paths: Record<
+		'md' | 'json' | 'yaml' | 'others',
+		{ sourceFilePath: string; outputFilePath: string }[]
+	> = {
 		md: [],
-		mdx: [],
 		json: [],
 		yaml: [],
 		others: []
 	};
 
 	const sourceDirPaths = getSourceDirPaths(config);
+	const outputDirPaths = getOutputDirPaths(config);
+
 	const includedFilePaths =
 		config.files.include === undefined
 			? true
@@ -417,11 +423,13 @@ export async function getSourceFilePaths(
 		];
 	}, []);
 
-	for (const sourceDirPath of sourceDirPaths) {
+	for (const [index, sourceDirPath] of sourceDirPaths.entries()) {
+		const resolvedSourceDirPath = sourceDirPath.replace(/\$langcode\$/, config.sourceLanguage);
+
 		const flatPaths = (
 			await fg('**/*.*', {
 				absolute: true,
-				cwd: sourceDirPath
+				cwd: resolvedSourceDirPath
 			})
 		).filter(
 			(path) =>
@@ -430,27 +438,27 @@ export async function getSourceFilePaths(
 		);
 
 		for (const path of flatPaths) {
-			if (path.endsWith('.md')) {
-				paths.md.push(path);
-				continue;
-			}
+			const filePaths = {
+				sourceFilePath: path,
+				outputFilePath: np.join(outputDirPaths[index], path.slice(resolvedSourceDirPath.length))
+			};
 
-			if (path.endsWith('.mdx')) {
-				paths.mdx.push(path);
+			if (path.endsWith('.md') || path.endsWith('.mdx')) {
+				paths.md.push(filePaths);
 				continue;
 			}
 
 			if (path.endsWith('.json')) {
-				paths.json.push(path);
+				paths.json.push(filePaths);
 				continue;
 			}
 
 			if (path.endsWith('.yaml') || path.endsWith('.yml')) {
-				paths.yaml.push(path);
+				paths.yaml.push(filePaths);
 				continue;
 			}
 
-			paths.others.push(path);
+			paths.others.push(filePaths);
 		}
 	}
 

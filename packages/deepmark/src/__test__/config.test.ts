@@ -19,6 +19,7 @@ const baseConfig: UserConfig = {
 	sourceLanguage: 'en',
 	outputLanguages: ['zh'],
 	directories: [
+		['i18n/$langcode$', 'i18n/$langcode$'],
 		['docs', 'i18n/$langcode$/docs'],
 		['blog', 'i18n/$langcode$/blog']
 	],

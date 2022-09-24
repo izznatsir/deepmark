@@ -6,7 +6,8 @@ import {
 	resolveEstreePropertyPath
 } from './ast/estree.js';
 import { eswalk } from './ast/eswalk.js';
-import { mdNodeIs, mdNodeIsJsxElement, MdNodeType } from './ast/mdast.js';
+import type { MdNodeType, MdRoot } from './ast/mdast.js';
+import { mdNodeIs, mdNodeIsJsxElement } from './ast/mdast.js';
 import type { UnNode } from './ast/unist.js';
 import { unwalk } from './ast/unwalk.js';
 import {
@@ -29,10 +30,10 @@ export function replaceMdastStrings({
 	config,
 	strings
 }: {
-	mdast: UnNode;
+	mdast: MdRoot;
 	strings: string[];
 	config: Config;
-}): string[] {
+}): MdRoot {
 	strings = strings.reverse();
 
 	unwalk(
@@ -213,7 +214,7 @@ export function replaceMdastStrings({
 		}
 	);
 
-	return strings;
+	return mdast;
 }
 
 export function replaceJsonOrYamlStrings({
@@ -290,5 +291,6 @@ export function replaceJsonOrYamlStrings({
 		}
 	}
 
+	if (type === 'json') return JSON.stringify(parsed);
 	return stringifyYaml(parsed);
 }
