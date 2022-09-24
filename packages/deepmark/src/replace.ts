@@ -8,7 +8,6 @@ import {
 import { eswalk } from './ast/eswalk.js';
 import type { MdNodeType, MdRoot } from './ast/mdast.js';
 import { mdNodeIs, mdNodeIsJsxElement } from './ast/mdast.js';
-import type { UnNode } from './ast/unist.js';
 import { unwalk } from './ast/unwalk.js';
 import {
 	type Config,

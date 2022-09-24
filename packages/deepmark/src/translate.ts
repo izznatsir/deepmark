@@ -91,6 +91,8 @@ export async function translate({
 
 				_translations.push(string);
 			}
+
+			translations[targetLanguage] = _translations;
 		}
 	}
 
