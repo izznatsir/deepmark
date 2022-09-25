@@ -1,7 +1,7 @@
 {
 	"name": "deepmark",
 	"description": "Translate markdown files correctly with `mdast` and DeepL.",
-	"version": "0.1.0",
+	"version": "0.1.2",
 	"license": "MIT",
 	"author": "Izzuddin Natsir",
 	"files": [

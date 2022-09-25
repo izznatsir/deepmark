@@ -229,6 +229,7 @@ export function replaceJsonOrYamlStrings({
 }): string {
 	if (isEmptyArray(config.jsonOrYamlProperties.include)) return source;
 
+	strings = strings.reverse();
 	const parsed = type === 'json' ? JSON.parse(source) : parseYaml(source);
 
 	process({ value: parsed });
