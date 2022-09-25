@@ -1,4 +1,4 @@
-/** @type {import("../config").UserConfig} */
+/** @type {import("../../../config").UserConfig} */
 export default {
 	sourceLanguage: 'en',
 	outputLanguages: ['zh', 'ja'],
@@ -7,8 +7,5 @@ export default {
 		['docs', 'i18n/$langcode$/docs'],
 		['blog', 'i18n/$langcode$/blog']
 	],
-	cwd: '../../example',
-	jsonOrYamlProperties: {
-		include: ['message', 'description']
-	}
+	cwd: '../../../../example'
 };
