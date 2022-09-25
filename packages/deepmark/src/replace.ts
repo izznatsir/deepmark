@@ -54,7 +54,7 @@ export function replaceMdastStrings({
 							continue;
 
 						if (isString(attribute.value)) {
-							strings.push(attribute.value.trim());
+							attribute.value = strings.pop();
 						} else if (attribute.value?.data?.estree) {
 							const estree = attribute.value.data.estree;
 
@@ -80,7 +80,7 @@ export function replaceMdastStrings({
 						if (isString(attribute.value)) {
 							if (!isAttributeIncluded) continue;
 
-							strings.push(attribute.value.trim());
+							attribute.value = strings.pop();
 						} else if (attribute.value?.data?.estree) {
 							if (
 								!config.jsxComponents.include[componentName] ||
@@ -171,14 +171,14 @@ export function replaceMdastStrings({
 					const value = object[field];
 
 					if (isString(value)) {
-						strings.push(value);
+						object[field] = strings.pop();
 						continue;
 					}
 
 					if (isArray(value)) {
-						for (const item of value) {
+						for (const [index, item] of value.entries()) {
 							if (!isString(item)) continue;
-							strings.push(item);
+							value[index] = strings.pop();
 						}
 					}
 				}
