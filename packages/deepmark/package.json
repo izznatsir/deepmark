@@ -1,14 +1,14 @@
 {
 	"name": "deepmark",
-	"description": "Translate markdown files correctly with `remark` and Deepl.",
-	"version": "0.0.13",
+	"description": "Translate markdown files correctly with `mdast` and DeepL.",
+	"version": "0.1.0",
 	"license": "MIT",
 	"author": "Izzuddin Natsir",
 	"files": [
 		"dist/*"
 	],
 	"bin": "./dist/bin.mjs",
-	"types": "./dist/@types/index.d.ts",
+	"types": "./dist/@types/config.d.ts",
 	"scripts": {
 		"build": "node ../../scripts/transform.js && del ./dist/index.mjs ./dist/@types/__test__ ./dist/@types/bin.d.ts",
 		"test": "vitest run --reporter verbose",

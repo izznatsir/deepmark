@@ -7,16 +7,16 @@ import { isBoolean } from './utils.js';
 
 export interface ConfigBase {
 	/**
-	 * Source's language code.
+	 * Source's language code. Based on DeepL supported languages.
 	 */
 	sourceLanguage: SourceLanguageCode;
 	/**
-	 * Output's languages code.
+	 * Output's languages code. Based on DeepL supported languages.
 	 */
 	outputLanguages: TargetLanguageCode[];
 	/**
 	 * Sources and ouputs directories pairs. $langcode$ variable
-	 * is provided to dynamically define output directory.
+	 * is provided to dynamically define directory.
 	 *
 	 * e.g. [ ["docs", "i18n/$langcode$/docs"], ["blog", "i18n/$langcode$/blog"] ]
 	 */
@@ -29,7 +29,7 @@ export interface Config extends ConfigBase {
 	 */
 	cwd: string;
 	/**
-	 * By default, all .md, .mdx, and .json files inside
+	 * By default, all .md, .mdx, .json, and .yaml|.yml files inside
 	 * source directories will be included.
 	 *
 	 * Define glob patterns to filter what files to include or exclude.
@@ -47,7 +47,7 @@ export interface Config extends ConfigBase {
 		exclude: string[];
 	};
 	/**
-	 * Markdown node types to include or exclude based on MDAST.
+	 * Markdown node types to include or exclude based on MDAST. Defaults to exclude `code` and `link`.
 	 */
 	markdownNodes: {
 		default: boolean;
@@ -55,8 +55,8 @@ export interface Config extends ConfigBase {
 		exclude: MdNodeType[];
 	};
 	/**
-	 * HTML elements to include, down to the level of attributes
-	 * and children, and exclude. Include all HTML elements inner text
+	 * HTML elements to include and exlcude, down to the level of attributes
+	 * and children. Include all HTML elements text content
 	 * and some global attributes such as title and placeholder.
 	 */
 	htmlElements: {
@@ -64,9 +64,13 @@ export interface Config extends ConfigBase {
 		exclude: HtmlTag[];
 	};
 	/**
-	 * JSX components to include, down to the level of attributes
-	 * and children, and exclude. Include all JSX components inner text
+	 * JSX components to include and exclude, down to the level of attributes
+	 * and children. Include all JSX components text children
 	 * and exclude all attributes by default.
+	 *
+	 * Support array, object, and jsx attribute value. For object and array value,
+	 * you can specify the access path starting with the attribute name
+	 * e.g. `items.description` to translate `items={[{description: "..."}]}.
 	 */
 	jsxComponents: {
 		default: boolean;
@@ -89,7 +93,7 @@ export interface UserConfig extends ConfigBase {
 	 */
 	cwd?: string;
 	/**
-	 * By default, all .md, .mdx, and .json files inside
+	 * By default, all .md, .mdx, .json, and .yaml|.yml files inside
 	 * source directories will be included.
 	 *
 	 * Define glob patterns to filter what files to include or exclude.
@@ -107,7 +111,7 @@ export interface UserConfig extends ConfigBase {
 		exclude?: string[];
 	};
 	/**
-	 * Markdown node types to include or exclude based on MDAST.
+	 * Markdown node types to include or exclude based on MDAST. Defaults to exclude `code` and `link`.
 	 */
 	markdownNodes?: {
 		default?: boolean;
@@ -115,8 +119,8 @@ export interface UserConfig extends ConfigBase {
 		exclude?: MdNodeType[];
 	};
 	/**
-	 * HTML elements to include, down to the level of attributes
-	 * and children, and exclude. Include all HTML elements inner text
+	 * HTML elements to include and exlcude, down to the level of attributes
+	 * and children. Include all HTML elements text content
 	 * and some global attributes such as title and placeholder.
 	 */
 	htmlElements?: {
@@ -125,9 +129,13 @@ export interface UserConfig extends ConfigBase {
 		exclude?: HtmlTag[];
 	};
 	/**
-	 * JSX components to include, down to the level of attributes
-	 * and children, and exclude. Include all JSX components inner text
+	 * JSX components to include and exclude, down to the level of attributes
+	 * and children. Include all JSX components text children
 	 * and exclude all attributes by default.
+	 *
+	 * Support array, object, and jsx attribute value. For object and array value,
+	 * you can specify the access path starting with the attribute name
+	 * e.g. `items.description` to translate `items={[{description: "..."}]}.
 	 */
 	jsxComponents?: {
 		default?: boolean;
