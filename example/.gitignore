@@ -5,6 +5,7 @@
 /build
 
 # Generated files
+.deepmark
 .docusaurus
 .cache-loader
 
