@@ -6,16 +6,16 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "yarn build:dts && yarn build:micromark && yarn build:mdast && yarn build:deepmark",
+		"build": "yarn build:dts && yarn build:mehc && yarn build:muhc && yarn build:deepmark",
 		"build:dts": "tsc --build .",
-		"build:micromark": "yarn workspace micromark-extension-html-comment build",
-		"build:mdast": "yarn workspace mdast-util-html-comment build",
+		"build:mehc": "yarn workspace micromark-extension-html-comment build",
+		"build:muhc": "yarn workspace mdast-util-html-comment build",
 		"build:deepmark": "yarn workspace deepmark build",
 		"format": "prettier --ignore-path .gitignore --write .",
 		"lint": "prettier --ignore-path .gitignore --check ./packages",
-		"publish:deepmark": "npm publish --workspace deepmark --access public",
+		"publish:mehc": "npm publish --workspace micromark-extension-html-comment --access public",
 		"publish:muhc": "npm publish --workspace mdast-util-html-comment --access public",
-		"publish:mehc": "npm publish --workspace micromark-extension-html-comment --access public"
+		"publish:deepmark": "npm publish --workspace deepmark --access public"
 	},
 	"devDependencies": {
 		"del-cli": "^5.0.0",
