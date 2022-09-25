@@ -1,8 +1,8 @@
 import type { TargetLanguageCode } from 'deepl-node';
 import { Translator } from 'deepl-node';
 import np from 'node:path';
-import type { Config } from './config';
-import { Database } from './database';
+import type { Config } from './config.js';
+import { Database } from './database.js';
 
 export async function translate({
 	strings,
