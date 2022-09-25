@@ -336,7 +336,7 @@ export function resolveConfig({
 					include: markdownNodes.include ?? [],
 					exclude: markdownNodes.exclude ?? ['code']
 			  }
-			: { default: true, include: [], exclude: ['code', 'link'] },
+			: { default: true, include: [], exclude: ['code'] },
 		frontmatterFields: frontmatterFields
 			? {
 					include: frontmatterFields.include ?? [],
