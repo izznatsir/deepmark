@@ -328,7 +328,7 @@ export function resolveConfig({
 					include: markdownNodes.include ?? [],
 					exclude: markdownNodes.exclude ?? ['code']
 			  }
-			: { default: true, include: [], exclude: ['code'] },
+			: { default: true, include: [], exclude: ['code', 'link'] },
 		frontmatterFields: frontmatterFields
 			? {
 					include: frontmatterFields.include ?? [],
@@ -561,8 +561,9 @@ export function isJsxComponentChildrenIncluded({
 }): boolean {
 	return (
 		!config.jsxComponents.exclude.includes(name) &&
-		Object.keys(config.jsxComponents.include).includes(name) &&
-		config.jsxComponents.include[name].children
+		((Object.keys(config.jsxComponents.include).includes(name) &&
+			config.jsxComponents.include[name].children) ||
+			(!Object.keys(config.jsxComponents.include).includes(name) && config.jsxComponents.default))
 	);
 }
 

@@ -73,6 +73,8 @@ export async function translate({
 					}
 				}
 			}
+
+			translations[targetLanguage] = _translations;
 		}
 	} else {
 		for (const targetLanguage of config.outputLanguages) {
