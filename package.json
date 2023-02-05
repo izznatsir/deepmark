@@ -6,25 +6,31 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "yarn build:dts && yarn build:mehc && yarn build:muhc && yarn build:deepmark",
+		"build": "pnpm build:dts && pnpm build:mehc && pnpm build:muhc && pnpm build:deepmark",
 		"build:dts": "tsc --build .",
-		"build:mehc": "yarn workspace micromark-extension-html-comment build",
-		"build:muhc": "yarn workspace mdast-util-html-comment build",
-		"build:deepmark": "yarn workspace deepmark build",
-		"format": "prettier --ignore-path .gitignore --write .",
-		"lint": "prettier --ignore-path .gitignore --check ./packages",
-		"publish:mehc": "npm publish --workspace micromark-extension-html-comment --access public",
-		"publish:muhc": "npm publish --workspace mdast-util-html-comment --access public",
-		"publish:deepmark": "npm publish --workspace deepmark --access public"
+		"build:mehc": "pnpm -F micromark-extension-html-comment run build",
+		"build:muhc": "pnpm -F mdast-util-html-comment run build",
+		"build:deepmark": "pnpm -F deepmark run build",
+		"format": "prettier --write .",
+		"lint": "prettier --check ./packages",
+		"publish:mehc": "pnpm publish -F micromark-extension-html-comment --access public",
+		"publish:muhc": "pnpm publish -F mdast-util-html-comment --access public",
+		"publish:deepmark": "pnpm publish -F deepmark --access public"
 	},
 	"devDependencies": {
+		"@types/fs-extra": "^11.0.1",
+		"@types/node": "^18.11.19",
 		"del-cli": "^5.0.0",
-		"esbuild": "^0.15.8",
+		"dotenv": "^16.0.3",
+		"esbuild": "^0.17.5",
 		"fast-glob": "^3.2.12",
-		"fs-extra": "^10.1.0",
-		"prettier": "^2.7.1",
-		"typescript": "4.9.1-beta"
+		"fs-extra": "^11.1.0",
+		"nock": "^13.3.0",
+		"prettier": "^2.8.3",
+		"typescript": "5.0.0-beta",
+		"vite": "^4.1.1",
+		"vitest": "^0.28.4"
 	},
 	"type": "module",
-	"packageManager": "yarn@3.2.3"
+	"packageManager": "pnpm@7.26.3"
 }

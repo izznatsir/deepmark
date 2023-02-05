@@ -14,12 +14,9 @@
 	},
 	"devDependencies": {
 		"@types/mdast": "^3.0.10",
-		"del-cli": "^5.0.0",
-		"mdast-util-from-markdown": "^1.2.0",
-		"mdast-util-mdx": "^2.0.0",
-		"mdast-util-to-markdown": "^1.3.0",
-		"micromark-extension-mdxjs": "^1.0.0",
-		"vite": "^3.1.3",
-		"vitest": "^0.23.4"
+		"mdast-util-from-markdown": "^1.3.0",
+		"mdast-util-mdx": "^2.0.1",
+		"mdast-util-to-markdown": "^1.5.0",
+		"micromark-extension-mdxjs": "^1.0.0"
 	}
 }
